@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedAscend - Study Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#BA5B47",
+                        "secondary": "#A1B9C5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto;
+            gap: 1rem;
+        }
+        .bento-item-large {
+            grid-column: span 2;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Study Hub</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<main class="flex-1 overflow-y-auto px-4 pb-24">
+<div class="pt-6 pb-4">
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 font-display">Study Hub</h1>
+<p class="text-slate-600 dark:text-slate-400 mt-2 text-base">Active recall and AI-driven tools tailored for your medical journey.</p>
+</div>
+<!-- Bento Box Layout -->
+<div class="bento-grid mt-4">
+<!-- Deep Learn - Primary Active State -->
+<div class="bento-item-large bg-primary rounded-xl p-5 flex flex-col justify-between min-h-[180px] shadow-lg shadow-primary/20">
+<div class="flex justify-between items-start">
+<div class="bg-white/20 p-3 rounded-full">
+<span class="material-symbols-outlined text-white">psychology</span>
+</div>
+<span class="bg-white/20 text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-wider">Most Popular</span>
+</div>
+<div>
+<h3 class="text-white text-xl font-bold font-display">Deep Learn</h3>
+<p class="text-white/80 text-sm mt-1">Master complex physiological systems with AI-guided paths.</p>
+</div>
+</div>
+<!-- Revise -->
+<div class="bg-secondary rounded-xl p-5 flex flex-col justify-between aspect-square shadow-sm">
+<div class="bg-white/30 w-fit p-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-800">history</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold font-display leading-tight">Revise</h3>
+<p class="text-slate-800/70 text-xs mt-1">Quick refreshers on daily topics.</p>
+</div>
+</div>
+<!-- Memory Forge -->
+<div class="bg-secondary rounded-xl p-5 flex flex-col justify-between aspect-square shadow-sm">
+<div class="bg-white/30 w-fit p-2 rounded-lg">
+<span class="material-symbols-outlined text-slate-800">memory</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold font-display leading-tight">Memory Forge</h3>
+<p class="text-slate-800/70 text-xs mt-1">Spaced repetition engine.</p>
+</div>
+</div>
+<!-- Exam Intelligence -->
+<div class="bg-slate-200 dark:bg-slate-800 rounded-xl p-5 flex items-center gap-4 bento-item-large shadow-sm">
+<div class="bg-primary/10 dark:bg-primary/20 p-4 rounded-xl">
+<span class="material-symbols-outlined text-primary scale-125">analytics</span>
+</div>
+<div class="flex-1">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold font-display">Exam Intelligence</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Predictive scoring based on your performance.</p>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<!-- Practice MCQs -->
+<div class="bento-item-large bg-slate-200 dark:bg-slate-800 rounded-xl p-5 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center justify-between">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold font-display">Practice MCQs</h3>
+<span class="material-symbols-outlined text-primary">quiz</span>
+</div>
+<div class="flex gap-2">
+<div class="flex-1 bg-background-light dark:bg-background-dark p-3 rounded-lg border border-slate-300 dark:border-slate-700">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Total Questions</p>
+<p class="text-lg font-bold">12,450</p>
+</div>
+<div class="flex-1 bg-background-light dark:bg-background-dark p-3 rounded-lg border border-slate-300 dark:border-slate-700">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Completed</p>
+<p class="text-lg font-bold text-primary">3,201</p>
+</div>
+</div>
+<button class="w-full bg-primary text-white font-bold py-3 rounded-lg mt-2">Start Session</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">grid_view</span>
+<p class="text-xs font-medium font-display">Hub</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-xs font-medium font-display">Library</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">forum</span>
+<p class="text-xs font-medium font-display">AI Chat</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-xs font-medium font-display">Profile</p>
+</a>
+</div>
+</nav>
+</body></html>

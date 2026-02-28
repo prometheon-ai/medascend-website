@@ -1,0 +1,141 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#13a4ec",
+            "accent-terracotta": "#BA5B47",
+            "brand-navy": "#426F80",
+            "brand-cream": "#FAF3EB",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+          },
+          fontFamily: {
+            "display": ["Lexend", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<title>MedAscend Hero Vision</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<!-- Main Container (iOS Phone Form Factor) -->
+<div class="relative mx-auto flex h-full min-h-screen w-full max-w-[375px] flex-col bg-white dark:bg-background-dark overflow-x-hidden shadow-2xl">
+<!-- Header Navigation -->
+<div class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-brand-navy dark:text-slate-100 flex size-10 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<h2 class="text-brand-navy dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">MedAscend</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-transparent text-brand-navy dark:text-slate-100 p-0">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 overflow-y-auto">
+<!-- High-Impact Hero Card -->
+<div class="p-4">
+<div class="flex flex-col items-stretch justify-start rounded-xl overflow-hidden shadow-lg bg-brand-cream border border-brand-navy/5">
+<!-- Hero Illustration Section -->
+<div class="relative w-full aspect-[4/5] bg-center bg-no-repeat bg-cover flex items-end overflow-hidden" data-alt="3D medical student in white coat looking upwards inspired" style="background-image: linear-gradient(to bottom, transparent, rgba(250, 243, 235, 0.4)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAlsEU7sCxcMNM92tThTsONWFXSD-gexXb9B4AD0ySENwVz15GWFPzC5g1GRtNk-aaciCPC2Xb4T6ZqBpH7wAOme2l5zkji6qfT9jrh6LdBpIz5wEdrvELEWF1WI4zHYliRdhAtIP5uR9_aDddmEiDYJok9VS2JaHaq0fQt9eJuG4xzamP8fBYE4bROMpEmA80Rmn8gtjiOOmr5JehldT8XokR-5ZnnPdr2CbrPFuFQjDyEd-gIbItcWZunoTu0ZpuhviuKGl63sg');">
+<!-- Floating Accent Elements -->
+<div class="absolute top-6 right-6 flex flex-col gap-2">
+<div class="size-12 rounded-full bg-accent-terracotta/20 flex items-center justify-center text-accent-terracotta">
+<span class="material-symbols-outlined text-3xl">lightbulb</span>
+</div>
+</div>
+<!-- Gradient Overlay Text Container -->
+<div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-brand-cream via-brand-cream/90 to-transparent">
+<div class="flex flex-col gap-3">
+<span class="text-accent-terracotta font-bold text-xs uppercase tracking-[0.2em]">Our Vision</span>
+<h1 class="text-brand-navy text-2xl font-bold leading-[1.2] tracking-tight">
+                  Built by a Medical Student. <br/>
+<span class="text-accent-terracotta">For Medical Students.</span>
+</h1>
+<p class="text-brand-navy/80 text-sm font-normal leading-relaxed">
+                  The ultimate active recall and AI-driven companion for your medical journey.
+                </p>
+<div class="mt-2 flex gap-3">
+<button class="flex-1 min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-11 px-4 bg-primary text-white text-sm font-bold shadow-md active:scale-95 transition-transform">
+                    Get Started
+                  </button>
+<button class="flex size-11 items-center justify-center rounded-lg border border-brand-navy/20 bg-white/50 text-brand-navy">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Feature Teasers -->
+<div class="px-4 py-2">
+<h3 class="text-brand-navy dark:text-slate-100 text-base font-bold mb-4">Core Features</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-brand-navy/10 shadow-sm flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary">psychology</span>
+<p class="text-sm font-bold text-brand-navy dark:text-slate-100 leading-tight">Active Recall</p>
+<p class="text-xs text-brand-navy/60 dark:text-slate-400">Master high-yield concepts fast.</p>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-brand-navy/10 shadow-sm flex flex-col gap-2">
+<span class="material-symbols-outlined text-accent-terracotta">smart_toy</span>
+<p class="text-sm font-bold text-brand-navy dark:text-slate-100 leading-tight">AI Tutor</p>
+<p class="text-xs text-brand-navy/60 dark:text-slate-400">Instant doubt resolution 24/7.</p>
+</div>
+</div>
+</div>
+<!-- Vision Statement -->
+<div class="p-6 mt-4 text-center">
+<p class="text-brand-navy/70 dark:text-slate-400 text-sm italic font-medium">
+          "Designed to revolutionize medical education through high-impact, efficient study methods."
+        </p>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="flex gap-2 border-t border-brand-navy/10 bg-white dark:bg-background-dark px-4 pb-6 pt-2 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<p class="text-[10px] font-bold leading-none uppercase tracking-wider">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-brand-navy/50 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<p class="text-[10px] font-bold leading-none uppercase tracking-wider">Study</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-brand-navy/50 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">neurology</span>
+</div>
+<p class="text-[10px] font-bold leading-none uppercase tracking-wider">AI Tutor</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-brand-navy/50 dark:text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-[10px] font-bold leading-none uppercase tracking-wider">Profile</p>
+</a>
+</div>
+<!-- iOS Home Indicator -->
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+</div>
+</body></html>

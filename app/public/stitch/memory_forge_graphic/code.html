@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Memory Forge - MedAscend</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d28c46",
+                        "background-light": "#FAF3EB",
+                        "background-dark": "#1f1913",
+                        "clinical-blue": "#426F80",
+                        "border-muted": "#A49692",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col items-center justify-center p-6">
+<!-- Mobile Screen Container -->
+<div class="relative w-full max-w-[390px] h-[844px] bg-background-light dark:bg-background-dark shadow-2xl rounded-[3rem] overflow-hidden border-[8px] border-slate-900 flex flex-col">
+<!-- Status Bar Simulation -->
+<div class="w-full h-12 flex items-center justify-between px-8 pt-4">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px]">battery_full</span>
+</div>
+</div>
+<!-- Header -->
+<div class="flex items-center bg-transparent p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Memory Forge</h2>
+</div>
+<!-- Hero Content -->
+<div class="px-6 pt-10 text-center">
+<h3 class="text-clinical-blue dark:text-primary tracking-tight text-2xl font-bold leading-tight">
+                Active recall that forces engagement
+            </h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Graphic 5 of 10: Master your knowledge</p>
+</div>
+<!-- Main Graphic Area -->
+<div class="flex-1 flex flex-col items-center justify-center px-6 gap-8">
+<!-- Forge Progress Ring Graphic -->
+<div class="relative flex items-center justify-center w-48 h-48">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-primary/10 stroke-current" cx="50" cy="50" fill="transparent" r="42" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="42" stroke-dasharray="263.89" stroke-dashoffset="92.36" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-1" style="font-variation-settings: 'FILL' 1">local_fire_department</span>
+<span class="text-3xl font-bold text-slate-900 dark:text-slate-100">65%</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Mastered</span>
+</div>
+</div>
+<!-- Flashcard UI -->
+<div class="w-full bg-white dark:bg-slate-800 rounded-xl border-2 border-border-muted dark:border-slate-700 shadow-sm overflow-hidden p-6 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Pharmacology</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">more_horiz</span>
+</div>
+<div class="py-4">
+<p class="text-slate-800 dark:text-slate-100 text-lg font-medium leading-relaxed">
+                        What is the mechanism of action for Lisinopril?
+                    </p>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700">
+<p class="text-slate-400 text-xs font-normal">Card ID: MED-892</p>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold shadow-md hover:bg-primary/90 transition-all">
+<span>Flip Card</span>
+<span class="material-symbols-outlined text-sm">style</span>
+</button>
+</div>
+</div>
+<!-- Progress Details -->
+<div class="w-full flex flex-col gap-4 px-2">
+<div class="flex justify-between items-end">
+<div class="flex flex-col gap-1">
+<span class="text-slate-500 text-xs font-medium uppercase tracking-tighter">Current Session</span>
+<span class="text-slate-900 dark:text-slate-100 text-sm font-bold">24 / 40 Cards Reviewed</span>
+</div>
+<span class="text-primary text-xs font-bold">Almost Mastered</span>
+</div>
+<div class="h-2 w-full bg-primary/20 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+<!-- Navigation Bar -->
+<div class="mt-auto border-t border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-6 pb-8 pt-4">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium">Library</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">local_fire_department</span>
+<span class="text-[10px] font-bold">Forge</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bolt</span>
+<span class="text-[10px] font-medium">AI Tutor</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</div>
+<!-- Home Indicator -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/20 dark:bg-slate-100/20 rounded-full"></div>
+</div>
+</body></html>

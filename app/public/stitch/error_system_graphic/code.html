@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedAscend - Error System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#426f80",
+                        "accent-red": "#BA5B47",
+                        "accent-gold": "#D38C46",
+                        "background-light": "#FAF3EB",
+                        "background-dark": "#161a1c",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .fill-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Section -->
+<div class="flex items-center bg-transparent p-6 pb-2 justify-between">
+<div class="text-primary flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-3xl">arrow_back_ios</span>
+</div>
+<h2 class="text-primary text-xl font-bold leading-tight tracking-tight flex-1 text-center pr-12">Your Personal Error System</h2>
+</div>
+<!-- Main Content Area (Flowchart Graphic) -->
+<div class="flex-1 flex flex-col items-center justify-center px-6">
+<div class="w-full max-w-sm space-y-0">
+<!-- Step 1: Wrong Answer -->
+<div class="flex flex-col items-center">
+<div class="bg-accent-red text-white p-6 rounded-xl shadow-lg w-full flex items-center gap-4 border-2 border-accent-red/20">
+<div class="bg-white/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-4xl fill-icon">cancel</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest font-bold opacity-80">Phase 01</span>
+<h3 class="text-xl font-bold">Wrong Answer</h3>
+<p class="text-sm opacity-90">Initial knowledge gap identified</p>
+</div>
+</div>
+<!-- Connector 1 -->
+<div class="h-12 w-1 bg-primary/20 relative">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl bg-background-light">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Step 2: Error Logbook -->
+<div class="flex flex-col items-center">
+<div class="bg-primary text-white p-6 rounded-xl shadow-lg w-full flex items-center gap-4 border-2 border-primary/20">
+<div class="bg-white/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-4xl">menu_book</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest font-bold opacity-80">Phase 02</span>
+<h3 class="text-xl font-bold">Error Logbook</h3>
+<p class="text-sm opacity-90">Systematic tracking &amp; analysis</p>
+</div>
+</div>
+<!-- Connector 2 -->
+<div class="h-12 w-1 bg-primary/20 relative">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl bg-background-light">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Step 3: Mastery -->
+<div class="flex flex-col items-center">
+<div class="bg-accent-gold text-white p-6 rounded-xl shadow-lg w-full flex items-center gap-4 border-2 border-accent-gold/20">
+<div class="bg-white/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-4xl fill-icon">check_circle</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest font-bold opacity-80">Phase 03</span>
+<h3 class="text-xl font-bold">Mastery</h3>
+<p class="text-sm opacity-90">Concept conquered via recall</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Descriptive Text -->
+<div class="mt-12 text-center max-w-xs">
+<h4 class="text-primary text-2xl font-bold tracking-tight mb-3">Track. Learn. Master.</h4>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+                Every mistake is an opportunity. Our system automatically logs your errors for targeted active recall.
+            </p>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 pb-8 pt-3">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">book_2</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Study</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl fill-icon">report</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Errors</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">auto_fix</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">AI Help</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<p class="text-[10px] font-semibold uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Planner &amp; Diary Graphic</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#426F80",
+                        "accent": "#D38C46",
+                        "background-light": "#FAF3EB",
+                        "background-dark": "#161b1c",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4">
+<!-- Phone Mockup -->
+<div class="relative w-full max-w-[390px] aspect-[9/19.5] bg-white dark:bg-slate-900 rounded-xl shadow-2xl overflow-hidden border-[8px] border-slate-800 flex flex-col">
+<!-- Status Bar -->
+<div class="flex justify-between items-center px-6 pt-4 pb-2">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-sm">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-sm">wifi</span>
+<span class="material-symbols-outlined text-sm">battery_full</span>
+</div>
+</div>
+<!-- Header -->
+<header class="px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary/10 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+</div>
+<h1 class="text-xl font-bold text-primary">Planner &amp; Diary</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">sync_alt</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto px-4">
+<!-- Hero Text -->
+<div class="py-6 text-center">
+<h2 class="text-2xl font-bold text-primary leading-tight">Stay Organized.<br/>Stay Accountable.</h2>
+</div>
+<!-- Calendar Card -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-4 mb-6">
+<div class="flex items-center justify-between mb-4">
+<button class="p-1 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-400">chevron_left</span>
+</button>
+<span class="font-bold text-slate-800 dark:text-slate-100">October 2023</span>
+<button class="p-1 hover:bg-slate-50 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 text-center mb-2">
+<span class="text-xs font-bold text-slate-400 uppercase">S</span>
+<span class="text-xs font-bold text-slate-400 uppercase">M</span>
+<span class="text-xs font-bold text-slate-400 uppercase">T</span>
+<span class="text-xs font-bold text-slate-400 uppercase">W</span>
+<span class="text-xs font-bold text-slate-400 uppercase">T</span>
+<span class="text-xs font-bold text-slate-400 uppercase">F</span>
+<span class="text-xs font-bold text-slate-400 uppercase">S</span>
+</div>
+<div class="grid grid-cols-7 gap-y-2">
+<!-- Placeholder days -->
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">24</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">25</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">26</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">27</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">28</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">29</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-300">30</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">1</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">2</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">3</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">4</div>
+<div class="h-8 flex items-center justify-center text-sm relative">
+<span class="z-10 text-white font-bold">5</span>
+<div class="absolute inset-0 bg-primary rounded-full scale-75"></div>
+</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">6</div>
+<div class="h-8 flex items-center justify-center text-sm text-slate-700 dark:text-slate-200">7</div>
+</div>
+</div>
+<!-- Tasks List -->
+<div class="space-y-3 pb-8">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Today's Tasks</h3>
+<span class="text-xs font-medium text-slate-400">Oct 5, 2023</span>
+</div>
+<!-- Completed Task -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="w-6 h-6 rounded-full border-2 border-accent bg-accent flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm filled-icon">check</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-400 line-through">Review Cardio Anatomy</p>
+</div>
+</div>
+<!-- Scheduled Block -->
+<div class="flex items-center gap-4 bg-primary p-4 rounded-xl border border-primary/20 shadow-md">
+<div class="w-6 h-6 rounded-full border-2 border-white/50 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">schedule</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-white">Revision Block: Pathophysiology</p>
+<p class="text-xs text-white/80">14:00 - 16:30 • Active Recall Session</p>
+</div>
+<span class="material-symbols-outlined text-white/50">more_vert</span>
+</div>
+<!-- Another Task -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="w-6 h-6 rounded-full border-2 border-accent flex items-center justify-center">
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-800 dark:text-slate-200">Practice MCQ: Renal System</p>
+</div>
+</div>
+<!-- Completed Task -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="w-6 h-6 rounded-full border-2 border-accent bg-accent flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm filled-icon">check</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-slate-400 line-through">Pharmacology Quiz</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-6 py-3 flex justify-between items-center">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined filled-icon">calendar_month</span>
+<span class="text-[10px] font-bold">Planner</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">school</span>
+<span class="text-[10px] font-bold">Study</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</nav>
+<!-- Home Indicator -->
+<div class="flex justify-center pb-2 bg-white dark:bg-slate-900">
+<div class="w-32 h-1 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
+</div>
+</div>
+</body></html>

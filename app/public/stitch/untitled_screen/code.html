@@ -1,0 +1,196 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1791cf",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111c21",
+          },
+          fontFamily: {
+            "display": ["Lexend"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Lexend', sans-serif;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full max-w-[430px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-slate-200 dark:border-slate-800">
+<!-- Top Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 backdrop-blur-md bg-opacity-80 dark:bg-opacity-80">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Practice Zone</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-full size-10 bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 overflow-y-auto pb-24">
+<!-- Performance Quick Stats -->
+<div class="px-4 py-6">
+<div class="bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-2xl p-4 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Current Streak</span>
+<span class="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              12 Days <span class="material-symbols-outlined text-orange-500 fill-1">local_fire_department</span>
+</span>
+</div>
+<div class="h-10 w-px bg-slate-300 dark:bg-slate-700"></div>
+<div class="flex flex-col text-right">
+<span class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider">Avg. Score</span>
+<span class="text-2xl font-bold text-primary">84%</span>
+</div>
+</div>
+</div>
+<!-- Test Modes Section -->
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em] px-4 pb-4">Test Modes</h2>
+<div class="grid grid-cols-1 gap-4 px-4">
+<!-- Daily 10Q -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-800 aspect-[16/7] flex flex-col justify-end p-5">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<div class="absolute inset-0 opacity-60 bg-cover bg-center" data-alt="Microscope lens looking at medical slide" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAaiEQ2dPUo_GuYOpe6pkV5ff3CSoUaaOeoUxmfXWQUOVyv7_KaNpwlYJs5B1yatwRMWQtQw4oqAYUHtbZhbnbQjlY_rL_pCw7c1QNI3RWDXzZ5DEfm9_kNizFrC0rt1sT7KlIkOA-GbiS8bl7ZrPFKdAvj1WTNiN1e4aCM1U_83sd0kv86LtUWiOpL5gTUHqdaTUNJFUVnYoJ3Ft_g_2SRuoLIPgsesV7VtQy70KoOQdXadS1OPTZfokkPXgQCGJVks5-WMIbvx5Y');"></div>
+<div class="relative z-20 flex justify-between items-end">
+<div>
+<p class="text-white text-lg font-bold leading-tight">Daily 10Q</p>
+<p class="text-slate-300 text-sm">Quick active recall session</p>
+</div>
+<div class="flex items-center gap-1 bg-primary px-3 py-1 rounded-full text-white text-xs font-bold">
+<span class="material-symbols-outlined text-sm">timer</span> 10m
+            </div>
+</div>
+</div>
+<!-- Grand Mock -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-800 aspect-[16/7] flex flex-col justify-end p-5">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<div class="absolute inset-0 opacity-60 bg-cover bg-center" data-alt="Anatomy book and stethoscope on desk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACXUeGm7rm1hHGGAxRCLLJlToGGGl73K894IdmQcLe3AInRr5vFNggXtmBPFLZob2whcB4270EsJIZmpJo7Qx7o6grXnySdJ1w4c8S62qLogUt9dP1JI4dw_6ML4vxlRhtA9TVZDOW4VFoYT27HdfZAvr-sykSX85Q3Ojmn-GagvDy__UcyMJxJvPVbawzb_QJtH7KXYNm2moxoVkorWGKnY0eG50vw3avMtaIZHD-QEeJlxOFAuPXLnDRJMaYAL-UVEbmqC5o9gg');"></div>
+<div class="relative z-20 flex justify-between items-end">
+<div>
+<p class="text-white text-lg font-bold leading-tight">Grand Mock (200Q)</p>
+<p class="text-slate-300 text-sm">Full exam simulation</p>
+</div>
+<div class="flex items-center gap-1 bg-red-500 px-3 py-1 rounded-full text-white text-xs font-bold">
+<span class="material-symbols-outlined text-sm">bolt</span> Hard
+            </div>
+</div>
+</div>
+<!-- Custom Quiz -->
+<div class="relative group cursor-pointer overflow-hidden rounded-xl bg-slate-200 dark:bg-slate-800 aspect-[16/7] flex flex-col justify-end p-5">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+<div class="absolute inset-0 opacity-60 bg-cover bg-center" data-alt="Writing notes on a clean desk" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLYc1_DJdiSU4CphSTvDCDbgK7TSVcr6cMc6iU3sxDb5lZtqr9ChinsurYwXVy-TNwOgIRWWpcHSdwVjHjHTPtH69akavT1CVZyFdZEB1T9o3eiqKKA2N2FDFS9AZbmmNRqraR7Pwlih23Un2v4tHR6mFzq0VFU53XhCaF8xvBhvto0gcxQo03mBFADGDPEV7064Oo2aObdLVQ-el1amFO3jULtXnPWuoggChYTzRLzMuPE5iQJ5D3tBDjAHiEL6Bh0o2IT8ExX34');"></div>
+<div class="relative z-20 flex justify-between items-end">
+<div>
+<p class="text-white text-lg font-bold leading-tight">Custom Quiz</p>
+<p class="text-slate-300 text-sm">Focus on specific subjects</p>
+</div>
+<div class="flex items-center gap-1 bg-slate-700 px-3 py-1 rounded-full text-white text-xs font-bold border border-slate-600">
+<span class="material-symbols-outlined text-sm">settings</span> Setup
+            </div>
+</div>
+</div>
+</div>
+<!-- Leaderboard Snippet -->
+<div class="px-4 mt-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight">Leaderboard</h3>
+<button class="text-primary text-sm font-semibold">View All</button>
+</div>
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-2xl overflow-hidden divide-y divide-slate-200 dark:divide-slate-800">
+<!-- Rank 1 -->
+<div class="flex items-center gap-4 p-4">
+<span class="text-primary font-bold w-4">1</span>
+<div class="size-10 rounded-full bg-slate-300 dark:bg-slate-700 flex-shrink-0 border-2 border-yellow-500 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile of a medical student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc5USJMgXD6aSQGghQpwRl_C8i2Apxm8ZlgbcJoCnZ7pq5tFXgfmSTbOWuq6Ki_7DzkMdy44PHQGO1vQHu5vywsDLS4FBcjpSW-XHhBPxtByKkmxXta5JUVwzE6Y5BL9SJcWt9nNC_0KW8lX8n71rDuidO0fd7VU1UglhB-qjj3Msz4VLTdJ46-crZBv-F5uzypkiMjFJZIKdeJ3OZaU75hgJHTnuvNf_oOV7GRg0s7DBTjlg0cwF8mcV9CzlCnShP58PsE4Mt3-U"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Dr. Sarah Chen</p>
+<p class="text-xs text-slate-500">14,250 XP</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold px-2 py-0.5 rounded bg-green-500/20 text-green-500">+12%</span>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="flex items-center gap-4 p-4">
+<span class="text-slate-400 font-bold w-4">2</span>
+<div class="size-10 rounded-full bg-slate-300 dark:bg-slate-700 flex-shrink-0 border-2 border-slate-400 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile of a student doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHygygdN0BSx9ZeSvA1Y-TIQLZ49755w2eumAmD4y8pn3DBhw0SxpyN1atfLv4gk_5Kew35IDsM8zTv2jvG2h-4_90ntGcHZTSvMbAFGlw_RxcEP4IOc6v7QzaYII60WLXxYlpAiOJ0extiINdnNxSxIay2TEoAuajsDUHXJy2km1cIrSxk_fhLeIME0YgjFvRnIi1rl3ZwbKbSEAX-QXpIlcmZsjrQVvvVx9gMhfg8pnGd2M4UQ73rwB2oP85IjcAyO4N3OTtANM"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">James Miller</p>
+<p class="text-xs text-slate-500">13,900 XP</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold px-2 py-0.5 rounded bg-slate-500/20 text-slate-400">Stable</span>
+</div>
+</div>
+<!-- User Rank -->
+<div class="flex items-center gap-4 p-4 bg-primary/10 border-l-4 border-primary">
+<span class="text-primary font-bold w-4">24</span>
+<div class="size-10 rounded-full bg-primary/20 flex-shrink-0 border-2 border-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">You (Alex)</p>
+<p class="text-xs text-slate-500">8,420 XP</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold px-2 py-0.5 rounded bg-primary/20 text-primary">Top 15%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto z-50">
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md px-4 pb-6 pt-2">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Study</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined font-variation-fill">timer</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Practice</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Doubt AI</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-bold uppercase tracking-wider">Profile</p>
+</a>
+</div>
+</div>
+</div>
+</body></html>

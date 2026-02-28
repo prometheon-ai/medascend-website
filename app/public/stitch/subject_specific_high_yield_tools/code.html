@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Subject Specific High Yield Tools</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1791cf",
+                        "secondary": "#426F80",
+                        "accent": "#A1B9C5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .ios-status-bar {
+            height: 44px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- iOS Status Bar Placeholder -->
+<div class="ios-status-bar flex justify-between items-center px-6 w-full">
+<span class="text-sm font-semibold">9:41</span>
+<div class="flex gap-1 items-center">
+<span class="material-symbols-outlined text-sm">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-sm">wifi</span>
+<span class="material-symbols-outlined text-sm">battery_full</span>
+</div>
+</div>
+<!-- Header -->
+<header class="flex items-center px-4 py-2 justify-between">
+<button class="text-slate-900 dark:text-slate-100 p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back_ios</span>
+</button>
+<h1 class="text-lg font-bold flex-1 text-center tracking-tight">High Yield Tools</h1>
+<button class="text-slate-900 dark:text-slate-100 p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Content Wrapper -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Subject Selector -->
+<div class="px-4 py-4">
+<div class="flex h-12 w-full items-center justify-center rounded-xl bg-slate-200 dark:bg-slate-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-primary has-[:checked]:text-white text-slate-500 dark:text-slate-400 text-sm font-medium transition-all">
+<span>Anatomy</span>
+<input checked="" class="hidden" name="subject" type="radio" value="Anatomy"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center rounded-lg px-2 has-[:checked]:bg-primary has-[:checked]:text-white text-slate-500 dark:text-slate-400 text-sm font-medium transition-all">
+<span>Pharmacology</span>
+<input class="hidden" name="subject" type="radio" value="Pharmacology"/>
+</label>
+</div>
+</div>
+<!-- Section 1: Anatomy Origin-Insertion Table -->
+<section class="px-4 mb-6">
+<div class="flex items-center gap-2 mb-4">
+<div class="p-2 bg-secondary/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary">accessibility_new</span>
+</div>
+<h2 class="text-xl font-bold">Origin-Insertion Table</h2>
+</div>
+<div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="grid grid-cols-3 bg-secondary/10 border-b border-slate-200 dark:border-slate-800">
+<div class="p-3 text-xs font-bold text-secondary uppercase tracking-wider">Muscle</div>
+<div class="p-3 text-xs font-bold text-secondary uppercase tracking-wider border-l border-slate-200 dark:border-slate-800">Origin</div>
+<div class="p-3 text-xs font-bold text-secondary uppercase tracking-wider border-l border-slate-200 dark:border-slate-800">Insertion</div>
+</div>
+<!-- Table Row 1 -->
+<div class="grid grid-cols-3 border-b border-slate-200 dark:border-slate-800">
+<div class="p-3 text-sm font-medium">Biceps Brachii</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Coracoid Process</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Radial Tuberosity</div>
+</div>
+<!-- Table Row 2 -->
+<div class="grid grid-cols-3 border-b border-slate-200 dark:border-slate-800">
+<div class="p-3 text-sm font-medium">Deltoid</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Clavicle &amp; Acromion</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Deltoid Tuberosity</div>
+</div>
+<!-- Table Row 3 -->
+<div class="grid grid-cols-3">
+<div class="p-3 text-sm font-medium">Triceps Brachii</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Infraglenoid Tubercle</div>
+<div class="p-3 text-xs border-l border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">Olecranon Process</div>
+</div>
+</div>
+<button class="mt-3 w-full py-3 bg-secondary/10 text-secondary font-semibold rounded-xl text-sm hover:bg-secondary/20 transition-colors">
+                Expand Full Upper Limb
+            </button>
+</section>
+<!-- Section 2: Drug Classification Hook -->
+<section class="px-4">
+<div class="flex items-center gap-2 mb-4">
+<div class="p-2 bg-primary/20 rounded-lg">
+<span class="material-symbols-outlined text-primary">medication</span>
+</div>
+<h2 class="text-xl font-bold">Drug Classification Hook</h2>
+</div>
+<div class="space-y-3">
+<!-- Hook Card 1 -->
+<div class="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 flex gap-4 items-start">
+<div class="h-10 w-10 shrink-0 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                        -olol
+                    </div>
+<div>
+<h3 class="font-bold text-primary">Beta-Blockers</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1 italic">"Block the heart's adrenaline rush."</p>
+<div class="mt-2 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-[10px] font-bold">PROPRANOLOL</span>
+<span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-[10px] font-bold">ATENOLOL</span>
+</div>
+</div>
+</div>
+<!-- Hook Card 2 -->
+<div class="p-4 rounded-xl bg-gradient-to-br from-accent/20 to-transparent border border-accent/30 flex gap-4 items-start">
+<div class="h-10 w-10 shrink-0 bg-secondary text-white rounded-full flex items-center justify-center font-bold">
+                        -pril
+                    </div>
+<div>
+<h3 class="font-bold text-secondary">ACE Inhibitors</h3>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1 italic">"Chill the pressure, protect the kidneys."</p>
+<div class="mt-2 flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-[10px] font-bold">LISINOPRIL</span>
+<span class="px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded text-[10px] font-bold">ENALAPRIL</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pro Tip Promo -->
+<div class="mx-4 mt-8 p-6 rounded-2xl bg-slate-900 text-white relative overflow-hidden">
+<div class="relative z-10">
+<span class="bg-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">MedAscend AI</span>
+<h3 class="text-xl font-bold mt-2">Doubt Resolution</h3>
+<p class="text-slate-400 text-sm mt-1">Confused by the Brachial Plexus? Ask AI to simplify it into 3 simple hooks.</p>
+<button class="mt-4 px-6 py-2 bg-white text-slate-900 font-bold rounded-full text-sm">Ask Now</button>
+</div>
+<div class="absolute right-[-20px] top-[-20px] opacity-20">
+<span class="material-symbols-outlined text-[120px]">psychology</span>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pb-6 pt-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-medium">Study</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">handyman</span>
+<span class="text-[10px] font-medium">Tools</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">psychology_alt</span>
+<span class="text-[10px] font-medium">Recall</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</body></html>

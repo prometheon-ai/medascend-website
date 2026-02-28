@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedAscend - Start Your Ascent</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1791cf",
+                        "med-slate": "#426F80",
+                        "med-cream": "#FAF3EB",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .ecg-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 0;
+            opacity: 0.15;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex flex-1 flex-col overflow-x-hidden max-w-md mx-auto w-full bg-background-light dark:bg-background-dark shadow-2xl">
+<header class="flex items-center p-6 justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-2 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">MedAscend</h2>
+</div>
+<button class="p-2 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-6 relative">
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-30 dark:opacity-20 flex items-center justify-center">
+<svg class="text-primary" height="200" viewbox="0 0 800 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path class="ecg-line" d="M0,100 L150,100 L170,80 L190,120 L210,100 L250,100 L260,40 L280,160 L300,100 L400,100 L420,80 L440,120 L460,100 L500,100 L510,40 L530,160 L550,100 L800,100" fill="none" stroke="currentColor" stroke-width="3"></path>
+</svg>
+</div>
+<div class="z-10 w-full flex flex-col items-center text-center">
+<div class="relative mb-8">
+<div class="w-32 h-32 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined !text-6xl">school</span>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-med-cream dark:bg-med-slate p-2 rounded-full shadow-lg border-2 border-background-light dark:border-background-dark">
+<span class="material-symbols-outlined text-primary dark:text-med-cream">verified</span>
+</div>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-bold leading-tight mb-4">
+                    Your Ascent <br/> Starts Here.
+                </h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg max-w-xs mb-10 leading-relaxed">
+                    The all-in-one medical education platform designed by students, for students.
+                </p>
+<div class="flex flex-col w-full gap-4 max-w-xs">
+<a class="flex items-center justify-center gap-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-4 px-6 rounded-xl font-medium transition-all active:scale-95" href="#">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+<path d="M18.71,19.5C17.88,20.74,17,21.95,15.66,21.97C14.32,22,13.89,21.18,12.37,21.18C10.84,21.18,10.37,21.95,9.1,22C7.79,22.05,6.8,20.68,5.96,19.47C4.25,17,2.94,12.45,4.7,9.39C5.57,7.87,7.13,6.91,8.82,6.88C10.1,6.86,11.32,7.75,12.11,7.75C12.89,7.75,14.37,6.68,15.92,6.84C16.57,6.87,18.39,7.1,19.56,8.82C19.47,8.88,17.39,10.1,17.41,12.63C17.44,15.65,20.06,16.66,20.09,16.67C20.06,16.74,19.67,18.11,18.71,19.5M13,3.5C13.73,2.67,14.94,2.04,15.94,2C16.07,3.17,15.6,4.35,14.9,5.19C14.21,6.04,13.07,6.7,11.95,6.61C11.8,5.46,12.36,4.26,13,3.5Z"></path>
+</svg>
+<div class="text-left">
+<p class="text-[10px] uppercase font-bold leading-none">Download on the</p>
+<p class="text-lg font-bold leading-none">App Store</p>
+</div>
+</a>
+<a class="flex items-center justify-center gap-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-4 px-6 rounded-xl font-medium transition-all active:scale-95" href="#">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24">
+<path d="M3,20.5V3.5C3,2.91,3.34,2.39,3.84,2.15L13.69,12L3.84,21.85C3.34,21.61,3,21.09,3,20.5M16.81,15.12L18.65,14.06C21.45,12.45,21.45,11.55,18.65,9.94L16.81,8.88L14.4,11.29L16.81,15.12M4.54,1.54C4.69,1.5,4.84,1.5,5,1.5C5.47,1.5,5.92,1.67,6.35,1.91L15.39,7.11L12.98,9.52L4.54,1.54M4.54,22.46L12.98,14.47L15.39,16.88L6.35,22.09C5.92,22.33,5.47,22.5,5,22.5C4.84,22.5,4.69,22.5,4.54,22.46Z"></path>
+</svg>
+<div class="text-left">
+<p class="text-[10px] uppercase font-bold leading-none">Get it on</p>
+<p class="text-lg font-bold leading-none">Google Play</p>
+</div>
+</a>
+</div>
+</div>
+</main>
+<footer class="mt-auto px-6 pb-10">
+<div class="flex flex-col items-center gap-4">
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary" href="#">
+<span class="material-symbols-outlined !text-xl">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary" href="#">
+<span class="material-symbols-outlined !text-xl">mail</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary" href="#">
+<span class="material-symbols-outlined !text-xl">help</span>
+</a>
+</div>
+<p class="text-slate-400 text-sm">Join 10k+ medical students today</p>
+</div>
+</footer>
+<nav class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 pb-6 pt-3 sticky bottom-0">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-medium">Study</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">rocket_launch</span>
+<p class="text-[10px] font-medium">Start</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">insights</span>
+<p class="text-[10px] font-medium">Progress</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-[10px] font-medium">Profile</p>
+</a>
+</nav>
+</div>
+</body></html>

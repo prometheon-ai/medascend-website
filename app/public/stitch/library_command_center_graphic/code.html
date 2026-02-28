@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#426f80",
+                        "accent-red": "#BA5B47",
+                        "neutral-muted": "#A49692",
+                        "background-light": "#FAF3EB",
+                        "background-dark": "#161a1c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-[430px] mx-auto bg-background-light shadow-2xl">
+<!-- Header / Navigation -->
+<div class="flex items-center bg-transparent p-4 pb-2 justify-between">
+<div class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Library Command Center</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-12 cursor-pointer items-center justify-center rounded-full bg-transparent text-slate-900 dark:text-slate-100 p-0">
+<span class="material-symbols-outlined text-2xl">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Search Bar Mockup -->
+<div class="px-6 py-4">
+<label class="flex flex-col min-w-40 h-14 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-sm">
+<div class="text-white flex border-none bg-neutral-muted items-center justify-center pl-4 rounded-l-xl border-r-0">
+<span class="material-symbols-outlined text-2xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-white focus:outline-0 focus:ring-0 border-none bg-neutral-muted focus:border-none h-full placeholder:text-white/80 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search PDFs, Notes, YouTube..." readonly="" value=""/>
+</div>
+</label>
+</div>
+<!-- Hero Content -->
+<div class="flex flex-col items-center px-6 pt-8 pb-4 text-center">
+<h1 class="text-accent-red tracking-tight text-[36px] font-bold leading-tight pb-2">Zero Fragmentation</h1>
+<p class="text-slate-700 dark:text-slate-300 text-lg font-medium max-w-[280px]">All your study materials in one place</p>
+</div>
+<!-- Central Visualization Graphic -->
+<div class="relative flex-1 flex items-center justify-center px-4 min-h-[400px]">
+<!-- Converging Elements Container -->
+<div class="relative w-full h-full flex items-center justify-center">
+<!-- Central Hub -->
+<div class="z-10 bg-primary w-32 h-32 rounded-3xl shadow-xl flex flex-col items-center justify-center text-white ring-8 ring-white/20">
+<span class="material-symbols-outlined text-5xl mb-1" style="font-variation-settings: 'FILL' 1">folder_managed</span>
+<span class="text-[10px] uppercase tracking-widest font-bold">Command Hub</span>
+</div>
+<!-- Floating Inputs (Converging) -->
+<!-- PDF Top Left -->
+<div class="absolute top-10 left-10 flex flex-col items-center">
+<div class="bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">picture_as_pdf</span>
+</div>
+<div class="h-16 w-1 mt-2 bg-gradient-to-b from-primary/40 to-transparent rounded-full rotate-[45deg] origin-top"></div>
+</div>
+<!-- Video Top Right -->
+<div class="absolute top-10 right-10 flex flex-col items-center">
+<div class="bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center text-red-500">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1">smart_display</span>
+</div>
+<div class="h-16 w-1 mt-2 bg-gradient-to-b from-primary/40 to-transparent rounded-full -rotate-[45deg] origin-top"></div>
+</div>
+<!-- Notes Bottom Left -->
+<div class="absolute bottom-10 left-10 flex flex-col items-center">
+<div class="h-16 w-1 mb-2 bg-gradient-to-t from-primary/40 to-transparent rounded-full rotate-[45deg] origin-bottom"></div>
+<div class="bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center text-amber-500">
+<span class="material-symbols-outlined text-3xl">description</span>
+</div>
+</div>
+<!-- Links/Web Bottom Right -->
+<div class="absolute bottom-10 right-10 flex flex-col items-center">
+<div class="h-16 w-1 mb-2 bg-gradient-to-t from-primary/40 to-transparent rounded-full -rotate-[45deg] origin-bottom"></div>
+<div class="bg-white p-3 rounded-2xl shadow-lg border border-slate-100 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-3xl">link</span>
+</div>
+</div>
+<!-- Additional Small Elements -->
+<div class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/60 p-2 rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary/60">audio_file</span>
+</div>
+<div class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/60 p-2 rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-primary/60">table_chart</span>
+</div>
+</div>
+</div>
+<!-- Graphic Progress Indicator -->
+<div class="px-6 py-4 flex justify-center gap-1.5">
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-10 rounded-full bg-primary"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+<div class="h-1.5 w-6 rounded-full bg-slate-200"></div>
+</div>
+<!-- Bottom Navigation Bar -->
+<div class="flex gap-2 border-t border-slate-200 bg-white/80 backdrop-blur-md px-4 pb-8 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<p class="text-[10px] font-medium leading-normal">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1">library_books</span>
+<p class="text-[10px] font-medium leading-normal">Library</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">psychology</span>
+<p class="text-[10px] font-medium leading-normal">AI Tutor</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">style</span>
+<p class="text-[10px] font-medium leading-normal">Flashcards</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<p class="text-[10px] font-medium leading-normal">Profile</p>
+</a>
+</div>
+<!-- iOS Home Indicator -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-900/10 rounded-full"></div>
+</div>
+</body></html>

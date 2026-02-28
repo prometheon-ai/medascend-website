@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1791cf",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                        "accent-teal": "#426F80",
+                        "accent-rust": "#BA5B47",
+                        "soft-paper": "#FAF3EB"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>MedAscend Vision</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">menu</span>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">MedAscend</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full bg-slate-200 dark:bg-slate-800">
+<span class="material-symbols-outlined text-slate-700 dark:text-slate-300">person</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 pb-24">
+<!-- Hero Section -->
+<div class="@container p-4">
+<div class="relative overflow-hidden rounded-xl aspect-[9/12] flex flex-col justify-end p-6 bg-soft-paper shadow-2xl">
+<!-- Stylized Background Image Representing 3D Medical Illustration -->
+<div class="absolute inset-0 z-0">
+<img alt="Determined medical student with floating digital interfaces" class="w-full h-full object-cover opacity-80" data-alt="Determined medical student with floating digital interfaces" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKyKGdwe9a_3ZVvVcP-wfXzqbgRaBzVhOnPM9NbPPVB6X7RJW0_eVv2ItZwD8WtiWCASAk9Ds3Q9pHiwHQjJ5SBGNzdBfBTjY9PbeBRljr_hNegH8SGvlpQb4hvmn7at--6FNM_sOXqYh99A2u-wIvorLQl0xAEAouUF0VsWGXLKBdD5sTXOb29ET_SfHqwdCE6GgXT4aCC3Ig2QfHo9bDg2JFMtS65FOEf0tbO_ZxmcGC5GVbzcHrduJfROT5O-G4-d9g8aRVdCA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+</div>
+<!-- Floating UI Elements (Stylized) -->
+<div class="absolute top-12 right-6 z-10 animate-pulse">
+<div class="bg-white/90 dark:bg-background-dark/90 backdrop-blur-md p-3 rounded shadow-lg border-l-4 border-accent-teal">
+<p class="text-[10px] uppercase font-bold text-accent-teal tracking-wider">Deep Learn Mode</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-sm text-accent-teal">psychology</span>
+<span class="text-xs font-semibold">Active Recall Active</span>
+</div>
+</div>
+</div>
+<div class="absolute top-40 left-6 z-10">
+<div class="relative size-20 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/50">
+<div class="absolute inset-0 rounded-full border-4 border-accent-rust border-t-transparent animate-spin" style="animation-duration: 3s;"></div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold text-white leading-none">85%</span>
+<span class="text-[8px] text-white opacity-80">Forge</span>
+</div>
+</div>
+</div>
+<!-- Hero Text -->
+<div class="relative z-20 space-y-3">
+<span class="inline-block px-3 py-1 bg-accent-rust text-white text-[10px] font-bold rounded-full uppercase tracking-widest">Variant 1 of 10</span>
+<h2 class="text-3xl font-extrabold text-white leading-tight">Built by a Medical Student.<br/><span class="text-primary">For Medical Students.</span></h2>
+<p class="text-slate-200 text-sm max-w-[280px]">Precision-engineered tools for the modern medical curriculum.</p>
+</div>
+</div>
+</div>
+<!-- Stats/Progress Section -->
+<div class="px-4 py-6">
+<div class="bg-slate-100 dark:bg-slate-800/50 rounded-lg p-5 border border-slate-200 dark:border-slate-700">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<span class="font-bold text-slate-800 dark:text-slate-200">Memory Forge</span>
+</div>
+<span class="text-lg font-bold text-primary">75%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 75%;"></div>
+</div>
+<div class="flex justify-between mt-3 text-xs text-slate-500 dark:text-slate-400">
+<span>Daily Mastery Goal</span>
+<span class="font-medium text-slate-700 dark:text-slate-300">150 / 200 Cards</span>
+</div>
+</div>
+</div>
+<!-- Feature Quick Access -->
+<div class="px-4 space-y-4">
+<h3 class="text-lg font-bold px-1">Study Suite</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-accent-teal/10 dark:bg-accent-teal/20 rounded border border-accent-teal/20 flex flex-col gap-2">
+<span class="material-symbols-outlined text-accent-teal">bolt</span>
+<p class="font-bold text-sm">Deep Learn</p>
+<p class="text-[10px] text-slate-600 dark:text-slate-400">AI-assisted recall sessions</p>
+</div>
+<div class="p-4 bg-accent-rust/10 dark:bg-accent-rust/20 rounded border border-accent-rust/20 flex flex-col gap-2">
+<span class="material-symbols-outlined text-accent-rust">auto_awesome</span>
+<p class="font-bold text-sm">AI Mentor</p>
+<p class="text-[10px] text-slate-600 dark:text-slate-400">Instant doubt resolution</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full bg-white/95 dark:bg-background-dark/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2 z-50">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="text-[10px] font-bold">Forge</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="text-[10px] font-medium">Library</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-[10px] font-medium">AI Mentor</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

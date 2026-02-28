@@ -1,0 +1,105 @@
+import { useState, useEffect } from 'react'
+import { Sun, Moon, Menu, X } from 'lucide-react'
+import faviconImg from '../assets/favicon.png'
+
+export default function Navbar({ theme, toggleTheme }) {
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const links = [
+    { href: '#features', label: 'Features' },
+    { href: '#study-hub', label: 'Study Hub' },
+    { href: '#practice', label: 'Practice' },
+    { href: '#ai-zone', label: 'AI Zone' },
+    { href: '#roadmap', label: 'Roadmap' },
+  ]
+
+  const closeMobile = () => setMobileOpen(false)
+
+  return (
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
+        ${scrolled ? 'shadow-lg' : ''}
+        ${theme === 'dark'
+          ? 'bg-dark/85 border-teal/10'
+          : 'bg-cream/85 border-teal/8'
+        }`}>
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[68px]">
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-2.5 no-underline">
+            <img src={faviconImg} alt="Prometheon Logo" className="w-[34px] h-[34px] rounded-lg object-contain" />
+            <div className="flex flex-col justify-center">
+              <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
+                Prometheon Applied 
+              </span>
+              <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
+                Intelligence
+              </span>
+              
+            </div>
+          </a>
+
+          {/* Desktop nav links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {links.map(l => (
+              <a key={l.href} href={l.href}
+                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200
+                  ${theme === 'dark'
+                    ? 'text-sky hover:text-cream hover:bg-teal/10'
+                    : 'text-teal-deep hover:text-teal hover:bg-teal/8'
+                  }`}>
+                {l.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            <button onClick={toggleTheme} aria-label="Toggle theme"
+              className={`w-10 h-10 rounded-full border flex items-center justify-center cursor-pointer transition-all duration-200
+                ${theme === 'dark'
+                  ? 'border-teal/20 text-sky hover:bg-teal/10'
+                  : 'border-teal/15 text-teal hover:bg-teal/8'
+                }`}>
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <a href="#cta"
+              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200">
+              Get Early Access
+            </a>
+            <button onClick={() => setMobileOpen(!mobileOpen)}
+              className="lg:hidden p-1.5 text-current cursor-pointer bg-transparent border-none"
+              aria-label="Menu">
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile menu overlay */}
+      <div className={`fixed inset-0 z-40 pt-[68px] transition-all duration-300 backdrop-blur-xl
+        ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        ${theme === 'dark' ? 'bg-dark/95' : 'bg-cream/95'}`}>
+        <div className="flex flex-col items-center justify-center h-full gap-4">
+          {links.map(l => (
+            <a key={l.href} href={l.href} onClick={closeMobile}
+              className={`text-xl font-semibold px-6 py-3 rounded-xl transition-all
+                ${theme === 'dark' ? 'text-cream hover:bg-teal/10' : 'text-dark hover:bg-teal/8'}`}>
+              {l.label}
+            </a>
+          ))}
+          <a href="#cta" onClick={closeMobile}
+            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl">
+            Get Early Access
+          </a>
+        </div>
+      </div>
+    </>
+  )
+}
