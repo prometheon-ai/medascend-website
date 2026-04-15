@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Problem from './components/Problem'
-import Features from './components/Features'
-import StudyHub from './components/StudyHub'
-import PracticeZone from './components/PracticeZone'
-import AIZone from './components/AIZone'
-import MoreFeatures from './components/MoreFeatures'
-import PainPoints from './components/PainPoints'
-import Roadmap from './components/Roadmap'
-import Founder from './components/Founder'
-import CTA from './components/CTA'
 import Footer from './components/Footer'
+import EarlyAccessModal from './components/EarlyAccessModal'
+import HomePage from './pages/HomePage'
+import FeaturesPage from './pages/FeaturesPage'
+import StudyHubPage from './pages/StudyHubPage'
+import PracticeZonePage from './pages/PracticeZonePage'
+import AIZonePage from './pages/AIZonePage'
+import RoadmapPage from './pages/RoadmapPage'
+import AboutPage from './pages/AboutPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -20,6 +20,7 @@ export default function App() {
     }
     return 'dark'
   })
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark')
@@ -28,22 +29,27 @@ export default function App() {
   }, [theme])
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
+  const openModal = () => setModalOpen(true)
+  const closeModal = () => setModalOpen(false)
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'bg-dark text-cream' : 'bg-cream text-dark'}`}>
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <Hero theme={theme} />
-      <Problem theme={theme} />
-      <Features theme={theme} />
-      <StudyHub theme={theme} />
-      <PracticeZone theme={theme} />
-      <AIZone theme={theme} />
-      <MoreFeatures theme={theme} />
-      <PainPoints theme={theme} />
-      <Roadmap theme={theme} />
-      <Founder theme={theme} />
-      <CTA theme={theme} />
+      <ScrollToTop />
+      <Navbar theme={theme} toggleTheme={toggleTheme} onEarlyAccess={openModal} />
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage theme={theme} onEarlyAccess={openModal} />} />
+          <Route path="/features" element={<FeaturesPage theme={theme} />} />
+          <Route path="/features/study-hub" element={<StudyHubPage theme={theme} />} />
+          <Route path="/features/practice-zone" element={<PracticeZonePage theme={theme} />} />
+          <Route path="/features/ai-zone" element={<AIZonePage theme={theme} />} />
+          <Route path="/roadmap" element={<RoadmapPage theme={theme} />} />
+          <Route path="/about" element={<AboutPage theme={theme} />} />
+          <Route path="*" element={<NotFoundPage theme={theme} />} />
+        </Routes>
+      </main>
       <Footer theme={theme} />
+      <EarlyAccessModal isOpen={modalOpen} onClose={closeModal} theme={theme} />
     </div>
   )
 }

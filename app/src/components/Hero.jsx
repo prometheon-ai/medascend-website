@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom'
 import { Rocket, ArrowDown, Brain, Bot, GraduationCap, Flame, ShieldCheck, Target, Layers, BarChart3, Sparkles, BookOpen, Stethoscope } from 'lucide-react'
 
-export default function Hero({ theme }) {
+export default function Hero({ theme, onEarlyAccess }) {
   const d = theme === 'dark'
   return (
     <section id="hero" className={`relative min-h-screen flex items-center pt-[68px] overflow-hidden
@@ -51,13 +52,10 @@ export default function Hero({ theme }) {
           </p>
 
           <div className="flex flex-wrap gap-3 mb-8">
-            <a href="#cta" className="inline-flex items-center gap-2 px-7 py-3.5 bg-teal text-cream font-semibold text-[15px] rounded-xl hover:-translate-y-0.5 hover:shadow-xl hover:shadow-teal/30 transition-all duration-300">
-              <Rocket size={18} /> Get Early Access
-            </a>
-            <a href="#features" className={`inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-[15px] rounded-xl border transition-all duration-300 hover:-translate-y-0.5
+            <Link to="/features" className={`inline-flex items-center gap-2 px-7 py-3.5 font-semibold text-[15px] rounded-xl border transition-all duration-300 hover:-translate-y-0.5
               ${d ? 'border-teal/20 text-cream hover:bg-teal/8' : 'border-teal/15 text-dark hover:bg-teal/5'}`}>
               <ArrowDown size={18} /> Explore Features
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-wrap gap-3">

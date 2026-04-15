@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Sun, Moon, Menu, X } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 
-export default function Navbar({ theme, toggleTheme }) {
+export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const location = useLocation()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -12,15 +14,20 @@ export default function Navbar({ theme, toggleTheme }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location.pathname])
+
   const links = [
-    { href: '#features', label: 'Features' },
-    { href: '#study-hub', label: 'Study Hub' },
-    { href: '#practice', label: 'Practice' },
-    { href: '#ai-zone', label: 'AI Zone' },
-    { href: '#roadmap', label: 'Roadmap' },
+    { to: '/', label: 'Home' },
+    { to: '/features', label: 'Features' },
+    { to: '/features/study-hub', label: 'Study Hub' },
+    { to: '/features/practice-zone', label: 'Practice' },
+    { to: '/features/ai-zone', label: 'AI Zone' },
+    { to: '/roadmap', label: 'Roadmap' },
   ]
 
-  const closeMobile = () => setMobileOpen(false)
+  const isActive = (to) => location.pathname === to
 
   return (
     <>
@@ -32,30 +39,33 @@ export default function Navbar({ theme, toggleTheme }) {
         }`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[68px]">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 no-underline">
+          <Link to="/" className="flex items-center gap-2.5 no-underline">
             <img src={faviconImg} alt="Prometheon Logo" className="w-[34px] h-[34px] rounded-lg object-contain" />
             <div className="flex flex-col justify-center">
               <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
-                Prometheon Applied 
+                Prometheon Applied
               </span>
               <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
                 Intelligence
               </span>
-              
             </div>
-          </a>
+          </Link>
 
           {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-1">
             {links.map(l => (
-              <a key={l.href} href={l.href}
+              <Link key={l.to} to={l.to}
                 className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200
-                  ${theme === 'dark'
-                    ? 'text-sky hover:text-cream hover:bg-teal/10'
-                    : 'text-teal-deep hover:text-teal hover:bg-teal/8'
+                  ${isActive(l.to)
+                    ? theme === 'dark'
+                      ? 'text-cream bg-teal/15'
+                      : 'text-teal bg-teal/12'
+                    : theme === 'dark'
+                      ? 'text-sky hover:text-cream hover:bg-teal/10'
+                      : 'text-teal-deep hover:text-teal hover:bg-teal/8'
                   }`}>
                 {l.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -69,10 +79,10 @@ export default function Navbar({ theme, toggleTheme }) {
                 }`}>
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <a href="#cta"
-              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200">
+            <button onClick={onEarlyAccess}
+              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none">
               Get Early Access
-            </a>
+            </button>
             <button onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-1.5 text-current cursor-pointer bg-transparent border-none"
               aria-label="Menu">
@@ -88,16 +98,19 @@ export default function Navbar({ theme, toggleTheme }) {
         ${theme === 'dark' ? 'bg-dark/95' : 'bg-cream/95'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-4">
           {links.map(l => (
-            <a key={l.href} href={l.href} onClick={closeMobile}
+            <Link key={l.to} to={l.to}
               className={`text-xl font-semibold px-6 py-3 rounded-xl transition-all
-                ${theme === 'dark' ? 'text-cream hover:bg-teal/10' : 'text-dark hover:bg-teal/8'}`}>
+                ${isActive(l.to)
+                  ? theme === 'dark' ? 'text-cream bg-teal/15' : 'text-dark bg-teal/12'
+                  : theme === 'dark' ? 'text-cream hover:bg-teal/10' : 'text-dark hover:bg-teal/8'
+                }`}>
               {l.label}
-            </a>
+            </Link>
           ))}
-          <a href="#cta" onClick={closeMobile}
-            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl">
+          <button onClick={() => { setMobileOpen(false); onEarlyAccess() }}
+            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl cursor-pointer border-none">
             Get Early Access
-          </a>
+          </button>
         </div>
       </div>
     </>

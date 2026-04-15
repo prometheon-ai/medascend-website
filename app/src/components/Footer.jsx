@@ -1,37 +1,11 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Mail, X } from 'lucide-react'
 import Logo from './Logo'
 
 export default function Footer({ theme }) {
   const d = theme === 'dark'
-  const cols = [
-    {
-      title: 'Platform',
-      links: [
-        { label: 'Study Hub', href: '#study-hub' },
-        { label: 'Practice Zone', href: '#practice' },
-        { label: 'AI Zone', href: '#ai-zone' },
-        { label: 'Flashcards', href: '#more-features' },
-        { label: 'Library', href: '#more-features' },
-      ],
-    },
-    {
-      title: 'Resources',
-      links: [
-        { label: 'Features', href: '#features' },
-        { label: 'Pain Points', href: '#painpoints' },
-        { label: 'Roadmap', href: '#roadmap' },
-        { label: 'About', href: '#founder' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'Prometheon AI', href: '#' },
-        { label: 'Contact', href: '#' },
-        { label: 'Privacy Policy', href: '#' },
-        { label: 'Terms of Service', href: '#' },
-      ],
-    },
-  ]
+  const [showContact, setShowContact] = useState(false)
 
   return (
     <footer className={`pt-16 pb-8 ${d ? 'bg-[#0a1218]' : 'bg-dark-surface'}`}>
@@ -39,29 +13,60 @@ export default function Footer({ theme }) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-12 border-b border-teal/10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2.5 mb-3">
+            <Link to="/" className="flex items-center gap-2.5 mb-3 no-underline">
               <Logo size={30} />
               <span className="text-lg font-extrabold tracking-tight">
                 <span className="text-cream">Med</span>
                 <span className="text-gold-light">Ascend</span>
               </span>
-            </div>
+            </Link>
             <p className="text-xs text-sky/40 tracking-[3px] uppercase mb-2 font-[family-name:var(--font-family-secondary)]">Rise Through Medicine</p>
-            <p className="text-sm text-sky/50 font-[family-name:var(--font-family-secondary)]">Built at KEM. Designed for success.</p>
+            <p className="text-sm text-sky/50 font-[family-name:var(--font-family-secondary)]">Built by a Medical Student, For NEET PG Aspirants.</p>
           </div>
 
-          {cols.map((col, i) => (
-            <div key={i}>
-              <h4 className="text-sm font-bold text-cream mb-4">{col.title}</h4>
-              <div className="flex flex-col gap-2.5">
-                {col.links.map((link, j) => (
-                  <a key={j} href={link.href} className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
+          {/* Platform */}
+          <div>
+            <h4 className="text-sm font-bold text-cream mb-4">Platform</h4>
+            <div className="flex flex-col gap-2.5">
+              <Link to="/features/study-hub" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Study Hub</Link>
+              <Link to="/features/practice-zone" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Practice Zone</Link>
+              <Link to="/features/ai-zone" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">AI Zone</Link>
             </div>
-          ))}
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="text-sm font-bold text-cream mb-4">Resources</h4>
+            <div className="flex flex-col gap-2.5">
+              <Link to="/features" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Features</Link>
+              <Link to="/roadmap" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Roadmap</Link>
+              <Link to="/about" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">About</Link>
+            </div>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-sm font-bold text-cream mb-4">Company</h4>
+            <div className="flex flex-col gap-2.5">
+              <a href="https://theprometheonai.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Prometheon AI</a>
+              <button onClick={() => setShowContact(!showContact)} className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)] text-left bg-transparent border-none cursor-pointer p-0">Contact</button>
+            </div>
+
+            {/* Contact card */}
+            {showContact && (
+              <div className="mt-3 p-3 rounded-xl border border-teal/15 bg-dark-surface/80 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-semibold text-cream">Get in touch</span>
+                  <button onClick={() => setShowContact(false)} className="text-sky/40 hover:text-cream bg-transparent border-none cursor-pointer p-0">
+                    <X size={14} />
+                  </button>
+                </div>
+                <a href="mailto:info@theprometheonai.com" className="inline-flex items-center gap-2 text-sm text-teal-light hover:text-cream transition-colors font-[family-name:var(--font-family-secondary)]">
+                  <Mail size={14} /> info@theprometheonai.com
+                </a>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="pt-6 text-center">

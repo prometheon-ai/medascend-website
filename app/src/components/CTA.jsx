@@ -1,7 +1,7 @@
 import { Bell } from 'lucide-react'
 import Logo from './Logo'
 
-export default function CTA({ theme }) {
+export default function CTA({ theme, onEarlyAccess }) {
   const d = theme === 'dark'
   return (
     <section id="cta" className={`py-24 lg:py-32 ${d ? 'bg-dark' : 'bg-cream'}`}>
@@ -26,9 +26,10 @@ export default function CTA({ theme }) {
             <p className="text-base text-sky/60 max-w-lg mx-auto mb-10 font-[family-name:var(--font-family-secondary)]">
               MedAscend is currently under development. Be among the first to experience the future of medical education.
             </p>
-            <a href="#" className="inline-flex items-center gap-2.5 px-10 py-4 bg-teal text-cream font-bold text-base rounded-2xl hover:-translate-y-1 hover:shadow-xl hover:shadow-teal/30 transition-all duration-300">
+            <button onClick={onEarlyAccess}
+              className="inline-flex items-center gap-2.5 px-10 py-4 bg-teal text-cream font-bold text-base rounded-2xl hover:-translate-y-1 hover:shadow-xl hover:shadow-teal/30 transition-all duration-300 cursor-pointer border-none">
               <Bell size={20} /> Notify Me at Launch
-            </a>
+            </button>
             <p className="mt-8 text-xs text-sky/40 font-[family-name:var(--font-family-secondary)]">
               A product of <span className="font-semibold text-sky/60">Prometheon Applied Intelligence Pvt. Ltd.</span>
             </p>

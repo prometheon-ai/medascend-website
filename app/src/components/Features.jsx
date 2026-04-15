@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom'
 import { BookOpen, Target, Cpu, Layers, Library, CalendarCheck, ArrowRight } from 'lucide-react'
 
 const features = [
-  { icon: BookOpen, title: 'Study Hub', desc: 'Five integrated modes flowing from one source. Content that respects your time.', href: '#study-hub', color: 'bg-teal', primary: true },
-  { icon: Target, title: 'Practice Zone', desc: 'Every practice scenario covered. Personalized daily questions, full mock tests, and custom quizzes.', href: '#practice', color: 'bg-gold' },
-  { icon: Cpu, title: 'AI Zone', desc: 'Context that generic AI cannot touch. 19 subject-specific chatbots with bounded expertise.', href: '#ai-zone', color: 'bg-terracotta' },
+  { icon: BookOpen, title: 'Study Hub', desc: 'Five integrated modes flowing from one source. Content that respects your time.', to: '/features/study-hub', color: 'bg-teal', primary: true },
+  { icon: Target, title: 'Practice Zone', desc: 'Every practice scenario covered. Personalized daily questions, full mock tests, and custom quizzes.', to: '/features/practice-zone', color: 'bg-gold' },
+  { icon: Cpu, title: 'AI Zone', desc: 'Context that generic AI cannot touch. 19 subject-specific chatbots with bounded expertise.', to: '/features/ai-zone', color: 'bg-terracotta' },
   { icon: Layers, title: 'Flashcard System', desc: 'SM2 spaced repetition. Chapter-wise decks. Daily review queues with streak tracking.', color: 'bg-sky' },
   { icon: Library, title: 'Library', desc: 'PDFs, YouTube, web articles, personal notes — unified, searchable, annotatable.', color: 'bg-stone' },
   { icon: CalendarCheck, title: 'Diary & Planner', desc: 'Log progress. Schedule revision blocks. From overwhelming syllabus to manageable daily missions.', color: 'bg-gold' },
@@ -40,10 +41,10 @@ export default function Features({ theme }) {
               </div>
               <h3 className={`text-lg font-bold mb-2 ${d ? 'text-cream' : 'text-dark'}`}>{f.title}</h3>
               <p className={`text-sm leading-relaxed mb-4 font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>{f.desc}</p>
-              {f.href && (
-                <a href={f.href} className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal group-hover:gap-2.5 transition-all duration-300">
+              {f.to && (
+                <Link to={f.to} className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal group-hover:gap-2.5 transition-all duration-300">
                   Learn more <ArrowRight size={15} />
-                </a>
+                </Link>
               )}
             </div>
           ))}
