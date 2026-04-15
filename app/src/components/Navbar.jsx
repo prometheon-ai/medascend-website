@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 
 export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
@@ -71,14 +71,6 @@ export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <button onClick={toggleTheme} aria-label="Toggle theme"
-              className={`w-10 h-10 rounded-full border flex items-center justify-center cursor-pointer transition-all duration-200
-                ${theme === 'dark'
-                  ? 'border-teal/20 text-sky hover:bg-teal/10'
-                  : 'border-teal/15 text-teal hover:bg-teal/8'
-                }`}>
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
             <button onClick={onEarlyAccess}
               className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none">
               Get Early Access

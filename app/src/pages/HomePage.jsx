@@ -1,11 +1,12 @@
 import { Helmet } from 'react-helmet-async'
 import useScrollToHash from '../hooks/useScrollToHash'
-import Hero from '../components/Hero'
-import Problem from '../components/Problem'
-import Features from '../components/Features'
-import PainPoints from '../components/PainPoints'
-import Founder from '../components/Founder'
-import CTA from '../components/CTA'
+import HeroV2 from '../components/HeroV2'
+import ProblemReveal from '../components/ProblemReveal'
+import SolutionIntro from '../components/SolutionIntro'
+import Differentiators from '../components/Differentiators'
+import FeaturesShowcase from '../components/FeaturesShowcase'
+import FounderCredibility from '../components/FounderCredibility'
+import HypeCTA from '../components/HypeCTA'
 
 export default function HomePage({ theme, onEarlyAccess }) {
   useScrollToHash()
@@ -60,12 +61,13 @@ export default function HomePage({ theme, onEarlyAccess }) {
           ]
         })}</script>
       </Helmet>
-      <Hero theme={theme} onEarlyAccess={onEarlyAccess} />
-      <Problem theme={theme} />
-      <Features theme={theme} />
-      <PainPoints theme={theme} />
-      <Founder theme={theme} />
-      <CTA theme={theme} onEarlyAccess={onEarlyAccess} />
+      <HeroV2 />
+      <ProblemReveal />
+      <SolutionIntro />
+      <Differentiators />
+      <FeaturesShowcase />
+      <FounderCredibility />
+      <HypeCTA onEarlyAccess={onEarlyAccess} />
     </>
   )
 }
