@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import useScrollToHash from '../hooks/useScrollToHash'
 import CinematicHero from '../components/CinematicHero'
-import NoMoreSection from '../components/NoMoreSection'
 import SolutionIntro from '../components/SolutionIntro'
 import Differentiators from '../components/Differentiators'
 import FeaturesShowcase from '../components/FeaturesShowcase'
@@ -62,7 +61,6 @@ export default function HomePage({ theme, onEarlyAccess }) {
         })}</script>
       </Helmet>
       <CinematicHero />
-      <NoMoreSection />
       <SolutionIntro />
       <Differentiators />
       <FeaturesShowcase />
