@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import useScrollToHash from '../hooks/useScrollToHash'
-import HeroV2 from '../components/HeroV2'
-import ProblemReveal from '../components/ProblemReveal'
+import CinematicHero from '../components/CinematicHero'
+import NoMoreSection from '../components/NoMoreSection'
 import SolutionIntro from '../components/SolutionIntro'
 import Differentiators from '../components/Differentiators'
 import FeaturesShowcase from '../components/FeaturesShowcase'
@@ -61,8 +61,8 @@ export default function HomePage({ theme, onEarlyAccess }) {
           ]
         })}</script>
       </Helmet>
-      <HeroV2 />
-      <ProblemReveal />
+      <CinematicHero />
+      <NoMoreSection />
       <SolutionIntro />
       <Differentiators />
       <FeaturesShowcase />
