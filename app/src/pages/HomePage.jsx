@@ -1,13 +1,14 @@
 import { Helmet } from 'react-helmet-async'
 import useScrollToHash from '../hooks/useScrollToHash'
 import CinematicHero from '../components/CinematicHero'
-import SolutionIntro from '../components/SolutionIntro'
-import Differentiators from '../components/Differentiators'
-import FeaturesShowcase from '../components/FeaturesShowcase'
 import FounderCredibility from '../components/FounderCredibility'
+import Differentiators from '../components/Differentiators'
+import StatsCounter from '../components/StatsCounter'
+import FeaturesShowcase from '../components/FeaturesShowcase'
+import RoadmapTeaser from '../components/RoadmapTeaser'
 import HypeCTA from '../components/HypeCTA'
 
-export default function HomePage({ theme, onEarlyAccess }) {
+export default function HomePage({ onEarlyAccess }) {
   useScrollToHash()
   return (
     <>
@@ -61,9 +62,10 @@ export default function HomePage({ theme, onEarlyAccess }) {
         })}</script>
       </Helmet>
       <CinematicHero />
-      <SolutionIntro />
       <Differentiators />
+      <StatsCounter />
       <FeaturesShowcase />
+      <RoadmapTeaser />
       <FounderCredibility />
       <HypeCTA onEarlyAccess={onEarlyAccess} />
     </>

@@ -1,6 +1,6 @@
 import { Quote, User } from 'lucide-react'
 
-export default function Founder({ theme }) {
+export default function Founder() {
   return (
     <section id="founder" className="py-24 lg:py-32 bg-dark-card">
       <div className="max-w-4xl mx-auto px-6">

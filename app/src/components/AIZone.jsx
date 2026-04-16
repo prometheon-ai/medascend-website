@@ -15,7 +15,7 @@ const aiTools = [
   { icon: Headphones, label: 'Audio Overview' },
 ]
 
-export default function AIZone({ theme }) {
+export default function AIZone() {
   return (
     <section id="ai-zone" className="py-24 lg:py-32 bg-dark-card">
       <div className="max-w-7xl mx-auto px-6">

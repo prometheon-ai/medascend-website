@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import Roadmap from '../components/Roadmap'
 
-export default function RoadmapPage({ theme }) {
+export default function RoadmapPage() {
   return (
     <>
       <Helmet>
@@ -32,7 +32,7 @@ export default function RoadmapPage({ theme }) {
           }
         })}</script>
       </Helmet>
-      <Roadmap theme={theme} />
+      <Roadmap />
     </>
   )
 }

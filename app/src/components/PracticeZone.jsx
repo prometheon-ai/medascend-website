@@ -20,7 +20,7 @@ const errorFeatures = [
   { icon: Bookmark, title: 'Bookmarked MCQs', desc: 'Build your personal high-yield collection.' },
 ]
 
-export default function PracticeZone({ theme }) {
+export default function PracticeZone() {
   return (
     <section id="practice" className="py-24 lg:py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">

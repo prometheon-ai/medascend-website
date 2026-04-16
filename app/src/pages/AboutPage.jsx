@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async'
 import Founder from '../components/Founder'
 import Problem from '../components/Problem'
 
-export default function AboutPage({ theme }) {
+export default function AboutPage() {
   return (
     <>
       <Helmet>
@@ -49,8 +49,8 @@ export default function AboutPage({ theme }) {
           ]
         })}</script>
       </Helmet>
-      <Founder theme={theme} />
-      <Problem theme={theme} />
+      <Founder />
+      <Problem />
     </>
   )
 }

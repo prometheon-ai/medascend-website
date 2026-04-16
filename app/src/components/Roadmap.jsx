@@ -1,14 +1,10 @@
-export default function Roadmap({ theme }) {
+export default function Roadmap() {
   const items = [
     {
-      badge: 'Coming Soon',
-      badgeColor: 'bg-gold/15 text-gold',
       title: 'Reel Mode',
       desc: 'Study through bite-sized video reels — condensed concepts, visual mnemonics, rapid revision in scrollable format. Learning that fits your attention, not fights it.',
     },
     {
-      badge: 'In Development',
-      badgeColor: 'bg-terracotta/15 text-terracotta',
       title: 'Clinical Posting Companion',
       desc: 'Your postings become active learning sessions. History-taking templates, case documentation, bedside examination checklists. Clinical and academic learning, finally connected.',
     },
@@ -18,7 +14,7 @@ export default function Roadmap({ theme }) {
     <section id="roadmap" className="py-24 lg:py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-[11px] font-semibold tracking-[5px] uppercase mb-4 block text-teal-light">COMING SOON</span>
+          <span className="text-[11px] font-semibold tracking-[5px] uppercase mb-4 block text-teal-light">WHAT'S NEXT</span>
           <h2 className="text-[clamp(28px,4vw,44px)] font-extrabold tracking-tight leading-[1.15] text-cream">
             The Next <span className="text-gradient">Evolution</span>
           </h2>
@@ -33,9 +29,6 @@ export default function Roadmap({ theme }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </div>
               <div className="p-7">
-                <span className={`inline-block text-[11px] font-semibold px-3 py-1 rounded-full mb-3 ${item.badgeColor}`}>
-                  {item.badge}
-                </span>
                 <h3 className="text-xl font-bold mb-2 text-cream">{item.title}</h3>
                 <p className="text-sm font-[family-name:var(--font-family-secondary)] leading-relaxed text-sky/60">{item.desc}</p>
               </div>

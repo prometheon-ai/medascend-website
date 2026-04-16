@@ -18,7 +18,7 @@ const hytCards = [
   { icon: PlusCircle, title: '+ 16 More', desc: 'Every subject gets its own specialized toolkit' },
 ]
 
-export default function StudyHub({ theme }) {
+export default function StudyHub() {
   return (
     <section id="study-hub" className="py-24 lg:py-32 bg-dark-card">
       <div className="max-w-7xl mx-auto px-6">

@@ -13,7 +13,7 @@ const features = [
   { icon: CalendarCheck, title: 'Diary & Planner', desc: 'Log progress. Schedule revision blocks. From overwhelming syllabus to manageable daily missions.', color: 'text-gold', bg: 'bg-gold/15' },
 ]
 
-export default function Features({ theme }) {
+export default function Features() {
   return (
     <section id="features" className="py-24 lg:py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">

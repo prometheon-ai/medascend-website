@@ -5,7 +5,7 @@ import PracticeZone from '../components/PracticeZone'
 import AIZone from '../components/AIZone'
 import MoreFeatures from '../components/MoreFeatures'
 
-export default function FeaturesPage({ theme }) {
+export default function FeaturesPage() {
   return (
     <>
       <Helmet>
@@ -36,11 +36,11 @@ export default function FeaturesPage({ theme }) {
           }
         })}</script>
       </Helmet>
-      <Features theme={theme} />
-      <StudyHub theme={theme} />
-      <PracticeZone theme={theme} />
-      <AIZone theme={theme} />
-      <MoreFeatures theme={theme} />
+      <Features />
+      <StudyHub />
+      <PracticeZone />
+      <AIZone />
+      <MoreFeatures />
     </>
   )
 }

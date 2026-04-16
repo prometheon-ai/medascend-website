@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import AIZone from '../components/AIZone'
 
-export default function AIZonePage({ theme }) {
+export default function AIZonePage() {
   return (
     <>
       <Helmet>
@@ -33,7 +33,7 @@ export default function AIZonePage({ theme }) {
           }
         })}</script>
       </Helmet>
-      <AIZone theme={theme} />
+      <AIZone />
     </>
   )
 }

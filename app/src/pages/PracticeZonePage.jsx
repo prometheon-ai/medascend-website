@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import PracticeZone from '../components/PracticeZone'
 
-export default function PracticeZonePage({ theme }) {
+export default function PracticeZonePage() {
   return (
     <>
       <Helmet>
@@ -33,7 +33,7 @@ export default function PracticeZonePage({ theme }) {
           }
         })}</script>
       </Helmet>
-      <PracticeZone theme={theme} />
+      <PracticeZone />
     </>
   )
 }

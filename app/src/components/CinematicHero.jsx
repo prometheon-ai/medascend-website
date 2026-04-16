@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Volume2, VolumeX } from 'lucide-react'
 import Logo from './Logo'
 
 const problems = [
-  { text: '500-page textbooks. Zero structured notes.', duration: 1400 },
-  { text: 'Resources scattered across 5+ platforms.', duration: 1300 },
-  { text: 'Handwritten notes that take longer than the lecture.', duration: 1200 },
-  { text: 'Revised Pharmacology 3 times. Forgot it in 3 weeks.', duration: 1000 },
-  { text: '19 subjects. No idea what\'s high-yield.', duration: 800 },
-  { text: 'Studying 14 hours. Still feeling behind.', duration: 600 },
+  { text: '500-page textbooks. Zero notes.', duration: 1500 },
+  { text: 'Scattered across 5+ platforms.', duration: 1400 },
+  { text: 'Notes that take longer than lectures.', duration: 1300 },
+  { text: 'Revised 3 times. Forgot in 3 weeks.', duration: 1100 },
+  { text: '19 subjects. No clue what\'s high-yield.', duration: 900 },
+  { text: '14 hours of studying. Still behind.', duration: 700 },
 ]
 
 // ── Sound FX via Web Audio API ──
@@ -27,7 +28,6 @@ function createNoise(ctx, duration, volume) {
 }
 
 function playWhoosh(ctx, intensity = 0.3) {
-  // Low rumble
   const osc = ctx.createOscillator()
   const gain = ctx.createGain()
   const filter = ctx.createBiquadFilter()
@@ -42,14 +42,12 @@ function playWhoosh(ctx, intensity = 0.3) {
   osc.connect(filter).connect(gain).connect(ctx.destination)
   osc.start()
   osc.stop(ctx.currentTime + 0.3)
-  // Noise layer
   const noise = createNoise(ctx, 0.15, 0.04 * intensity)
   noise.start()
 }
 
 function playBassImpact(ctx) {
   const t = ctx.currentTime
-  // Deep sub bass
   const sub = ctx.createOscillator()
   const subGain = ctx.createGain()
   sub.type = 'sine'
@@ -60,7 +58,6 @@ function playBassImpact(ctx) {
   sub.connect(subGain).connect(ctx.destination)
   sub.start(t)
   sub.stop(t + 1.3)
-  // Mid punch
   const mid = ctx.createOscillator()
   const midGain = ctx.createGain()
   mid.type = 'triangle'
@@ -71,7 +68,6 @@ function playBassImpact(ctx) {
   mid.connect(midGain).connect(ctx.destination)
   mid.start(t)
   mid.stop(t + 0.7)
-  // High shimmer
   const high = ctx.createOscillator()
   const highGain = ctx.createGain()
   const highFilter = ctx.createBiquadFilter()
@@ -86,10 +82,8 @@ function playBassImpact(ctx) {
   high.connect(highFilter).connect(highGain).connect(ctx.destination)
   high.start(t)
   high.stop(t + 0.9)
-  // Impact noise burst
   const noise = createNoise(ctx, 0.25, 0.18)
   noise.start(t)
-  // Delayed reverb tail
   const tail = ctx.createOscillator()
   const tailGain = ctx.createGain()
   tail.type = 'sine'
@@ -107,6 +101,22 @@ export default function CinematicHero() {
   const [problemIndex, setProblemIndex] = useState(0)
   const [shake, setShake] = useState(false)
   const [audioCtx, setAudioCtx] = useState(null)
+  const [muted, setMuted] = useState(false)
+  const mutedRef = useRef(false)
+
+  const toggleMute = useCallback(() => {
+    setMuted(prev => {
+      mutedRef.current = !prev
+      return !prev
+    })
+  }, [])
+
+  const skipToReveal = useCallback(() => {
+    if (audioCtx && !mutedRef.current) playBassImpact(audioCtx)
+    setShake(true)
+    setTimeout(() => setShake(false), 200)
+    setPhase('reveal')
+  }, [audioCtx])
 
   const startSequence = useCallback(() => {
     const ctx = new (window.AudioContext || window.webkitAudioContext)()
@@ -120,7 +130,6 @@ export default function CinematicHero() {
     return () => clearTimeout(t)
   }, [startSequence])
 
-  // Phase 1: Pain — problems swapping
   useEffect(() => {
     if (phase !== 'pain' || !audioCtx) return
     if (problemIndex >= problems.length) {
@@ -128,7 +137,7 @@ export default function CinematicHero() {
       return
     }
     const intensity = 0.2 + (problemIndex / problems.length) * 0.8
-    playWhoosh(audioCtx, intensity)
+    if (!mutedRef.current) playWhoosh(audioCtx, intensity)
     setShake(true)
     setTimeout(() => setShake(false), 120)
 
@@ -136,11 +145,10 @@ export default function CinematicHero() {
     return () => clearTimeout(timer)
   }, [phase, problemIndex, audioCtx])
 
-  // Phase 2: Break (1.5s silence)
   useEffect(() => {
     if (phase !== 'break') return
     const timer = setTimeout(() => {
-      if (audioCtx) playBassImpact(audioCtx)
+      if (audioCtx && !mutedRef.current) playBassImpact(audioCtx)
       setShake(true)
       setTimeout(() => setShake(false), 200)
       setPhase('reveal')
@@ -148,7 +156,6 @@ export default function CinematicHero() {
     return () => clearTimeout(timer)
   }, [phase, audioCtx])
 
-  // Phase 3: Reveal → done
   useEffect(() => {
     if (phase !== 'reveal') return
     const timer = setTimeout(() => setPhase('done'), 2500)
@@ -159,6 +166,25 @@ export default function CinematicHero() {
 
   return (
     <section className={`relative min-h-screen flex items-center justify-center overflow-hidden bg-dark ${shake ? 'animate-shake' : ''}`}>
+      {/* Mute toggle */}
+      <button
+        onClick={toggleMute}
+        className="absolute top-24 right-6 z-20 p-2 rounded-lg text-stone/40 hover:text-cream/60 transition-colors cursor-pointer bg-transparent border-none"
+        aria-label={muted ? 'Unmute' : 'Mute'}
+      >
+        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+      </button>
+
+      {/* Skip button */}
+      {(phase === 'pain' || phase === 'break') && (
+        <button
+          onClick={skipToReveal}
+          className="absolute bottom-8 right-8 z-20 text-[11px] tracking-[2px] uppercase text-stone/40 hover:text-cream/60 transition-colors cursor-pointer bg-transparent border-none"
+        >
+          Skip
+        </button>
+      )}
+
       {/* BG noise during pain */}
       <div
         className="absolute inset-0 transition-opacity duration-500 pointer-events-none"

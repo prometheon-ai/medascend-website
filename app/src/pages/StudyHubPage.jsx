@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import StudyHub from '../components/StudyHub'
 
-export default function StudyHubPage({ theme }) {
+export default function StudyHubPage() {
   return (
     <>
       <Helmet>
@@ -33,7 +33,7 @@ export default function StudyHubPage({ theme }) {
           }
         })}</script>
       </Helmet>
-      <StudyHub theme={theme} />
+      <StudyHub />
     </>
   )
 }

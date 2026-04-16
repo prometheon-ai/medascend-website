@@ -146,36 +146,17 @@
 
 /* Glass effect */
 .glass {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(26, 46, 56, 0.5);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-}
-
-/* Dark mode glass */
-.dark .glass {
-  background: rgba(26, 46, 56, 0.5);
-}
-
-/* Light mode glass */
-.light .glass {
-  background: rgba(255, 255, 255, 0.7);
 }
 
 /* Phone frame styling */
 .phone-frame {
   border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
-}
-
-.dark .phone-frame {
   border: 2px solid rgba(66, 111, 128, 0.2);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
-}
-
-.light .phone-frame {
-  border: 2px solid rgba(66, 111, 128, 0.1);
-  box-shadow: 0 20px 60px rgba(66, 111, 128, 0.15);
 }
 
 /* Animated gradient border on hover */

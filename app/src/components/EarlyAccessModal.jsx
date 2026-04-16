@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { X, Send, CheckCircle, Loader2 } from 'lucide-react'
 import Logo from './Logo'
 
-export default function EarlyAccessModal({ isOpen, onClose, theme }) {
+export default function EarlyAccessModal({ isOpen, onClose }) {
   const [form, setForm] = useState({ name: '', college: '', email: '', phone: '' })
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [errorMsg, setErrorMsg] = useState('')

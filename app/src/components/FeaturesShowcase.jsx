@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Target, Brain, Clapperboard, Shield, Layers, CalendarCheck, FileText, ArrowRight } from 'lucide-react'
+import { BookOpen, Target, Brain, Clapperboard, Shield, Layers, CalendarCheck, FileText, Play, ArrowRight } from 'lucide-react'
 import FadeInView from './animations/FadeInView'
 
 const features = [
@@ -9,6 +9,7 @@ const features = [
   { icon: Target, title: 'Practice Zone', desc: 'QBank, mocks, daily 10Q & arena', color: 'text-gold', bg: 'bg-gold/15' },
   { icon: Brain, title: 'AI Tools Suite', desc: 'Mindmaps, flashcards, audio, explain back', color: 'text-terracotta', bg: 'bg-terracotta/15' },
   { icon: Clapperboard, title: 'Reel Mode', desc: '60-sec visual concept reels', color: 'text-sky', bg: 'bg-sky/15' },
+  { icon: Play, title: 'Animations Engine', desc: 'Cinematic visual explanations', color: 'text-gold-light', bg: 'bg-gold/15' },
   { icon: Shield, title: 'Exam Intelligence', desc: 'PYQ analysis, high-yield mapping', color: 'text-gold', bg: 'bg-gold/15' },
   { icon: FileText, title: 'Knowledge Forge', desc: 'Study from any material you upload', color: 'text-teal', bg: 'bg-teal/15' },
   { icon: Layers, title: 'Subject Pearls', desc: 'Subject-specific tips & tricks', color: 'text-stone', bg: 'bg-stone/15' },

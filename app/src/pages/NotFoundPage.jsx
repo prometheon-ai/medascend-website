@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { Home } from 'lucide-react'
 
-export default function NotFoundPage({ theme }) {
+export default function NotFoundPage() {
 
   return (
     <>

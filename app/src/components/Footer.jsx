@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom'
 import { Mail, X } from 'lucide-react'
 import Logo from './Logo'
 
-export default function Footer({ theme }) {
-  const d = theme === 'dark'
+export default function Footer() {
   const [showContact, setShowContact] = useState(false)
 
   return (
-    <footer className={`pt-16 pb-8 ${d ? 'bg-[#0a1218]' : 'bg-dark-surface'}`}>
+    <footer className="pt-16 pb-8 bg-[#0a1218]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-12 border-b border-teal/10">
           {/* Brand */}
@@ -71,7 +70,7 @@ export default function Footer({ theme }) {
 
         <div className="pt-6 text-center">
           <p className="text-xs text-sky/30 font-[family-name:var(--font-family-secondary)]">
-            &copy; 2025 MedAscend. Prometheon Applied Intelligence Pvt. Ltd. All rights reserved.
+            &copy; 2026 MedAscend. Prometheon Applied Intelligence Pvt. Ltd. All rights reserved.
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 
-export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
+export default function Navbar({ onEarlyAccess }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()

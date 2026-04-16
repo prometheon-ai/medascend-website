@@ -24,7 +24,7 @@ const cards = [
   },
 ]
 
-export default function MoreFeatures({ theme }) {
+export default function MoreFeatures() {
   const [selectedImg, setSelectedImg] = useState(null)
 
   return (
