@@ -1,16 +1,18 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpen, Target, Cpu, Layers, Library, CalendarCheck, ArrowRight } from 'lucide-react'
+import { BookOpen, Target, Brain, Clapperboard, Shield, Layers, CalendarCheck, FileText, ArrowRight } from 'lucide-react'
 import FadeInView from './animations/FadeInView'
 
 const features = [
   { icon: BookOpen, title: 'Study Hub', desc: '5 integrated study modes', color: 'text-teal', bg: 'bg-teal/15' },
-  { icon: Target, title: 'Practice Zone', desc: '8 practice modes + error system', color: 'text-gold', bg: 'bg-gold/15' },
-  { icon: Cpu, title: 'AI Zone', desc: '9 AI tools, 19 subject bots', color: 'text-terracotta', bg: 'bg-terracotta/15' },
-  { icon: Layers, title: 'Flashcards', desc: 'SM2 spaced repetition', color: 'text-sky', bg: 'bg-sky/15' },
-  { icon: Library, title: 'Library', desc: 'All resources, one place', color: 'text-stone', bg: 'bg-stone/15' },
-  { icon: CalendarCheck, title: 'Planner', desc: 'Track, plan, execute', color: 'text-gold', bg: 'bg-gold/15' },
+  { icon: Target, title: 'Practice Zone', desc: 'QBank, mocks, daily 10Q & arena', color: 'text-gold', bg: 'bg-gold/15' },
+  { icon: Brain, title: 'AI Tools Suite', desc: 'Mindmaps, flashcards, audio, explain back', color: 'text-terracotta', bg: 'bg-terracotta/15' },
+  { icon: Clapperboard, title: 'Reel Mode', desc: '60-sec visual concept reels', color: 'text-sky', bg: 'bg-sky/15' },
+  { icon: Shield, title: 'Exam Intelligence', desc: 'PYQ analysis, high-yield mapping', color: 'text-gold', bg: 'bg-gold/15' },
+  { icon: FileText, title: 'Knowledge Forge', desc: 'Study from any material you upload', color: 'text-teal', bg: 'bg-teal/15' },
+  { icon: Layers, title: 'Subject Pearls', desc: 'Subject-specific tips & tricks', color: 'text-stone', bg: 'bg-stone/15' },
+  { icon: CalendarCheck, title: 'Diary & Planner', desc: 'Track, plan, execute daily', color: 'text-terracotta', bg: 'bg-terracotta/15' },
 ]
 
 export default function FeaturesShowcase() {
@@ -54,7 +56,7 @@ export default function FeaturesShowcase() {
           {/* Feature cards */}
           <div className="grid grid-cols-2 gap-3">
             {features.map((f, i) => (
-              <FadeInView key={i} direction="right" delay={i * 0.1}>
+              <FadeInView key={i} direction="right" delay={i * 0.08}>
                 <div className="glow-card p-5 rounded-2xl bg-dark-surface/50 border border-teal/8 hover:-translate-y-1 transition-all duration-300">
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${f.bg}`}>
                     <f.icon size={18} className={f.color} />

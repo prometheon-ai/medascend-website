@@ -3,13 +3,13 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 
 const problems = [
   'no more 2hr lectures',
-  'no more scattered notes',
+  'no more scattered resources',
   'no more forgetting everything',
-  'no more AI hallucinations',
-  'no more 5+ platforms',
   'no more passive learning',
   'no more guessing exam patterns',
+  'no more unverified AI answers',
   'no more repeating mistakes',
+  'no more feeling behind',
 ]
 
 export default function NoMoreSection() {

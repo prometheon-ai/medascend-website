@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
@@ -13,29 +13,24 @@ import RoadmapPage from './pages/RoadmapPage'
 import AboutPage from './pages/AboutPage'
 import NotFoundPage from './pages/NotFoundPage'
 
+const theme = 'dark'
+
 export default function App() {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('medascend-theme') || 'dark'
-    }
-    return 'dark'
-  })
   const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark')
-    document.documentElement.classList.add(theme)
-    localStorage.setItem('medascend-theme', theme)
-  }, [theme])
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('medascend-theme', 'dark')
+  }, [])
 
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
   const openModal = () => setModalOpen(true)
   const closeModal = () => setModalOpen(false)
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'bg-dark text-cream' : 'bg-cream text-dark'}`}>
+    <div className="min-h-screen bg-dark text-cream">
       <ScrollToTop />
-      <Navbar theme={theme} toggleTheme={toggleTheme} onEarlyAccess={openModal} />
+      <Navbar theme={theme} onEarlyAccess={openModal} />
       <main>
         <Routes>
           <Route path="/" element={<HomePage theme={theme} onEarlyAccess={openModal} />} />

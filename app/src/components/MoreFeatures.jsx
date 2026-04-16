@@ -25,24 +25,22 @@ const cards = [
 ]
 
 export default function MoreFeatures({ theme }) {
-  const d = theme === 'dark'
   const [selectedImg, setSelectedImg] = useState(null)
 
   return (
     <>
-      <section id="more-features" className={`py-24 lg:py-32 ${d ? 'bg-dark' : 'bg-cream'}`}>
+      <section id="more-features" className="py-24 lg:py-32 bg-dark">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {cards.map((c, i) => (
-              <FadeInView key={i} delay={i * 0.15}>
+              <FadeInView key={i} delay={i * 0.15} className="flex">
                 <motion.div
-                  className={`glow-card group rounded-2xl overflow-hidden transition-all duration-300
-                    ${d ? 'bg-dark-surface/50 border border-teal/8' : 'bg-white border border-teal/6 shadow-sm'}`}
+                  className="glow-card group rounded-2xl overflow-hidden transition-all duration-300 bg-dark-surface/50 border border-teal/10 flex flex-col h-full"
                   whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   <div
-                    className={`h-56 overflow-hidden cursor-pointer ${d ? 'bg-dark-card' : 'bg-cream-dark'}`}
+                    className="h-56 overflow-hidden cursor-pointer bg-dark-card"
                     onClick={() => setSelectedImg(c.img)}
                   >
                     <img src={c.img} alt={c.title} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" loading="lazy" />
@@ -52,9 +50,9 @@ export default function MoreFeatures({ theme }) {
                       <motion.div whileHover={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 0.4 }}>
                         <c.icon size={20} className="text-teal" />
                       </motion.div>
-                      <h3 className={`text-lg font-bold ${d ? 'text-cream' : 'text-dark'}`}>{c.title}</h3>
+                      <h3 className="text-lg font-bold text-cream">{c.title}</h3>
                     </div>
-                    <p className={`text-sm font-[family-name:var(--font-family-secondary)] leading-relaxed ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>{c.desc}</p>
+                    <p className="text-sm font-[family-name:var(--font-family-secondary)] leading-relaxed text-sky/60">{c.desc}</p>
                   </div>
                 </motion.div>
               </FadeInView>

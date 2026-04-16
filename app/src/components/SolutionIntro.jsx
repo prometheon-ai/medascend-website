@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
-import { Brain, Bot, GraduationCap, Zap, GitBranch, Clapperboard, BarChart3 } from 'lucide-react'
+import { Brain, Bot, GraduationCap, Zap, Clapperboard, BookOpen, BarChart3, Shield } from 'lucide-react'
 import FadeInView from './animations/FadeInView'
 
 const solutions = [
-  { text: 'AI notes from any textbook in seconds', icon: Zap },
-  { text: 'Visual flowcharts that draw themselves', icon: GitBranch },
-  { text: '60-sec Reels that teach Pathology while you eat', icon: Clapperboard },
-  { text: 'Spaced repetition that knows what you\'ll forget', icon: Brain },
-  { text: '19 subjects. Every high-yield topic mapped.', icon: BarChart3 },
+  { text: 'Pre-generated mindmaps, flashcards & schematic diagrams', icon: Zap },
+  { text: 'Reel Mode — 60-sec visual concepts you actually retain', icon: Clapperboard },
+  { text: 'AI Tools Suite — mindmaps, audio overview, explain back to me', icon: Brain },
+  { text: 'Practice Zone — custom quiz, mock tests, daily 10Q & more', icon: BarChart3 },
+  { text: 'Knowledge Forge — study from any material you upload', icon: BookOpen },
+  { text: 'NEET PG Exam Intelligence — data-driven topic prioritization', icon: Shield },
 ]
 
 const pillars = [
@@ -32,7 +33,7 @@ export default function SolutionIntro() {
           </p>
         </FadeInView>
 
-        {/* Five solution points */}
+        {/* Solution points */}
         <div className="flex flex-col items-center gap-3 mb-16">
           {solutions.map((s, i) => (
             <FadeInView key={i} delay={0.1 + i * 0.12} direction={i % 2 === 0 ? 'left' : 'right'}>

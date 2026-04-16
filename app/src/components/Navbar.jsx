@@ -33,19 +33,16 @@ export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
         ${scrolled ? 'shadow-lg' : ''}
-        ${theme === 'dark'
-          ? 'bg-dark/85 border-teal/10'
-          : 'bg-cream/85 border-teal/8'
-        }`}>
+        bg-dark/85 border-teal/10`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[68px]">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 no-underline">
             <img src={faviconImg} alt="Prometheon Logo" className="w-[34px] h-[34px] rounded-lg object-contain" />
             <div className="flex flex-col justify-center">
-              <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 text-teal-light">
                 Prometheon Applied
               </span>
-              <span className={`text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 ${theme === 'dark' ? 'text-teal-light' : 'text-teal/80'}`}>
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 text-teal-light">
                 Intelligence
               </span>
             </div>
@@ -57,12 +54,8 @@ export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
               <Link key={l.to} to={l.to}
                 className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200
                   ${isActive(l.to)
-                    ? theme === 'dark'
-                      ? 'text-cream bg-teal/15'
-                      : 'text-teal bg-teal/12'
-                    : theme === 'dark'
-                      ? 'text-sky hover:text-cream hover:bg-teal/10'
-                      : 'text-teal-deep hover:text-teal hover:bg-teal/8'
+                    ? 'text-cream bg-teal/15'
+                    : 'text-sky hover:text-cream hover:bg-teal/10'
                   }`}>
                 {l.label}
               </Link>
@@ -87,14 +80,14 @@ export default function Navbar({ theme, toggleTheme, onEarlyAccess }) {
       {/* Mobile menu overlay */}
       <div className={`fixed inset-0 z-40 pt-[68px] transition-all duration-300 backdrop-blur-xl
         ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        ${theme === 'dark' ? 'bg-dark/95' : 'bg-cream/95'}`}>
+        bg-dark/95`}>
         <div className="flex flex-col items-center justify-center h-full gap-4">
           {links.map(l => (
             <Link key={l.to} to={l.to}
               className={`text-xl font-semibold px-6 py-3 rounded-xl transition-all
                 ${isActive(l.to)
-                  ? theme === 'dark' ? 'text-cream bg-teal/15' : 'text-dark bg-teal/12'
-                  : theme === 'dark' ? 'text-cream hover:bg-teal/10' : 'text-dark hover:bg-teal/8'
+                  ? 'text-cream bg-teal/15'
+                  : 'text-cream hover:bg-teal/10'
                 }`}>
               {l.label}
             </Link>

@@ -21,9 +21,8 @@ const errorFeatures = [
 ]
 
 export default function PracticeZone({ theme }) {
-  const d = theme === 'dark'
   return (
-    <section id="practice" className={`py-24 lg:py-32 ${d ? 'bg-dark' : 'bg-cream'}`}>
+    <section id="practice" className="py-24 lg:py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           <FadeInView direction="left" className="order-2 lg:order-1 flex justify-center">
@@ -37,31 +36,30 @@ export default function PracticeZone({ theme }) {
           </FadeInView>
           <div className="order-1 lg:order-2">
             <FadeInView>
-              <span className={`text-[11px] font-semibold tracking-[5px] uppercase mb-4 block ${d ? 'text-teal-light' : 'text-teal'}`}>PRACTICE ZONE</span>
+              <span className="text-[11px] font-semibold tracking-[5px] uppercase mb-4 block text-teal-light">PRACTICE ZONE</span>
             </FadeInView>
             <AnimatedText
               text="Precision Training"
               mode="word"
               stagger={0.1}
-              className={`text-[clamp(28px,4vw,44px)] font-extrabold tracking-tight leading-[1.15] mb-4 ${d ? 'text-cream' : 'text-dark'}`}
+              className="text-[clamp(28px,4vw,44px)] font-extrabold tracking-tight leading-[1.15] mb-4 text-cream"
               as="h2"
             />
             <FadeInView delay={0.3}>
-              <p className={`font-[family-name:var(--font-family-secondary)] text-base mb-8 ${d ? 'text-sky/70' : 'text-teal-deep/60'}`}>
+              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky/70">
                 Every practice scenario, covered. From daily micro-challenges to full-length NEET-PG simulations.
               </p>
             </FadeInView>
             <div className="grid grid-cols-2 gap-3">
               {practiceItems.map((item, i) => (
-                <FadeInView key={i} delay={0.4 + i * 0.08} direction="right">
+                <FadeInView key={i} delay={0.4 + i * 0.08} direction="right" className="flex">
                   <motion.div
-                    className={`glow-card flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
-                      ${d ? 'bg-dark-surface/50 border border-teal/8' : 'bg-white border border-teal/6 shadow-sm'}`}
+                    className="glow-card flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-dark-surface/50 border border-teal/10 flex-1"
                     whileHover={{ x: 6, scale: 1.02 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
                     <item.icon size={18} className="text-teal shrink-0" />
-                    <span className={`text-sm font-semibold ${d ? 'text-cream/90' : 'text-dark'}`}>{item.label}</span>
+                    <span className="text-sm font-semibold text-cream/90">{item.label}</span>
                   </motion.div>
                 </FadeInView>
               ))}
@@ -77,31 +75,30 @@ export default function PracticeZone({ theme }) {
                 <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
                   <AlertCircle size={20} className="text-terracotta" />
                 </motion.div>
-                <h3 className={`text-2xl font-extrabold ${d ? 'text-cream' : 'text-dark'}`}>Your Personal Error System</h3>
+                <h3 className="text-2xl font-extrabold text-cream">Your Personal Error System</h3>
               </div>
-              <p className={`font-[family-name:var(--font-family-secondary)] text-sm mb-6 ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>
+              <p className="font-[family-name:var(--font-family-secondary)] text-sm mb-6 text-sky/60">
                 Every mistake becomes your roadmap. Systematic weakness elimination.
               </p>
             </FadeInView>
             <div className="space-y-4">
               {errorFeatures.map((f, i) => (
-                <FadeInView key={i} delay={i * 0.15} direction="left">
+                <FadeInView key={i} delay={i * 0.15} direction="left" className="flex">
                   <motion.div
-                    className={`glow-card flex items-start gap-4 p-5 rounded-xl transition-all duration-300
-                      ${d ? 'bg-dark-surface/50 border border-teal/8' : 'bg-white border border-teal/6 shadow-sm'}`}
+                    className="glow-card flex items-start gap-4 p-5 rounded-xl transition-all duration-300 bg-dark-surface/50 border border-teal/10 flex-1"
                     whileHover={{ y: -4, scale: 1.01 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
                     <motion.div
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${d ? 'bg-terracotta/15' : 'bg-terracotta/10'}`}
+                      className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-terracotta/15"
                       whileHover={{ rotate: [0, -15, 15, 0] }}
                       transition={{ duration: 0.5 }}
                     >
                       <f.icon size={20} className="text-terracotta" />
                     </motion.div>
                     <div>
-                      <h4 className={`font-bold text-[15px] mb-0.5 ${d ? 'text-cream' : 'text-dark'}`}>{f.title}</h4>
-                      <p className={`text-sm font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>{f.desc}</p>
+                      <h4 className="font-bold text-[15px] mb-0.5 text-cream">{f.title}</h4>
+                      <p className="text-sm font-[family-name:var(--font-family-secondary)] text-sky/60">{f.desc}</p>
                     </div>
                   </motion.div>
                 </FadeInView>

@@ -3,7 +3,6 @@ import { X, Send, CheckCircle, Loader2 } from 'lucide-react'
 import Logo from './Logo'
 
 export default function EarlyAccessModal({ isOpen, onClose, theme }) {
-  const d = theme === 'dark'
   const [form, setForm] = useState({ name: '', college: '', email: '', phone: '' })
   const [status, setStatus] = useState('idle') // idle | loading | success | error
   const [errorMsg, setErrorMsg] = useState('')
@@ -48,15 +47,13 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       <div
-        className={`relative w-full max-w-md rounded-2xl p-8 shadow-2xl border
-          ${d ? 'bg-dark-card border-teal/15' : 'bg-cream border-teal/10'}`}
+        className="relative w-full max-w-md rounded-2xl p-8 shadow-2xl border bg-dark-card border-teal/15"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={handleClose}
-          className={`absolute top-4 right-4 p-1.5 rounded-lg transition-colors cursor-pointer bg-transparent border-none
-            ${d ? 'text-sky/50 hover:text-cream hover:bg-teal/10' : 'text-teal-deep/40 hover:text-dark hover:bg-teal/8'}`}
+          className="absolute top-4 right-4 p-1.5 rounded-lg transition-colors cursor-pointer bg-transparent border-none text-sky/50 hover:text-cream hover:bg-teal/10"
           aria-label="Close"
         >
           <X size={20} />
@@ -69,10 +66,10 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
                 <CheckCircle size={32} className="text-teal" />
               </div>
             </div>
-            <h3 className={`text-2xl font-bold mb-2 ${d ? 'text-cream' : 'text-dark'}`}>
+            <h3 className="text-2xl font-bold mb-2 text-cream">
               You're on the list!
             </h3>
-            <p className={`text-base mb-6 font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/60' : 'text-teal-deep/60'}`}>
+            <p className="text-base mb-6 font-[family-name:var(--font-family-secondary)] text-sky/60">
               We'll notify you as soon as MedAscend launches. Get ready to ascend.
             </p>
             <button
@@ -87,14 +84,14 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
             <div className="flex items-center gap-3 mb-6">
               <Logo size={36} />
               <div>
-                <h3 className={`text-lg font-bold ${d ? 'text-cream' : 'text-dark'}`}>Get Early Access</h3>
-                <p className={`text-xs ${d ? 'text-sky/50' : 'text-teal-deep/50'}`}>Be the first to know when we launch</p>
+                <h3 className="text-lg font-bold text-cream">Get Early Access</h3>
+                <p className="text-xs text-sky/50">Be the first to know when we launch</p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
-                <label className={`block text-xs font-semibold mb-1.5 ${d ? 'text-sky/70' : 'text-teal-deep/70'}`}>
+                <label className="block text-xs font-semibold mb-1.5 text-sky/70">
                   Full Name *
                 </label>
                 <input
@@ -104,16 +101,12 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
                   value={form.name}
                   onChange={handleChange}
                   placeholder="Dr. / Your Name"
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors
-                    ${d
-                      ? 'bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40'
-                      : 'bg-white border-teal/12 text-dark placeholder:text-teal-deep/30 focus:border-teal/30'
-                    }`}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40"
                 />
               </div>
 
               <div>
-                <label className={`block text-xs font-semibold mb-1.5 ${d ? 'text-sky/70' : 'text-teal-deep/70'}`}>
+                <label className="block text-xs font-semibold mb-1.5 text-sky/70">
                   College / Organization *
                 </label>
                 <input
@@ -123,16 +116,12 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
                   value={form.college}
                   onChange={handleChange}
                   placeholder="e.g. Seth GS Medical College"
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors
-                    ${d
-                      ? 'bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40'
-                      : 'bg-white border-teal/12 text-dark placeholder:text-teal-deep/30 focus:border-teal/30'
-                    }`}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40"
                 />
               </div>
 
               <div>
-                <label className={`block text-xs font-semibold mb-1.5 ${d ? 'text-sky/70' : 'text-teal-deep/70'}`}>
+                <label className="block text-xs font-semibold mb-1.5 text-sky/70">
                   Email *
                 </label>
                 <input
@@ -142,17 +131,13 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
                   value={form.email}
                   onChange={handleChange}
                   placeholder="you@email.com"
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors
-                    ${d
-                      ? 'bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40'
-                      : 'bg-white border-teal/12 text-dark placeholder:text-teal-deep/30 focus:border-teal/30'
-                    }`}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40"
                 />
               </div>
 
               <div>
-                <label className={`block text-xs font-semibold mb-1.5 ${d ? 'text-sky/70' : 'text-teal-deep/70'}`}>
-                  Phone <span className={`font-normal ${d ? 'text-sky/30' : 'text-teal-deep/30'}`}>(optional)</span>
+                <label className="block text-xs font-semibold mb-1.5 text-sky/70">
+                  Phone <span className="font-normal text-sky/30">(optional)</span>
                 </label>
                 <input
                   type="tel"
@@ -160,11 +145,7 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
                   value={form.phone}
                   onChange={handleChange}
                   placeholder="+91 98765 43210"
-                  className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors
-                    ${d
-                      ? 'bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40'
-                      : 'bg-white border-teal/12 text-dark placeholder:text-teal-deep/30 focus:border-teal/30'
-                    }`}
+                  className="w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-colors bg-dark-surface border-teal/15 text-cream placeholder:text-sky/30 focus:border-teal/40"
                 />
               </div>
 
@@ -185,7 +166,7 @@ export default function EarlyAccessModal({ isOpen, onClose, theme }) {
               </button>
             </form>
 
-            <p className={`mt-4 text-[11px] text-center font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/30' : 'text-teal-deep/30'}`}>
+            <p className="mt-4 text-[11px] text-center font-[family-name:var(--font-family-secondary)] text-sky/30">
               We'll never spam you. Only launch updates.
             </p>
           </>

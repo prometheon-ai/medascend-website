@@ -4,7 +4,7 @@ import Logo from './Logo'
 
 const problems = [
   { text: '500-page textbooks. Zero structured notes.', duration: 1400 },
-  { text: 'Telegram. YouTube. PrepLadder. Nothing connected.', duration: 1300 },
+  { text: 'Resources scattered across 5+ platforms.', duration: 1300 },
   { text: 'Handwritten notes that take longer than the lecture.', duration: 1200 },
   { text: 'Revised Pharmacology 3 times. Forgot it in 3 weeks.', duration: 1000 },
   { text: '19 subjects. No idea what\'s high-yield.', duration: 800 },

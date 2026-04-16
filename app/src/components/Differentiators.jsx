@@ -2,12 +2,12 @@ import { ArrowRight } from 'lucide-react'
 import FadeInView from './animations/FadeInView'
 
 const comparisons = [
-  { old: '2hr+ video lectures', new: '10-min structured content' },
-  { old: 'Minimal retention from passive watching', new: 'Active recall at every stage' },
-  { old: '5+ scattered platforms', new: 'One unified ecosystem' },
-  { old: 'Generic AI that hallucinates', new: '19 subject-specific bounded AI tutors' },
-  { old: 'Repeating the same mistakes', new: 'Error Logbook + Smart Retry' },
-  { old: 'No exam pattern knowledge', new: 'Real PYQ data-driven analysis' },
+  { old: 'Resources scattered across 5+ platforms', new: 'One unified ecosystem — study, practice, AI, all in one' },
+  { old: 'Passive 2hr video lectures', new: '60-sec Reels + structured text modes' },
+  { old: 'Generic AI that hallucinates medical facts', new: '19 subject-specific AI bots with bounded expertise' },
+  { old: 'No idea what\'s high-yield for the exam', new: 'NEET PG Exam Intelligence — PYQ-driven topic mapping' },
+  { old: 'Forgetting everything after revision', new: 'Spaced repetition + Memory Forge active recall' },
+  { old: 'No structured notes for any subject', new: 'Pre-generated mindmaps, flashcards & schematic diagrams' },
 ]
 
 export default function Differentiators() {
@@ -20,8 +20,8 @@ export default function Differentiators() {
               EVERY PAIN POINT. ANSWERED.
             </span>
             <h2 className="text-[clamp(28px,4vw,44px)] font-extrabold text-cream leading-tight">
-              Not feature creep.{' '}
-              <span className="text-gradient">Comprehensive design.</span>
+              No platform provides everything.{' '}
+              <span className="text-gradient">We do.</span>
             </h2>
           </div>
         </FadeInView>

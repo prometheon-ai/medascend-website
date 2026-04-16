@@ -19,24 +19,23 @@ const hytCards = [
 ]
 
 export default function StudyHub({ theme }) {
-  const d = theme === 'dark'
   return (
-    <section id="study-hub" className={`py-24 lg:py-32 ${d ? 'bg-dark-card' : 'bg-cream-dark'}`}>
+    <section id="study-hub" className="py-24 lg:py-32 bg-dark-card">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
           <div>
             <FadeInView>
-              <span className={`text-[11px] font-semibold tracking-[5px] uppercase mb-4 block ${d ? 'text-teal-light' : 'text-teal'}`}>STUDY HUB</span>
+              <span className="text-[11px] font-semibold tracking-[5px] uppercase mb-4 block text-teal-light">STUDY HUB</span>
             </FadeInView>
             <AnimatedText
               text="Content That Respects Your Time"
               mode="word"
               stagger={0.06}
-              className={`text-[clamp(28px,4vw,44px)] font-extrabold tracking-tight leading-[1.15] mb-4 ${d ? 'text-cream' : 'text-dark'}`}
+              className="text-[clamp(28px,4vw,44px)] font-extrabold tracking-tight leading-[1.15] mb-4 text-cream"
               as="h2"
             />
             <FadeInView delay={0.3}>
-              <p className={`font-[family-name:var(--font-family-secondary)] text-base mb-8 ${d ? 'text-sky/70' : 'text-teal-deep/60'}`}>
+              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky/70">
                 Five integrated modes flowing from one source: Deep Learn — our core content architecture designed for actual retention.
               </p>
             </FadeInView>
@@ -44,7 +43,7 @@ export default function StudyHub({ theme }) {
               {modes.map((m, i) => (
                 <FadeInView key={i} delay={0.4 + i * 0.1} direction="left">
                   <motion.div
-                    className={`flex items-start gap-4 p-4 rounded-xl transition-all duration-300 ${d ? 'hover:bg-dark-surface/60' : 'hover:bg-white/80'}`}
+                    className="flex items-start gap-4 p-4 rounded-xl transition-all duration-300 hover:bg-dark-surface/60"
                     whileHover={{ x: 8 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                   >
@@ -56,8 +55,8 @@ export default function StudyHub({ theme }) {
                       <m.icon size={20} className={m.color.split(' ')[1]} />
                     </motion.div>
                     <div>
-                      <h4 className={`font-bold text-[15px] mb-0.5 ${d ? 'text-cream' : 'text-dark'}`}>{m.title}</h4>
-                      <p className={`text-sm font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>{m.desc}</p>
+                      <h4 className="font-bold text-[15px] mb-0.5 text-cream">{m.title}</h4>
+                      <p className="text-sm font-[family-name:var(--font-family-secondary)] text-sky/60">{m.desc}</p>
                     </div>
                   </motion.div>
                 </FadeInView>
@@ -84,27 +83,26 @@ export default function StudyHub({ theme }) {
               <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
                 <Sparkles size={20} className="text-gold" />
               </motion.div>
-              <h3 className={`text-2xl font-extrabold ${d ? 'text-cream' : 'text-dark'}`}>High Yield Tools</h3>
+              <h3 className="text-2xl font-extrabold text-cream">High Yield Tools</h3>
             </div>
-            <p className={`font-[family-name:var(--font-family-secondary)] text-sm ${d ? 'text-sky/60' : 'text-teal-deep/50'}`}>
+            <p className="font-[family-name:var(--font-family-secondary)] text-sm text-sky/60">
               Subject-specific compilations and tricks crafted for each of the 19 subjects.
             </p>
           </div>
         </FadeInView>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {hytCards.map((c, i) => (
-            <FadeInView key={i} delay={i * 0.12}>
+            <FadeInView key={i} delay={i * 0.12} className="flex">
               <motion.div
-                className={`glow-card p-6 rounded-2xl text-center transition-all duration-300
-                  ${d ? 'bg-dark-surface/50 border border-teal/8' : 'bg-white border border-teal/6 shadow-sm'}`}
+                className="glow-card p-6 rounded-2xl text-center transition-all duration-300 bg-dark-surface/50 border border-teal/10 flex flex-col h-full"
                 whileHover={{ y: -6, scale: 1.02 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               >
                 <motion.div whileHover={{ scale: 1.2, rotate: 10 }} transition={{ type: 'spring', stiffness: 300 }}>
                   <c.icon size={28} className="text-gold mx-auto mb-3" />
                 </motion.div>
-                <h4 className={`font-bold text-[15px] mb-1 ${d ? 'text-cream' : 'text-dark'}`}>{c.title}</h4>
-                <p className={`text-xs font-[family-name:var(--font-family-secondary)] ${d ? 'text-sky/50' : 'text-teal-deep/40'}`}>{c.desc}</p>
+                <h4 className="font-bold text-[15px] mb-1 text-cream">{c.title}</h4>
+                <p className="text-xs font-[family-name:var(--font-family-secondary)] text-sky/50">{c.desc}</p>
               </motion.div>
             </FadeInView>
           ))}
