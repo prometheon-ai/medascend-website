@@ -9,7 +9,6 @@ import FeaturesPage from './pages/FeaturesPage'
 import StudyHubPage from './pages/StudyHubPage'
 import PracticeZonePage from './pages/PracticeZonePage'
 import AIZonePage from './pages/AIZonePage'
-import RoadmapPage from './pages/RoadmapPage'
 import AboutPage from './pages/AboutPage'
 import NotFoundPage from './pages/NotFoundPage'
 
@@ -34,7 +33,6 @@ export default function App() {
           <Route path="/features/study-hub" element={<StudyHubPage />} />
           <Route path="/features/practice-zone" element={<PracticeZonePage />} />
           <Route path="/features/ai-zone" element={<AIZonePage />} />
-          <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

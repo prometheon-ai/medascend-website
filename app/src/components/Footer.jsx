@@ -38,7 +38,6 @@ export default function Footer() {
             <h4 className="text-sm font-bold text-cream mb-4">Resources</h4>
             <div className="flex flex-col gap-2.5">
               <Link to="/features" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Features</Link>
-              <Link to="/roadmap" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">Roadmap</Link>
               <Link to="/about" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-[family-name:var(--font-family-secondary)]">About</Link>
             </div>
           </div>

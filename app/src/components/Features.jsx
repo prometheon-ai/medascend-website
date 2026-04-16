@@ -1,16 +1,50 @@
-import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { BookOpen, Target, Cpu, Layers, Library, CalendarCheck, ArrowRight } from 'lucide-react'
+import {
+  BookOpen, Target, Brain, Clapperboard, Play, BarChart3, Layers,
+  Trophy, RefreshCw, Sparkles, Upload, Bot, HeartPulse,
+  Microscope, BookMarked, Newspaper
+} from 'lucide-react'
 import AnimatedText from './animations/AnimatedText'
 import FadeInView from './animations/FadeInView'
 
-const features = [
-  { icon: BookOpen, title: 'Study Hub', desc: 'Five integrated modes flowing from one source. Content that respects your time.', to: '/features/study-hub', color: 'text-teal', bg: 'bg-teal/15' },
-  { icon: Target, title: 'Practice Zone', desc: 'Every practice scenario covered. Personalized daily questions, full mock tests, and custom quizzes.', to: '/features/practice-zone', color: 'text-gold', bg: 'bg-gold/15' },
-  { icon: Cpu, title: 'AI Zone', desc: 'Context that generic AI cannot touch. 19 subject-specific chatbots with bounded expertise.', to: '/features/ai-zone', color: 'text-terracotta', bg: 'bg-terracotta/15' },
-  { icon: Layers, title: 'Flashcard System', desc: 'SM2 spaced repetition. Chapter-wise decks. Daily review queues with streak tracking.', color: 'text-sky', bg: 'bg-sky/15' },
-  { icon: Library, title: 'Library', desc: 'PDFs, YouTube, web articles, personal notes — unified, searchable, annotatable.', color: 'text-stone', bg: 'bg-stone/15' },
-  { icon: CalendarCheck, title: 'Diary & Planner', desc: 'Log progress. Schedule revision blocks. From overwhelming syllabus to manageable daily missions.', color: 'text-gold', bg: 'bg-gold/15' },
+const categories = [
+  {
+    label: 'LEARN',
+    color: 'text-teal',
+    accent: 'bg-teal/15',
+    features: [
+      { icon: BookOpen, title: 'Study Hub', desc: 'Five integrated modes from one source — Deep Learn for first-time understanding, Revise for speed review, Memory Forge for active recall, Exam Intelligence for PYQ patterns, and Practice MCQs to test yourself. Every chapter flows through understanding, retention, and testing. Content built for comprehension, not watch time.' },
+      { icon: Clapperboard, title: 'Reel Mode', desc: '60-second visual concept reels you swipe through like TikTok. Each reel covers one atomic concept — a hook that grabs you, a visual explanation that makes it click, and a memory anchor that makes it stick. Built for how this generation actually learns. Swipe through an entire subject and genuinely retain it.' },
+      { icon: Play, title: 'Animations Engine', desc: 'Cinematic medical animations that make complex mechanisms, pathways, and processes visually intuitive. No more imagining what your textbook is trying to describe — see it happen. Every animation comes with extractable key facts you can send straight to flashcards. Watch to understand, read to memorize, test to confirm.' },
+      { icon: Brain, title: 'Clinical Posting Companion', desc: 'Disease-wise history taking proformas you can fill during actual postings — tappable checklists, fillable fields, exportable as PDF. A case logger that builds your clinical portfolio over time. Cross-subject integration that connects every disease across Medicine, Pathology, Pharmacology, and Microbiology in one view.' },
+      { icon: Microscope, title: 'Practical Content Hub', desc: 'Every practical you\'ll ever face — Anatomy histology slides and specimens, Pathology gross specimens and special stains, Microbiology culture media, Surgery instruments with common viva questions, Forensic Medicine protocols and poison charts. Searchable, zoomable, always in your pocket.' },
+      { icon: Layers, title: 'Subject Pearls', desc: 'Subject-specific quick-reference cards designed for rapid recall — Anatomy origin-insertion tables, Pharmacology drug comparison charts, Medicine DOC compilations, Surgery staging systems, Pediatrics milestone charts, Microbiology vaccine schedules. The curated reference material that saves hours of note-making.' },
+      { icon: Newspaper, title: 'Recent Guidelines', desc: 'Updated medical guidelines with exam-focused summaries. What changed from the previous version, why it matters for NEET-PG, related MCQs that test the updates, and ready-made flashcards for every key change. Never get caught off guard by a guideline question.' },
+      { icon: BookMarked, title: 'Mindmaps & Flashcards Library', desc: 'A pre-built library of professionally designed mindmaps and flashcard decks for every chapter across all 19 subjects. No creation effort — browse, preview, and start studying. Add entire decks to your spaced repetition queue with one tap.' },
+    ],
+  },
+  {
+    label: 'PRACTICE',
+    color: 'text-gold',
+    accent: 'bg-gold/15',
+    features: [
+      { icon: Target, title: 'Practice Zone', desc: '15+ practice modes covering every scenario: Daily 10Q for consistency, QBank for depth, Grand Test Series for full NEET-PG simulation with national ranking, Rapid Fire for quick 5-minute sessions, Image-Based Questions for the increasingly visual exam pattern, One-Liner Mode for rapid fact recall, PYQ Mode, Timed Mode, and Custom Quiz Builder. Post-quiz analytics identify your exact weak spots and generate a recovery plan.' },
+      { icon: Trophy, title: 'MedAscend Arena', desc: 'Live competitive quizzes with real prize money. Subject Showdowns, All-India Challenges, College Battles, City Championships, and daily Flash Quizzes. Compete against thousands of students in real-time, earn a national rank, track your Arena rating, and win actual prizes. Because studying alone only takes you so far — pressure and competition forge the sharpest minds.' },
+      { icon: RefreshCw, title: 'Spaced Repetition System', desc: 'A built-in spaced repetition engine you never have to set up. Flashcards auto-generate from every reel you watch, every animation\'s key facts, every wrong answer in practice, and every study session. The SM-2 algorithm schedules each card at the exact moment you\'re about to forget it. Not a separate app — it\'s the backbone connecting everything you learn across MedAscend.' },
+    ],
+  },
+  {
+    label: 'AI',
+    color: 'text-terracotta',
+    accent: 'bg-terracotta/15',
+    features: [
+      { icon: Sparkles, title: 'AI Tools Suite', desc: 'A complete toolkit: Mindmap Generator, Flashcard Generator, Podcast Generator (two AI voices discussing your topic), Mnemonic Creator, MCQ Generator, Content Summarizer, and Explain Back To Me — where you explain a concept and AI scores your understanding, identifies gaps, and points you to what to review. Paste any topic and get complete study material in seconds.' },
+      { icon: Upload, title: 'Knowledge Forge', desc: 'Upload anything — PDFs, lecture recordings, YouTube video links, handwritten notes, textbook photos, website URLs. AI processes your material into an interactive chat, concise summary, visual mindmap, flashcard deck, two-voice audio podcast, and practice quiz. Like NotebookLM, but built natively into your study ecosystem so everything connects.' },
+      { icon: Bot, title: '19 Subject-Specific AI Tutors', desc: 'Not generic ChatGPT that hallucinates across all of medicine. 19 separate AI bots, each operating within the boundaries of one subject. The Pharmacology bot answers Pharmacology. It won\'t guess about Surgery. Bounded expertise means accurate, trustworthy responses you can study from without cross-checking every answer.' },
+      { icon: HeartPulse, title: 'Patient Simulator & OSCE Mode', desc: 'Interactive clinical case simulations where you play the doctor. Take history by asking the AI patient questions, select systems to examine, order investigations, arrive at a diagnosis, and plan treatment — scored against standard protocols. OSCE stations run on 8-minute timers with real marking schemes. Build clinical confidence before you hit the ward.' },
+      { icon: BarChart3, title: 'Exam Intelligence System', desc: '10 years of NEET-PG papers systematically analyzed. Subject-wise question distribution, high-yield topic rankings, year-over-year trend analysis, question pattern breakdowns, and common trap identification. Plus a personalized strategy built from your own practice data — predicted score range, rank estimate, and exactly which subjects to improve to reach your target rank. Your blueprint for cracking the exam.' },
+    ],
+  },
 ]
 
 export default function Features() {
@@ -37,25 +71,35 @@ export default function Features() {
           </FadeInView>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((f, i) => (
-            <FadeInView key={i} delay={i * 0.1} className="flex">
-              <div className="glow-card group relative p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-dark-surface/50 border border-teal/10 flex flex-col w-full">
-                <motion.div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${f.bg}`}
-                  whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
-                >
-                  <f.icon size={22} className={f.color} />
-                </motion.div>
-                <h3 className="text-lg font-bold mb-2 text-cream">{f.title}</h3>
-                <p className="text-sm leading-relaxed mb-4 font-[family-name:var(--font-family-secondary)] text-sky/60 flex-1">{f.desc}</p>
-                {f.to && (
-                  <Link to={f.to} className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal group-hover:gap-2.5 transition-all duration-300 mt-auto">
-                    Learn more <ArrowRight size={15} />
-                  </Link>
-                )}
+        <div className="space-y-20">
+          {categories.map((cat, ci) => (
+            <div key={ci}>
+              <FadeInView>
+                <span className={`text-[11px] font-semibold tracking-[5px] uppercase mb-6 block ${cat.color}`}>
+                  {cat.label}
+                </span>
+              </FadeInView>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {cat.features.map((f, fi) => (
+                  <FadeInView key={fi} delay={fi * 0.08} className="flex">
+                    <motion.div
+                      className="glow-card p-7 rounded-2xl bg-dark-surface/50 border border-teal/10 flex flex-col w-full"
+                      whileHover={{ y: -4 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    >
+                      <motion.div
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${cat.accent}`}
+                        whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
+                      >
+                        <f.icon size={22} className={cat.color} />
+                      </motion.div>
+                      <h3 className="text-lg font-bold mb-2 text-cream">{f.title}</h3>
+                      <p className="text-sm leading-relaxed font-[family-name:var(--font-family-secondary)] text-sky/60 flex-1">{f.desc}</p>
+                    </motion.div>
+                  </FadeInView>
+                ))}
               </div>
-            </FadeInView>
+            </div>
           ))}
         </div>
       </div>

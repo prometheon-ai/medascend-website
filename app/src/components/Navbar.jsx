@@ -24,7 +24,6 @@ export default function Navbar({ onEarlyAccess }) {
     { to: '/features/study-hub', label: 'Study Hub' },
     { to: '/features/practice-zone', label: 'Practice' },
     { to: '/features/ai-zone', label: 'AI Zone' },
-    { to: '/roadmap', label: 'Roadmap' },
   ]
 
   const isActive = (to) => location.pathname === to

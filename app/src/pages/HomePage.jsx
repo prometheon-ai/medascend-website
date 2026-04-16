@@ -3,9 +3,7 @@ import useScrollToHash from '../hooks/useScrollToHash'
 import CinematicHero from '../components/CinematicHero'
 import FounderCredibility from '../components/FounderCredibility'
 import Differentiators from '../components/Differentiators'
-import StatsCounter from '../components/StatsCounter'
 import FeaturesShowcase from '../components/FeaturesShowcase'
-import RoadmapTeaser from '../components/RoadmapTeaser'
 import HypeCTA from '../components/HypeCTA'
 
 export default function HomePage({ onEarlyAccess }) {
@@ -63,9 +61,7 @@ export default function HomePage({ onEarlyAccess }) {
       </Helmet>
       <CinematicHero />
       <Differentiators />
-      <StatsCounter />
       <FeaturesShowcase />
-      <RoadmapTeaser />
       <FounderCredibility />
       <HypeCTA onEarlyAccess={onEarlyAccess} />
     </>

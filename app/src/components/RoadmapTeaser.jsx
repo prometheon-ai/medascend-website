@@ -4,7 +4,7 @@ import FadeInView from './animations/FadeInView'
 
 const upcoming = [
   { icon: Clapperboard, title: 'Reel Mode', desc: 'TikTok-style 60-sec concept reels. Swipe through entire subjects.' },
-  { icon: Sparkles, title: 'Animations Engine', desc: 'Cinematic Kurzgesagt-style medical animations for every concept.' },
+  { icon: Sparkles, title: 'Animations Engine', desc: 'Cinematic medical animations for every concept.' },
   { icon: Trophy, title: 'MedAscend Arena', desc: 'Live competitive quizzes with prizes. College battles. All-India challenges.' },
   { icon: Stethoscope, title: 'Clinical Posting Companion', desc: 'History proformas, case logger, cross-subject integration for postings.' },
   { icon: BookOpen, title: 'Knowledge Forge', desc: 'Upload any material — AI creates notes, flashcards, podcasts, quizzes from it.' },

@@ -3,7 +3,6 @@ import Features from '../components/Features'
 import StudyHub from '../components/StudyHub'
 import PracticeZone from '../components/PracticeZone'
 import AIZone from '../components/AIZone'
-import MoreFeatures from '../components/MoreFeatures'
 
 export default function FeaturesPage() {
   return (
@@ -40,7 +39,6 @@ export default function FeaturesPage() {
       <StudyHub />
       <PracticeZone />
       <AIZone />
-      <MoreFeatures />
     </>
   )
 }
