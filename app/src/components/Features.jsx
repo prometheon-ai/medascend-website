@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import {
   Target, Brain, Clapperboard, Play, BarChart3, Layers,
   Trophy, RefreshCw, Sparkles, Upload, Bot, HeartPulse,
-  Microscope, BookMarked, Newspaper
+  Microscope, BookMarked, Newspaper, GraduationCap, Users,
+  Zap, PenLine
 } from 'lucide-react'
 import AnimatedText from './animations/AnimatedText'
 import FadeInView from './animations/FadeInView'
@@ -20,6 +21,7 @@ const categories = [
       { icon: Layers, title: 'Subject Pearls', desc: 'Subject-specific quick-reference cards designed for rapid recall — Anatomy origin-insertion tables, Pharmacology drug comparison charts, Medicine DOC compilations, Surgery staging systems, Pediatrics milestone charts, Microbiology vaccine schedules. The curated reference material that saves hours of note-making.' },
       { icon: Newspaper, title: 'Recent Guidelines', desc: 'Updated medical guidelines with exam-focused summaries. What changed from the previous version, why it matters for NEET-PG, related MCQs that test the updates, and ready-made flashcards for every key change. Never get caught off guard by a guideline question.' },
       { icon: BookMarked, title: 'Mindmaps & Flashcards Library', desc: 'A pre-built library of professionally designed mindmaps and flashcard decks for every chapter across all 19 subjects. No creation effort — browse, preview, and start studying. Add entire decks to your spaced repetition queue with one tap.' },
+      { icon: PenLine, title: 'Notes & PDF Reader', desc: 'A note-taking system built for medical students, not a generic app bolted on. Open any textbook PDF — Robbins, Harrison\'s, Gray\'s — and annotate directly with handwritten scribbles, typed notes, color-coded highlights, and voice memos pinned to specific pages. Notes auto-link to MedAscend\'s subject-chapter structure so everything you ever wrote on a topic surfaces together. AI generates summaries from your PDFs and turns your notes into flashcards and MCQs.' },
     ],
   },
   {
@@ -30,6 +32,7 @@ const categories = [
       { icon: Target, title: 'Practice Zone', desc: '15+ practice modes covering every scenario: Daily 10Q for consistency, QBank for depth, Grand Test Series for full NEET-PG simulation with national ranking, Rapid Fire for quick 5-minute sessions, Image-Based Questions for the increasingly visual exam pattern, One-Liner Mode for rapid fact recall, PYQ Mode, Timed Mode, and Custom Quiz Builder. Post-quiz analytics identify your exact weak spots and generate a recovery plan.' },
       { icon: Trophy, title: 'MedAscend Arena', desc: 'Live competitive quizzes with real prize money. Subject Showdowns, All-India Challenges, College Battles, City Championships, and daily Flash Quizzes. Compete against thousands of students in real-time, earn a national rank, track your Arena rating, and win actual prizes. Because studying alone only takes you so far — pressure and competition forge the sharpest minds.' },
       { icon: RefreshCw, title: 'Spaced Repetition System', desc: 'A built-in spaced repetition engine you never have to set up. Flashcards auto-generate from every reel you watch, every animation\'s key facts, every wrong answer in practice, and every study session. The SM-2 algorithm schedules each card at the exact moment you\'re about to forget it. Not a separate app — it\'s the backbone connecting everything you learn across MedAscend.' },
+      { icon: Zap, title: 'Exam Crisis Content', desc: 'Exam in 3 days. Don\'t panic. A dedicated mode that surfaces ultra-high-yield revision material designed for the final 72 hours. Condensed one-pagers, must-know MCQs, most-repeated university questions, last-minute mnemonics, and panic-tested frameworks that focus on what actually shows up — not everything, just what scores. Available in 7-day, 3-day, and 24-hour modes with a passing score toolkit for when time is running out.' },
     ],
   },
   {
@@ -42,6 +45,15 @@ const categories = [
       { icon: Bot, title: '19 Subject-Specific AI Tutors', desc: 'Not generic ChatGPT that hallucinates across all of medicine. 19 separate AI bots, each operating within the boundaries of one subject. The Pharmacology bot answers Pharmacology. It won\'t guess about Surgery. Bounded expertise means accurate, trustworthy responses you can study from without cross-checking every answer.' },
       { icon: HeartPulse, title: 'Patient Simulator & OSCE Mode', desc: 'Interactive clinical case simulations where you play the doctor. Take history by asking the AI patient questions, select systems to examine, order investigations, arrive at a diagnosis, and plan treatment — scored against standard protocols. OSCE stations run on 8-minute timers with real marking schemes. Build clinical confidence before you hit the ward.' },
       { icon: BarChart3, title: 'Exam Intelligence System', desc: '10 years of NEET-PG papers systematically analyzed. Subject-wise question distribution, high-yield topic rankings, year-over-year trend analysis, question pattern breakdowns, and common trap identification. Plus a personalized strategy built from your own practice data — predicted score range, rank estimate, and exactly which subjects to improve to reach your target rank. Your blueprint for cracking the exam.' },
+    ],
+  },
+  {
+    label: 'COMMUNITY',
+    color: 'text-sky',
+    accent: 'bg-sky/20',
+    features: [
+      { icon: GraduationCap, title: 'Teacher Hub', desc: 'Learn directly from India\'s top medical educators. A curated space where verified doctors, professors, and subject specialists publish their own notes, high-yield pearls, mnemonics, and concept breakdowns — organized by subject, chapter, and topic. Follow your favorite teachers, get notified when they drop new content, and build a personalized feed of the educators whose teaching style clicks for you. No more hunting across WhatsApp groups and YouTube.' },
+      { icon: Users, title: 'Influencer Hub', desc: 'Real journeys. Real strategies. From people who\'ve been where you are. Toppers who cracked NEET-PG, seniors who survived third year, and aspirants one step ahead share what actually worked — study vlogs, daily routines, subject-wise preparation playbooks, and honest takes on what\'s worth your time. Not polished marketing content. Peer wisdom you can trust because they took the same exam you\'re preparing for.' },
     ],
   },
 ]
