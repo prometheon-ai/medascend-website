@@ -5,7 +5,6 @@ import { BookOpen, Target, Brain, Clapperboard, Shield, Layers, CalendarCheck, F
 import FadeInView from './animations/FadeInView'
 
 const features = [
-  { icon: BookOpen, title: 'Study Hub', desc: '5 integrated study modes', color: 'text-teal', bg: 'bg-teal/15' },
   { icon: Target, title: 'Practice Zone', desc: 'QBank, mocks, daily 10Q & arena', color: 'text-gold', bg: 'bg-gold/15' },
   { icon: Brain, title: 'AI Tools Suite', desc: 'Mindmaps, flashcards, audio, explain back', color: 'text-terracotta', bg: 'bg-terracotta/15' },
   { icon: Clapperboard, title: 'Reel Mode', desc: '60-sec visual concept reels', color: 'text-sky', bg: 'bg-sky/15' },

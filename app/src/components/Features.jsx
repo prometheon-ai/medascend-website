@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import {
-  BookOpen, Target, Brain, Clapperboard, Play, BarChart3, Layers,
+  Target, Brain, Clapperboard, Play, BarChart3, Layers,
   Trophy, RefreshCw, Sparkles, Upload, Bot, HeartPulse,
   Microscope, BookMarked, Newspaper
 } from 'lucide-react'
@@ -13,7 +13,6 @@ const categories = [
     color: 'text-teal',
     accent: 'bg-teal/15',
     features: [
-      { icon: BookOpen, title: 'Study Hub', desc: 'Five integrated modes from one source — Deep Learn for first-time understanding, Revise for speed review, Memory Forge for active recall, Exam Intelligence for PYQ patterns, and Practice MCQs to test yourself. Every chapter flows through understanding, retention, and testing. Content built for comprehension, not watch time.' },
       { icon: Clapperboard, title: 'Reel Mode', desc: '60-second visual concept reels you swipe through like TikTok. Each reel covers one atomic concept — a hook that grabs you, a visual explanation that makes it click, and a memory anchor that makes it stick. Built for how this generation actually learns. Swipe through an entire subject and genuinely retain it.' },
       { icon: Play, title: 'Animations Engine', desc: 'Cinematic medical animations that make complex mechanisms, pathways, and processes visually intuitive. No more imagining what your textbook is trying to describe — see it happen. Every animation comes with extractable key facts you can send straight to flashcards. Watch to understand, read to memorize, test to confirm.' },
       { icon: Brain, title: 'Clinical Posting Companion', desc: 'Disease-wise history taking proformas you can fill during actual postings — tappable checklists, fillable fields, exportable as PDF. A case logger that builds your clinical portfolio over time. Cross-subject integration that connects every disease across Medicine, Pathology, Pharmacology, and Microbiology in one view.' },
