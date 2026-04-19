@@ -20,6 +20,7 @@ export default function Navbar({ onEarlyAccess }) {
 
   const links = [
     { to: '/', label: 'Home' },
+    { to: '/sahai', label: 'SahAI' },
     { to: '/features', label: 'Features' },
     { to: '/features/study-hub', label: 'Study Hub' },
     { to: '/features/practice-zone', label: 'Practice' },
@@ -33,10 +34,10 @@ export default function Navbar({ onEarlyAccess }) {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
         ${scrolled ? 'shadow-lg' : ''}
         bg-dark/85 border-teal/10`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-[68px]">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-17">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 no-underline">
-            <img src={faviconImg} alt="Prometheon Logo" className="w-[34px] h-[34px] rounded-lg object-contain" />
+            <img src={faviconImg} alt="Prometheon Logo" className="w-8.5 h-8.5 rounded-lg object-contain" />
             <div className="flex flex-col justify-center">
               <span className="text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 text-teal-light">
                 Prometheon Applied
@@ -77,7 +78,7 @@ export default function Navbar({ onEarlyAccess }) {
       </nav>
 
       {/* Mobile menu overlay */}
-      <div className={`fixed inset-0 z-40 pt-[68px] transition-all duration-300 backdrop-blur-xl
+      <div className={`fixed inset-0 z-40 pt-17 transition-all duration-300 backdrop-blur-xl
         ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         bg-dark/95`}>
         <div className="flex flex-col items-center justify-center h-full gap-4">

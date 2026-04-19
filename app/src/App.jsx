@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -9,11 +10,14 @@ import FeaturesPage from './pages/FeaturesPage'
 import StudyHubPage from './pages/StudyHubPage'
 import PracticeZonePage from './pages/PracticeZonePage'
 import AIZonePage from './pages/AIZonePage'
+import SahAIPage from './pages/SahAIPage'
 import AboutPage from './pages/AboutPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false)
+  const location = useLocation()
+  const isSahAIRoute = location.pathname.startsWith('/sahai')
 
   useEffect(() => {
     document.documentElement.classList.add('dark')
@@ -33,11 +37,12 @@ export default function App() {
           <Route path="/features/study-hub" element={<StudyHubPage />} />
           <Route path="/features/practice-zone" element={<PracticeZonePage />} />
           <Route path="/features/ai-zone" element={<AIZonePage />} />
+          <Route path="/sahai" element={<SahAIPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
+      {!isSahAIRoute && <Footer />}
       <EarlyAccessModal isOpen={modalOpen} onClose={closeModal} />
     </div>
   )
