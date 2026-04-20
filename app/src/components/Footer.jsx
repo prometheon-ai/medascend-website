@@ -20,7 +20,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-xs text-sky/40 tracking-[3px] uppercase mb-2 font-[family-name:var(--font-family-secondary)]">Rise Through Medicine</p>
-            <p className="text-sm text-sky/50 font-[family-name:var(--font-family-secondary)]">Built by a Medical Student, For NEET PG Aspirants.</p>
+            <p className="text-sm text-sky/50 font-[family-name:var(--font-family-secondary)]">Built by a Medical Student, For Medical Students.</p>
           </div>
 
           {/* Platform */}

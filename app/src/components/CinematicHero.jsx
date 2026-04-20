@@ -288,7 +288,7 @@ export default function CinematicHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.5 }}
               >
-                Built by a Medical Student. <span className="text-gradient">For NEET PG Aspirants.</span>
+                Built by a Medical Student. <span className="text-gradient">For Medical Students.</span>
               </motion.p>
             </motion.div>
           )}

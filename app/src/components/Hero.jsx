@@ -41,7 +41,7 @@ export default function Hero({ theme, onEarlyAccess }) {
               Built by a Medical Student,
             </span>
             <span className="block text-[clamp(20px,2.5vw,32px)] font-extrabold tracking-[-0.03em] leading-[1.2] text-gradient mt-1">
-              For NEET PG Aspirants.
+              For Medical Students .
             </span>
           </h1>
 
