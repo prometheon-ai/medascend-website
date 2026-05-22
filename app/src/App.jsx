@@ -1,49 +1,45 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-import EarlyAccessModal from './components/EarlyAccessModal'
+import AuthModal from './components/AuthModal'
 import HomePage from './pages/HomePage'
 import FeaturesPage from './pages/FeaturesPage'
-import StudyHubPage from './pages/StudyHubPage'
-import PracticeZonePage from './pages/PracticeZonePage'
-import AIZonePage from './pages/AIZonePage'
+import HelpPage from './pages/HelpPage'
+import JoinPage from './pages/JoinPage'
 import SahAIPage from './pages/SahAIPage'
-import AboutPage from './pages/AboutPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 export default function App() {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [authModal, setAuthModal] = useState({ open: false, tab: 'login' })
   const location = useLocation()
-  const isSahAIRoute = location.pathname.startsWith('/sahai')
+  const isSahAI = location.pathname.startsWith('/sahai')
 
   useEffect(() => {
     document.documentElement.classList.add('dark')
   }, [])
 
-  const openModal = () => setModalOpen(true)
-  const closeModal = () => setModalOpen(false)
+  const openLogin = () => setAuthModal({ open: true, tab: 'login' })
+  const openRegister = () => setAuthModal({ open: true, tab: 'register' })
+  const closeAuth = () => setAuthModal(p => ({ ...p, open: false }))
 
   return (
     <div className="min-h-screen bg-dark text-cream">
       <ScrollToTop />
-      <Navbar onEarlyAccess={openModal} />
+      {!isSahAI && <Navbar onLogin={openLogin} onRegister={openRegister} />}
       <main>
         <Routes>
-          <Route path="/" element={<HomePage onEarlyAccess={openModal} />} />
+          <Route path="/" element={<HomePage onAuth={openLogin} />} />
           <Route path="/features" element={<FeaturesPage />} />
-          <Route path="/features/study-hub" element={<StudyHubPage />} />
-          <Route path="/features/practice-zone" element={<PracticeZonePage />} />
-          <Route path="/features/ai-zone" element={<AIZonePage />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="/join" element={<JoinPage />} />
           <Route path="/sahai" element={<SahAIPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      {!isSahAIRoute && <Footer />}
-      <EarlyAccessModal isOpen={modalOpen} onClose={closeModal} />
+      {!isSahAI && <Footer />}
+      <AuthModal isOpen={authModal.open} onClose={closeAuth} defaultTab={authModal.tab} />
     </div>
   )
 }

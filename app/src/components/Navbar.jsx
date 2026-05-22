@@ -3,7 +3,16 @@ import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 
-export default function Navbar({ onEarlyAccess }) {
+const links = [
+  { to: '/', label: 'Home' },
+  { to: '/#the-problem', label: 'The Problem' },
+  { to: '/#the-platform', label: 'The Platform' },
+  { to: '/features', label: 'Features' },
+  { to: '/#where-we-are', label: 'Where We Are' },
+  { to: '/#built-for', label: 'For Students' },
+]
+
+export default function Navbar({ onLogin, onRegister }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
@@ -18,16 +27,21 @@ export default function Navbar({ onEarlyAccess }) {
     setMobileOpen(false)
   }, [location.pathname])
 
-  const links = [
-    { to: '/', label: 'Home' },
-    { to: '/sahai', label: 'SahAI' },
-    { to: '/features', label: 'Features' },
-    { to: '/features/study-hub', label: 'Study Hub' },
-    { to: '/features/practice-zone', label: 'Practice' },
-    { to: '/features/ai-zone', label: 'AI Zone' },
-  ]
+  const isActive = (to) => {
+    if (to.includes('#')) return false
+    return location.pathname === to
+  }
 
-  const isActive = (to) => location.pathname === to
+  const handleAnchorClick = (e, to) => {
+    if (!to.includes('#')) return
+    const [path, hash] = to.split('#')
+    if (location.pathname !== '/' && path === '/') {
+      return // let Link handle navigation, scroll will happen via useScrollToHash
+    }
+    e.preventDefault()
+    document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
+    setMobileOpen(false)
+  }
 
   return (
     <>
@@ -35,66 +49,77 @@ export default function Navbar({ onEarlyAccess }) {
         ${scrolled ? 'shadow-lg' : ''}
         bg-dark/85 border-teal/10`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-17">
+
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 no-underline">
-            <img src={faviconImg} alt="Prometheon Logo" className="w-8.5 h-8.5 rounded-lg object-contain" />
+          <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 no-underline shrink-0">
+            <img src={faviconImg} alt="MedAscend" className="w-8.5 h-8.5 rounded-lg object-contain" />
             <div className="flex flex-col justify-center">
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 text-teal-light">
-                Prometheon Applied
+              <span className="text-base font-extrabold tracking-tight leading-none mb-0.5">
+                <span className="text-cream">Med</span><span className="text-gold-light">Ascend</span>
               </span>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-[1.2px] font-bold leading-none mb-1 text-teal-light">
-                Intelligence
+              <span className="text-[9px] uppercase tracking-[1.2px] font-semibold leading-none text-teal-light">
+                Prometheon Applied Intelligence
               </span>
             </div>
           </Link>
 
-          {/* Desktop nav links */}
+          {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-1">
             {links.map(l => (
-              <Link key={l.to} to={l.to}
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={(e) => handleAnchorClick(e, l.to)}
                 className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200
                   ${isActive(l.to)
                     ? 'text-cream bg-teal/15'
                     : 'text-sky hover:text-cream hover:bg-teal/10'
-                  }`}>
+                  }`}
+              >
                 {l.label}
               </Link>
             ))}
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-3">
-            <button onClick={onEarlyAccess}
-              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none">
-              Get Early Access
+          {/* CTA + hamburger */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onLogin}
+              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none"
+            >
+              Login / Register
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-1.5 text-current cursor-pointer bg-transparent border-none"
-              aria-label="Menu">
+              aria-label="Menu"
+            >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu */}
       <div className={`fixed inset-0 z-40 pt-17 transition-all duration-300 backdrop-blur-xl
         ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         bg-dark/95`}>
         <div className="flex flex-col items-center justify-center h-full gap-4">
           {links.map(l => (
-            <Link key={l.to} to={l.to}
-              className={`text-xl font-semibold px-6 py-3 rounded-xl transition-all
-                ${isActive(l.to)
-                  ? 'text-cream bg-teal/15'
-                  : 'text-cream hover:bg-teal/10'
-                }`}>
+            <Link
+              key={l.to}
+              to={l.to}
+              onClick={(e) => handleAnchorClick(e, l.to)}
+              className="text-xl font-semibold px-6 py-3 rounded-xl text-cream hover:bg-teal/10 transition-all"
+            >
               {l.label}
             </Link>
           ))}
-          <button onClick={() => { setMobileOpen(false); onEarlyAccess() }}
-            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl cursor-pointer border-none">
-            Get Early Access
+          <button
+            onClick={() => { setMobileOpen(false); onLogin() }}
+            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl cursor-pointer border-none"
+          >
+            Login / Register
           </button>
         </div>
       </div>

@@ -2,17 +2,17 @@ import { motion } from 'framer-motion'
 import FadeInView from './animations/FadeInView'
 
 const comparisons = [
-  { problem: 'Resources scattered across 5+ platforms', solution: 'One unified ecosystem — study, practice, AI, all in one' },
-  { problem: 'Passive 2hr video lectures', solution: '60-sec Reels + cinematic Animations Engine' },
-  { problem: 'Generic AI that hallucinates medical facts', solution: '19 subject-specific AI bots with bounded expertise' },
-  { problem: 'No idea what\'s high-yield for the exam', solution: 'NEET PG Exam Intelligence — PYQ-driven topic mapping' },
-  { problem: 'Forgetting everything after revision', solution: 'Spaced repetition + Memory Forge active recall' },
-  { problem: 'Can\'t study from your own material', solution: 'Knowledge Forge — upload anything, AI creates study tools' },
+  { problem: 'Resources scattered across multiple platforms', solution: 'One platform — learn, revise, practise, and ask in one place' },
+  { problem: 'Long video lectures you don\'t retain', solution: 'Short reels and clear animations built for memory' },
+  { problem: 'Generic AI that invents medical facts', solution: '19 subject-specialist tutors kept within their subject' },
+  { problem: 'No idea what\'s high-yield for the exam', solution: 'Exam Intelligence — a decade of papers, decoded' },
+  { problem: 'Forgetting weeks after revision', solution: 'Spaced repetition that brings concepts back at the right time' },
+  { problem: 'Can\'t study from your own notes and books', solution: 'Knowledge Forge & My Notes — upload or write your own, understood in medical context' },
 ]
 
 export default function Differentiators() {
   return (
-    <section className="py-24 lg:py-32 bg-dark">
+    <section id="the-platform" className="py-24 lg:py-32 bg-dark">
       <div className="max-w-6xl mx-auto px-6">
         <FadeInView>
           <div className="text-center mb-16">
@@ -20,8 +20,8 @@ export default function Differentiators() {
               EVERY PAIN POINT. ANSWERED.
             </span>
             <h2 className="text-[clamp(28px,4vw,44px)] font-extrabold text-cream leading-tight">
-              No platform provides everything.{' '}
-              <span className="text-gradient">We do.</span>
+              No platform covers all of it.{' '}
+              <span className="text-gradient">MedAscend does.</span>
             </h2>
           </div>
         </FadeInView>
@@ -30,10 +30,10 @@ export default function Differentiators() {
           <div className="rounded-2xl border border-teal/10 overflow-hidden">
             <div className="grid grid-cols-2 bg-teal/10">
               <div className="px-6 md:px-8 py-5 text-sm md:text-base font-bold text-terracotta uppercase tracking-wider">
-                What Frustrates You
+                What slows you down
               </div>
               <div className="px-6 md:px-8 py-5 text-sm md:text-base font-bold text-teal-light uppercase tracking-wider border-l border-teal/10">
-                How MedAscend Solves It
+                What MedAscend does
               </div>
             </div>
 
