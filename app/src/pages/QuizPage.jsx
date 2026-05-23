@@ -47,11 +47,11 @@ export default function QuizPage() {
 
     const init = async () => {
       try {
-        await fetch(`${API}/arena/events/${contestId}/start`, {
+        await fetch(`${API}/arena/quizzes/${contestId}/start`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${activeToken}` },
         })
-        const res = await fetch(`${API}/arena/events/${contestId}/questions`, {
+        const res = await fetch(`${API}/arena/quizzes/${contestId}/questions`, {
           headers: { Authorization: `Bearer ${activeToken}` },
         })
         if (!res.ok) throw new Error('Failed to load questions')
@@ -94,7 +94,7 @@ export default function QuizPage() {
       if (document.hidden && !terminated) {
         const newCount = useArenaStore.getState().switchCount + 1
         incrementSwitchCount()
-        fetch(`${API}/arena/events/${contestId}/report-switch`, {
+        fetch(`${API}/arena/quizzes/${contestId}/report-switch`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${activeToken}` },
         }).catch(() => {})
@@ -122,7 +122,7 @@ export default function QuizPage() {
     const timeTaken = Math.max(0, budget - useArenaStore.getState().timeLeft)
 
     try {
-      const res = await fetch(`${API}/arena/events/${contestId}/submit`, {
+      const res = await fetch(`${API}/arena/quizzes/${contestId}/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ export default function QuizPage() {
 
   const finishQuiz = useCallback(async () => {
     try {
-      await fetch(`${API}/arena/events/${contestId}/finish`, {
+      await fetch(`${API}/arena/quizzes/${contestId}/finish`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${activeToken}` },
       })

@@ -19,31 +19,26 @@ export default function ResultsPage() {
   useEffect(() => {
     const headers = activeToken ? { Authorization: `Bearer ${activeToken}` } : {}
     Promise.all([
-      fetch(`${API}/arena/events/${contestId}/my-result`, { headers })
+      fetch(`${API}/arena/quizzes/${contestId}/review`, { headers })
         .then(r => r.ok ? r.json() : null)
         .catch(() => null),
-      fetch(`${API}/arena/events/${contestId}/leaderboard`, { headers })
-        .then(r => r.ok ? r.json() : [])
-        .catch(() => []),
+      fetch(`${API}/arena/quizzes/${contestId}/leaderboard`, { headers })
+        .then(r => r.ok ? r.json() : {})
+        .catch(() => ({})),
     ])
       .then(([result, lb]) => {
         setMyResult(result)
-        const entries = Array.isArray(lb) ? lb : lb.entries ?? lb.results ?? lb.leaderboard ?? []
+        const entries = lb.leaderboard ?? lb.entries ?? lb.results ?? (Array.isArray(lb) ? lb : [])
         setLeaderboard(entries)
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
   }, [contestId, activeToken])
 
-  // Support both API shapes
-  const score = myResult?.total_score ?? myResult?.score ?? '—'
-  const correct = myResult?.problems_solved ?? myResult?.correct_answers ?? '—'
+  const score = myResult?.final_score ?? myResult?.total_score ?? myResult?.score ?? '—'
+  const correct = myResult?.questions_correct ?? myResult?.problems_solved ?? myResult?.correct_answers ?? '—'
   const total = myResult?.total_questions
-  const accuracy = myResult?.accuracy_pct != null
-    ? `${myResult.accuracy_pct}%`
-    : (myResult?.correct_answers != null && myResult?.total_questions > 0)
-      ? `${Math.round((myResult.correct_answers / myResult.total_questions) * 100)}%`
-      : '—'
+  const accuracy = myResult?.accuracy_pct != null ? `${myResult.accuracy_pct}%` : '—'
   const rank = myResult?.rank ?? '—'
 
   return (

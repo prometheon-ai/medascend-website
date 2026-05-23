@@ -33,9 +33,10 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
     setRegistering(true)
     setRegError('')
     try {
-      const res = await fetch(`${API}/arena/events/${contest.id}/register`, {
+      const res = await fetch(`${API}/arena/quizzes/${contest.id}/register`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payment_method: 'wallet' }),
       })
       if (res.status === 409) {
         setContest(c => ({ ...c, is_registered: true }))
@@ -74,6 +75,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
       return (
         <Link
           to={`/arena/${contest.id}/lobby`}
+          state={{ registeredCount: contest.registered_count }}
           className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all no-underline"
         >
           <Zap size={14} />
@@ -99,6 +101,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
             <span className="text-sm font-semibold text-green-400">Registered ✓</span>
             <Link
               to={`/arena/${contest.id}/lobby`}
+              state={{ registeredCount: contest.registered_count }}
               className="text-xs font-bold text-cream/60 hover:text-cream border border-cream/15 hover:border-cream/30 px-3 py-1.5 rounded-lg transition-all no-underline"
             >
               Go to Lobby →
@@ -210,6 +213,7 @@ export default function ArenaPage({ onAuth }) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [needsAuth, setNeedsAuth] = useState(false)
   const [registered, setRegistered] = useState({})
 
   useEffect(() => {
@@ -219,10 +223,11 @@ export default function ArenaPage({ onAuth }) {
     if (activeToken) headers.Authorization = `Bearer ${activeToken}`
     fetch(`${API}/arena/`, { headers })
       .then(res => {
+        if (res.status === 401 || res.status === 403) { setNeedsAuth(true); return null }
         if (!res.ok) throw new Error('Failed to load contests')
         return res.json()
       })
-      .then(d => setData(d))
+      .then(d => { if (d) setData(d) })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
   }, [token, authLoading])
@@ -276,14 +281,46 @@ export default function ArenaPage({ onAuth }) {
             </div>
           )}
 
-          {error && (
+          {(needsAuth) && (
+            <div className="flex flex-col items-center justify-center py-24 gap-6 text-center">
+              <Trophy size={40} className="text-teal/40" />
+              <div>
+                <p className="text-lg font-bold text-cream mb-2">Login to access the Arena</p>
+                <p className="text-sm text-sky/60">Register or log in to view contests and compete.</p>
+              </div>
+              <button
+                onClick={onAuth}
+                className="px-8 py-3 bg-teal text-cream font-bold text-sm rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"
+              >
+                Login / Register
+              </button>
+            </div>
+          )}
+
+          {error && !needsAuth && (
             <div className="flex items-center gap-3 p-4 rounded-xl border border-terracotta/20 bg-terracotta/5 text-terracotta text-sm">
               <AlertCircle size={18} />
               {error}
             </div>
           )}
 
-          {!loading && !error && data && (
+          {!loading && !error && !needsAuth && !token && !localStorage.getItem('access_token') && (
+            <div className="flex flex-col items-center justify-center py-24 gap-6 text-center">
+              <Trophy size={40} className="text-teal/40" />
+              <div>
+                <p className="text-lg font-bold text-cream mb-2">Login to access the Arena</p>
+                <p className="text-sm text-sky/60">Register or log in to view contests and compete.</p>
+              </div>
+              <button
+                onClick={onAuth}
+                className="px-8 py-3 bg-teal text-cream font-bold text-sm rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"
+              >
+                Login / Register
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && data && (token || localStorage.getItem('access_token')) && (
             <>
               {isEmpty ? (
                 <div className="text-center py-24 text-sky/40">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Loader2, Clock, Users, ChevronRight, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
@@ -34,7 +34,10 @@ function formatCountdown(secs) {
 export default function LobbyPage() {
   const { contestId } = useParams()
   const navigate = useNavigate()
+  const { state: routeState } = useLocation()
   const { token, loading: authLoading } = useAuth()
+
+  const registeredCount = routeState?.registeredCount ?? '—'
 
   const [contest, setContest] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -49,20 +52,17 @@ export default function LobbyPage() {
     if (!activeToken) { navigate('/arena'); return }
 
     const headers = { Authorization: `Bearer ${activeToken}` }
-    fetch(`${API}/arena/`, { headers })
+    fetch(`${API}/arena/quizzes/${contestId}/dashboard`, { headers })
       .then(res => {
-        if (!res.ok) throw new Error('Failed to load')
+        if (!res.ok) throw new Error('Failed to load lobby')
         return res.json()
       })
       .then(d => {
-        const all = [
-          ...(d.live_events || []),
-          ...(d.upcoming_events || []),
-          ...(d.recent_results || []),
-        ]
-        const found = all.find(c => String(c.id) === String(contestId))
-        if (!found) throw new Error('Contest not found')
-        setContest(found)
+        const c = d.contest ?? d
+        setContest({
+          ...c,
+          difficulty: c.difficulty ?? null,
+        })
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
@@ -100,15 +100,17 @@ export default function LobbyPage() {
 
           {!loading && !error && contest && (
             <div className="rounded-2xl border border-teal/15 bg-dark-card p-8 text-center">
-              <div className="mb-3">
-                <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
-                  contest.difficulty === 'easy' ? 'text-teal bg-teal/10 border-teal/20'
-                  : contest.difficulty === 'hard' ? 'text-terracotta bg-terracotta/10 border-terracotta/20'
-                  : 'text-gold bg-gold/10 border-gold/20'
-                }`}>
-                  {contest.difficulty?.charAt(0).toUpperCase() + contest.difficulty?.slice(1)}
-                </span>
-              </div>
+              {contest.difficulty && (
+                <div className="mb-3">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${
+                    contest.difficulty === 'easy' ? 'text-teal bg-teal/10 border-teal/20'
+                    : contest.difficulty === 'hard' ? 'text-terracotta bg-terracotta/10 border-terracotta/20'
+                    : 'text-gold bg-gold/10 border-gold/20'
+                  }`}>
+                    {contest.difficulty.charAt(0).toUpperCase() + contest.difficulty.slice(1)}
+                  </span>
+                </div>
+              )}
 
               <h1 className="text-2xl font-extrabold text-cream mb-6 leading-tight">{contest.title}</h1>
 
@@ -118,7 +120,7 @@ export default function LobbyPage() {
                     <Users size={13} />
                     <span>Registered</span>
                   </div>
-                  <p className="text-lg font-bold text-cream">{contest.registered_count ?? 0}</p>
+                  <p className="text-lg font-bold text-cream">{registeredCount}</p>
                 </div>
                 <div className="rounded-xl bg-dark-surface p-4">
                   <div className="flex items-center justify-center gap-2 text-sky/50 text-xs mb-1">
