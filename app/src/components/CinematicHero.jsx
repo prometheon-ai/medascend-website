@@ -26,7 +26,7 @@ export default function CinematicHero({ onAuth }) {
         </p>
 
         {/* Supporting line */}
-        <p className="text-sm text-cream/45 font-family-secondary mb-10 max-w-lg mx-auto leading-relaxed">
+        <p className="text-sm text-sky/80 font-family-secondary mb-10 max-w-lg mx-auto leading-relaxed">
           One platform for everything you need to learn, revise, practise, and prepare — from the first day of MBBS to PG entrance and beyond.
         </p>
 
@@ -40,7 +40,7 @@ export default function CinematicHero({ onAuth }) {
           </button>
           <a
             href="#the-problem"
-            className="px-8 py-3 border border-cream/15 text-cream/60 font-semibold text-sm rounded-xl hover:border-cream/35 hover:text-cream transition-all duration-200 no-underline"
+            className="px-8 py-3 border border-cream/15 text-cream/80 font-semibold text-sm rounded-xl hover:border-cream/35 hover:text-cream transition-all duration-200 no-underline"
           >
             See what we're building
           </a>
@@ -51,7 +51,7 @@ export default function CinematicHero({ onAuth }) {
           {audienceTags.map(tag => (
             <span
               key={tag}
-              className="text-[10px] font-semibold tracking-[1.5px] uppercase px-3 py-1 rounded-full border border-sky/15 text-sky/35 bg-sky/5"
+              className="text-[10px] font-semibold tracking-[1.5px] uppercase px-3 py-1 rounded-full border border-sky/25 text-sky/60 bg-sky/5"
             >
               {tag}
             </span>

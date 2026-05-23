@@ -82,7 +82,7 @@ export default function Features() {
             as="h2"
           />
           <FadeInView delay={0.4}>
-            <p className="font-family-secondary text-base text-sky/60">
+            <p className="font-family-secondary text-base text-sky">
               Each one is built against a real problem someone taking the same exams has faced.
             </p>
           </FadeInView>
@@ -114,7 +114,7 @@ export default function Features() {
                         <h3 className="text-lg font-bold text-cream">{f.title}</h3>
                         {f.live && <span className="text-[10px] font-bold tracking-[2px] uppercase px-2 py-0.5 rounded-full bg-teal/20 text-teal-light">LIVE</span>}
                       </div>
-                      <p className="text-sm leading-relaxed font-family-secondary text-sky/60 flex-1">{f.desc}</p>
+                      <p className="text-sm leading-relaxed font-family-secondary text-sky flex-1">{f.desc}</p>
                     </motion.div>
                   </FadeInView>
                 ))}
@@ -124,7 +124,7 @@ export default function Features() {
         </div>
 
         <FadeInView delay={0.2}>
-          <p className="mt-16 text-center text-base text-sky/50 font-family-secondary max-w-2xl mx-auto">
+          <p className="mt-16 text-center text-base text-sky font-family-secondary max-w-2xl mx-auto">
             Everything you learn is held together by a built-in Spaced Repetition System, so concepts come back at the right time and you remember them long after.
           </p>
         </FadeInView>

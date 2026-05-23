@@ -24,10 +24,10 @@ function GetInvolved() {
               <h2 className="text-[clamp(22px,3vw,34px)] font-extrabold text-cream leading-tight mb-4">
                 Tell us what's slowing you down.
               </h2>
-              <p className="text-base text-sky/60 font-family-secondary leading-relaxed mb-4 flex-1">
+              <p className="text-base text-sky font-family-secondary leading-relaxed mb-4 flex-1">
                 This is built by a student who actually uses it. There are dozens of small, specific problems in a medical student's day that no platform bothers to fix.
               </p>
-              <p className="text-base text-sky/60 font-family-secondary leading-relaxed mb-8">
+              <p className="text-base text-sky font-family-secondary leading-relaxed mb-8">
                 We want to hear yours. However small or specific. Tell us the problem, and we'll try to solve it.
               </p>
               <Link
@@ -46,10 +46,10 @@ function GetInvolved() {
               <h2 className="text-[clamp(22px,3vw,34px)] font-extrabold text-cream leading-tight mb-4">
                 Help us build it.
               </h2>
-              <p className="text-base text-sky/60 font-family-secondary leading-relaxed mb-4 flex-1">
+              <p className="text-base text-sky font-family-secondary leading-relaxed mb-4 flex-1">
                 MedAscend is a long, deliberate effort to streamline medical education in India. We are looking for developers, medical content creators, designers, doctors, educators, and investors.
               </p>
-              <p className="text-base text-sky/60 font-family-secondary leading-relaxed mb-8">
+              <p className="text-base text-sky font-family-secondary leading-relaxed mb-8">
                 If this matters to you, tell us about yourself.
               </p>
               <Link

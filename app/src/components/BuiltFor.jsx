@@ -28,7 +28,7 @@ export default function BuiltFor() {
               >
                 <p className="font-bold text-cream text-base">{t.label}</p>
                 {t.sub && (
-                  <p className="text-sm text-sky/50 font-family-secondary mt-1">{t.sub}</p>
+                  <p className="text-sm text-sky font-family-secondary mt-1">{t.sub}</p>
                 )}
               </div>
             ))}

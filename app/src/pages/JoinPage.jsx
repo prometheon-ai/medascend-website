@@ -37,7 +37,7 @@ export default function JoinPage() {
             <h1 className="text-[clamp(32px,5vw,52px)] font-extrabold text-cream leading-tight mb-6">
               Help us build it.
             </h1>
-            <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed mb-12">
+            <p className="text-base md:text-lg text-sky font-family-secondary leading-relaxed mb-12">
               MedAscend is a long, deliberate effort to streamline medical education in India. We are looking for people who want to be part of that — developers, medical content creators, designers, doctors, educators, and investors. If this matters to you, tell us about yourself.
             </p>
           </FadeInView>
@@ -46,7 +46,7 @@ export default function JoinPage() {
             <FadeInView>
               <div className="rounded-2xl border border-teal/20 bg-teal/5 px-8 py-12 text-center">
                 <p className="text-2xl font-bold text-cream mb-3">We'll be in touch.</p>
-                <p className="text-sm text-sky/50 font-family-secondary">Thanks for reaching out.</p>
+                <p className="text-sm text-sky font-family-secondary">Thanks for reaching out.</p>
               </div>
             </FadeInView>
           ) : (
@@ -75,12 +75,12 @@ export default function JoinPage() {
                   className={inputCls + ' resize-none'}
                 />
                 <div>
-                  <label className="block text-xs text-sky/40 font-family-secondary mb-2 uppercase tracking-wider">CV / Resume (optional)</label>
+                  <label className="block text-xs text-sky/70 font-family-secondary mb-2 uppercase tracking-wider">CV / Resume (optional)</label>
                   <input
                     type="file"
                     accept=".pdf,.doc,.docx"
                     onChange={e => set('cv', e.target.files[0] || null)}
-                    className="text-sm text-sky/50 font-family-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal/15 file:text-teal-light hover:file:bg-teal/25 cursor-pointer"
+                    className="text-sm text-sky font-family-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal/15 file:text-teal-light hover:file:bg-teal/25 cursor-pointer"
                   />
                 </div>
                 {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">Something went wrong. Try again.</p>}

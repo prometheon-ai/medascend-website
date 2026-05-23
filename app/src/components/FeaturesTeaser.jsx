@@ -18,7 +18,7 @@ export default function FeaturesTeaser() {
           <h2 className="text-[clamp(28px,4vw,44px)] font-extrabold text-cream leading-tight mb-3">
             Every feature exists because a medical student needed it.
           </h2>
-          <p className="text-base text-sky/60 font-family-secondary mb-12 max-w-2xl">
+          <p className="text-base text-sky font-family-secondary mb-12 max-w-2xl">
             Each one is built against a real problem someone taking the same exams has faced.
           </p>
         </FadeInView>
@@ -32,7 +32,7 @@ export default function FeaturesTeaser() {
                 </div>
                 <span className={`text-[10px] font-bold tracking-[3px] uppercase mb-2 block ${f.color}`}>{f.label}</span>
                 <h3 className="text-base font-bold text-cream mb-2">{f.title}</h3>
-                <p className="text-sm text-sky/50 font-family-secondary leading-relaxed">{f.desc}</p>
+                <p className="text-sm text-sky font-family-secondary leading-relaxed">{f.desc}</p>
               </div>
             </FadeInView>
           ))}
@@ -42,7 +42,7 @@ export default function FeaturesTeaser() {
           <div className="text-center">
             <Link
               to="/features"
-              className="inline-flex items-center gap-2 px-8 py-3.5 border border-teal/30 text-cream/70 font-bold text-sm rounded-xl hover:border-teal/60 hover:text-cream transition-all duration-200 no-underline"
+              className="inline-flex items-center gap-2 px-8 py-3.5 border border-teal/30 text-cream/85 font-bold text-sm rounded-xl hover:border-teal/60 hover:text-cream transition-all duration-200 no-underline"
             >
               View all features →
             </Link>

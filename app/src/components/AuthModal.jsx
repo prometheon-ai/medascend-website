@@ -73,7 +73,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg transition-colors cursor-pointer bg-transparent border-none text-sky/50 hover:text-cream hover:bg-teal/10"
+          className="absolute top-4 right-4 p-1.5 rounded-lg transition-colors cursor-pointer bg-transparent border-none text-sky/75 hover:text-cream hover:bg-teal/10"
           aria-label="Close"
         >
           <X size={20} />
@@ -84,20 +84,20 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
           <Logo size={36} />
           <div>
             <h3 className="text-lg font-bold text-cream">MedAscend</h3>
-            <p className="text-xs text-sky/50">Your medical education platform</p>
+            <p className="text-xs text-sky/75">Your medical education platform</p>
           </div>
         </div>
 
         <div className="flex gap-1 p-1 rounded-xl bg-dark-surface mb-6">
           <button
             onClick={() => { setTab('login'); setStatus('idle'); setErrorMsg('') }}
-            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'login' ? 'bg-teal text-cream' : 'bg-transparent text-sky/60 hover:text-cream'}`}
+            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'login' ? 'bg-teal text-cream' : 'bg-transparent text-sky/80 hover:text-cream'}`}
           >
             Already have an account
           </button>
           <button
             onClick={() => { setTab('register'); setStatus('idle'); setErrorMsg('') }}
-            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'register' ? 'bg-teal text-cream' : 'bg-transparent text-sky/60 hover:text-cream'}`}
+            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'register' ? 'bg-teal text-cream' : 'bg-transparent text-sky/80 hover:text-cream'}`}
           >
             New here
           </button>
@@ -106,7 +106,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
         {tab === 'login' ? (
           <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Email</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Email</label>
               <input
                 type="email"
                 required
@@ -117,7 +117,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Password</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -130,7 +130,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sky/40 hover:text-sky/80 bg-transparent border-none cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sky/85 hover:text-sky/80 bg-transparent border-none cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -144,7 +144,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
             >
               {status === 'loading' ? <><Loader2 size={18} className="animate-spin" /> Logging in...</> : 'Login'}
             </button>
-            <p className="text-center text-xs text-sky/40 font-family-secondary">
+            <p className="text-center text-xs text-sky/85 font-family-secondary">
               Don't have an account?{' '}
               <button type="button" onClick={() => setTab('register')} className="text-teal underline bg-transparent border-none cursor-pointer text-xs">
                 Register
@@ -154,7 +154,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
         ) : (
           <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Full Name</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Full Name</label>
               <input
                 type="text"
                 required
@@ -165,7 +165,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">College / Institution</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">College / Institution</label>
               <input
                 type="text"
                 required
@@ -176,7 +176,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Batch</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Batch</label>
               <select
                 required
                 value={registerForm.batch}
@@ -190,7 +190,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Email</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Email</label>
               <input
                 type="email"
                 required
@@ -201,7 +201,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Phone</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Phone</label>
               <input
                 type="tel"
                 required
@@ -212,7 +212,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1.5 text-sky/70">Password</label>
+              <label className="block text-xs font-semibold mb-1.5 text-sky/85">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -226,7 +226,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(p => !p)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sky/40 hover:text-sky/80 bg-transparent border-none cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sky/85 hover:text-sky/80 bg-transparent border-none cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -240,7 +240,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
             >
               {status === 'loading' ? <><Loader2 size={18} className="animate-spin" /> Creating account...</> : 'Create Account'}
             </button>
-            <p className="text-center text-xs text-sky/40 font-family-secondary">
+            <p className="text-center text-xs text-sky/85 font-family-secondary">
               Already have an account?{' '}
               <button type="button" onClick={() => setTab('login')} className="text-teal underline bg-transparent border-none cursor-pointer text-xs">
                 Login

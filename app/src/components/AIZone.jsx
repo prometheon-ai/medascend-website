@@ -32,7 +32,7 @@ export default function AIZone() {
               as="h2"
             />
             <FadeInView delay={0.3}>
-              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky/70">
+              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky">
                 ChatGPT hallucinates. It invents facts. MedAscend's AI is different — responses shaped by actual subject context, not probabilistic guessing.
               </p>
             </FadeInView>

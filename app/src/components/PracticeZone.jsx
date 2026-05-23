@@ -46,7 +46,7 @@ export default function PracticeZone() {
               as="h2"
             />
             <FadeInView delay={0.3}>
-              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky/70">
+              <p className="font-[family-name:var(--font-family-secondary)] text-base mb-8 text-sky">
                 Every practice scenario, covered. From daily micro-challenges to full-length NEET-PG simulations.
               </p>
             </FadeInView>
@@ -77,7 +77,7 @@ export default function PracticeZone() {
                 </motion.div>
                 <h3 className="text-2xl font-extrabold text-cream">Your Personal Error System</h3>
               </div>
-              <p className="font-[family-name:var(--font-family-secondary)] text-sm mb-6 text-sky/60">
+              <p className="font-[family-name:var(--font-family-secondary)] text-sm mb-6 text-sky">
                 Every mistake becomes your roadmap. Systematic weakness elimination.
               </p>
             </FadeInView>
@@ -98,7 +98,7 @@ export default function PracticeZone() {
                     </motion.div>
                     <div>
                       <h4 className="font-bold text-[15px] mb-0.5 text-cream">{f.title}</h4>
-                      <p className="text-sm font-[family-name:var(--font-family-secondary)] text-sky/60">{f.desc}</p>
+                      <p className="text-sm font-[family-name:var(--font-family-secondary)] text-sky">{f.desc}</p>
                     </div>
                   </motion.div>
                 </FadeInView>

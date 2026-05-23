@@ -41,7 +41,7 @@ export default function WhyDifferent() {
                 </span>
                 <div>
                   <p className="text-lg md:text-xl font-bold text-cream mb-2">{p.title}</p>
-                  <p className="text-base text-sky/60 font-family-secondary leading-relaxed">{p.body}</p>
+                  <p className="text-base text-sky font-family-secondary leading-relaxed">{p.body}</p>
                 </div>
               </div>
             </FadeInView>

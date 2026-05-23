@@ -19,7 +19,7 @@ export default function Footer() {
                 <span className="text-cream">Med</span><span className="text-gold-light">Ascend</span>
               </span>
             </Link>
-            <p className="text-sm text-sky/50 font-family-secondary leading-relaxed">
+            <p className="text-sm text-sky/75 font-family-secondary leading-relaxed">
               Built by a medical student.<br />For medical students.
             </p>
           </div>
@@ -28,10 +28,10 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold text-cream mb-4 uppercase tracking-widest">Platform</h4>
             <div className="flex flex-col gap-3">
-              <Link to="/features" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Features</Link>
-              <Link to="/features#practise" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Practice</Link>
-              <Link to="/features#ai-zone" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">AI Zone</Link>
-              <Link to="/features#community" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Community</Link>
+              <Link to="/features" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Features</Link>
+              <Link to="/features#practise" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Practice</Link>
+              <Link to="/features#ai-zone" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">AI Zone</Link>
+              <Link to="/features#community" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Community</Link>
             </div>
           </div>
 
@@ -39,9 +39,9 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-bold text-cream mb-4 uppercase tracking-widest">Resources</h4>
             <div className="flex flex-col gap-3">
-              <Link to="/features" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Features</Link>
-              <Link to="/help" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Tell Us Your Problem</Link>
-              <Link to="/join" className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary">Join Us</Link>
+              <Link to="/features" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Features</Link>
+              <Link to="/help" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Tell Us Your Problem</Link>
+              <Link to="/join" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Join Us</Link>
             </div>
           </div>
 
@@ -53,13 +53,13 @@ export default function Footer() {
                 href="https://theprometheonai.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary"
+                className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary"
               >
                 Prometheon Applied Intelligence
               </a>
               <button
                 onClick={() => setShowContact(!showContact)}
-                className="text-sm text-sky/50 hover:text-cream transition-colors duration-200 font-family-secondary text-left bg-transparent border-none cursor-pointer p-0"
+                className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary text-left bg-transparent border-none cursor-pointer p-0"
               >
                 Contact
               </button>
@@ -67,7 +67,7 @@ export default function Footer() {
                 <div className="p-3 rounded-xl border border-teal/15 bg-dark-surface/80 backdrop-blur-sm">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold text-cream">Get in touch</span>
-                    <button onClick={() => setShowContact(false)} className="text-sky/40 hover:text-cream bg-transparent border-none cursor-pointer p-0">
+                    <button onClick={() => setShowContact(false)} className="text-sky/85 hover:text-cream bg-transparent border-none cursor-pointer p-0">
                       <X size={14} />
                     </button>
                   </div>
@@ -81,7 +81,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-6 text-center">
-          <p className="text-xs text-sky/30 font-family-secondary">
+          <p className="text-xs text-sky/60 font-family-secondary">
             &copy; 2026 MedAscend. A product of Prometheon Applied Intelligence Pvt. Ltd. All rights reserved.
           </p>
         </div>

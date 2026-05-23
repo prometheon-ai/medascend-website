@@ -48,10 +48,10 @@ export default function HelpPage() {
             <h1 className="text-[clamp(32px,5vw,52px)] font-extrabold text-cream leading-tight mb-6">
               Tell us what's slowing you down.
             </h1>
-            <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed mb-4">
+            <p className="text-base md:text-lg text-sky/80 font-family-secondary leading-relaxed mb-4">
               The biggest advantage we have is simple: this is built by a student who actually uses it. There are dozens of small, specific problems in a medical student's day that no platform bothers to fix — but that quietly add up and hurt your preparation.
             </p>
-            <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed mb-10">
+            <p className="text-base md:text-lg text-sky/80 font-family-secondary leading-relaxed mb-10">
               We want to hear yours. However small or specific. Tell us the problem, and we'll try to solve it.
             </p>
           </FadeInView>
@@ -59,7 +59,7 @@ export default function HelpPage() {
           <FadeInView delay={0.15}>
             <div className="mb-10 space-y-3">
               {examples.map((ex, i) => (
-                <p key={i} className="text-sm text-sky/35 font-family-secondary italic leading-relaxed">{ex}</p>
+                <p key={i} className="text-sm text-sky/70 font-family-secondary italic leading-relaxed">{ex}</p>
               ))}
             </div>
           </FadeInView>
@@ -68,7 +68,7 @@ export default function HelpPage() {
             <FadeInView>
               <div className="rounded-2xl border border-teal/20 bg-teal/5 px-8 py-12 text-center">
                 <p className="text-2xl font-bold text-cream mb-3">Got it. Thank you.</p>
-                <p className="text-sm text-sky/50 font-family-secondary">We read every submission carefully.</p>
+                <p className="text-sm text-sky font-family-secondary">We read every submission carefully.</p>
               </div>
             </FadeInView>
           ) : (

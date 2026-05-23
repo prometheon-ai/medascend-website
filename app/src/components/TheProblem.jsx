@@ -11,10 +11,10 @@ export default function TheProblem() {
           </p>
         </FadeInView>
         <FadeInView delay={0.2}>
-          <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed mb-5 max-w-2xl">
+          <p className="text-base md:text-lg text-sky font-family-secondary leading-relaxed mb-5 max-w-2xl">
             Indian medical education spans 5+ years, 19 subjects, and tens of thousands of clinical concepts. The work is enormous, but not impossible. What makes it feel impossible is the system around it.
           </p>
-          <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed max-w-2xl">
+          <p className="text-base md:text-lg text-sky font-family-secondary leading-relaxed max-w-2xl">
             A medical student today juggles multiple apps, books, notes, and groups just to get through one exam cycle — and spends more time figuring out what to study than actually studying.
           </p>
         </FadeInView>

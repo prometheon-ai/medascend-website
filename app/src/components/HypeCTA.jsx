@@ -32,7 +32,7 @@ export default function HypeCTA() {
             </Link>
             <Link
               to="/join"
-              className="px-10 py-4 border border-teal/30 text-cream/70 font-bold text-base rounded-2xl hover:border-teal/60 hover:text-cream transition-all duration-200 no-underline"
+              className="px-10 py-4 border border-teal/30 text-cream/85 font-bold text-base rounded-2xl hover:border-teal/60 hover:text-cream transition-all duration-200 no-underline"
             >
               Join Us
             </Link>

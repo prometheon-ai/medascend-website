@@ -10,7 +10,7 @@ export default function ThePlatform() {
           </h2>
         </FadeInView>
         <FadeInView delay={0.2}>
-          <p className="text-base md:text-lg text-sky/60 font-family-secondary leading-relaxed mb-8 max-w-2xl">
+          <p className="text-base md:text-lg text-sky font-family-secondary leading-relaxed mb-8 max-w-2xl">
             Your lessons, your notes and books, your question bank, your mock tests, your flashcards and revision, your doubts, your clinical and practical prep, your exam strategy, and your daily plan — in one app, instead of many.
           </p>
           <p className="text-lg md:text-xl font-bold text-cream">

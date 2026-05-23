@@ -46,7 +46,7 @@ export default function Differentiators() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
               >
-                <div className="px-6 md:px-8 py-5 md:py-6 text-sm md:text-base text-cream/50 font-[family-name:var(--font-family-secondary)]">
+                <div className="px-6 md:px-8 py-5 md:py-6 text-sm md:text-base text-cream/85 font-[family-name:var(--font-family-secondary)]">
                   {c.problem}
                 </div>
                 <div className="px-6 md:px-8 py-5 md:py-6 text-sm md:text-base text-cream font-semibold border-l border-teal/8">

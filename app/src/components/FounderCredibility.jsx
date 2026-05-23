@@ -33,7 +33,7 @@ export default function FounderCredibility() {
         <FadeInView delay={1.5}>
           <div>
             <p className="text-cream font-bold text-lg">Vedant Shinde</p>
-            <p className="text-sky/50 text-sm font-family-secondary">
+            <p className="text-sky/75 text-sm font-family-secondary">
               Founder · 3rd Year MBBS, Seth GS Medical College & KEM Hospital
             </p>
           </div>
