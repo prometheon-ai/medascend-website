@@ -48,7 +48,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
       }
       if (!res.ok) {
         const d = await res.json()
-        throw new Error(d.detail || 'Registration failed')
+        throw new Error(d.detail || d.error?.message || 'Registration failed')
       }
       setContest(c => ({ ...c, is_registered: true }))
       onRegistered(contest.id)
@@ -232,15 +232,18 @@ export default function ArenaPage({ onAuth }) {
   const withRegistered = (contests) =>
     contests?.map(c => registered[c.id] ? { ...c, is_registered: true } : c) ?? []
 
-  const liveEvents = withRegistered(data?.live_events)
+  const allLive = withRegistered(data?.live_events)
   const upcomingEvents = withRegistered(data?.upcoming_events)
   const recentResults = withRegistered(data?.recent_results)
 
-  const lobbyEvents = upcomingEvents.filter(c => c.status === 'lobby')
+  // Backend merges lobby+live into live_events — split them back
+  const liveEvents = allLive.filter(c => c.status === 'live')
+  const liveLobbyEvents = allLive.filter(c => c.status === 'lobby')
+  const lobbyEvents = [...liveLobbyEvents, ...upcomingEvents.filter(c => c.status === 'lobby')]
   const publishedEvents = upcomingEvents.filter(c => c.status === 'published')
   const hasLive = liveEvents.length > 0
 
-  const isEmpty = liveEvents.length === 0 && upcomingEvents.length === 0 && recentResults.length === 0
+  const isEmpty = allLive.length === 0 && upcomingEvents.length === 0 && recentResults.length === 0
 
   return (
     <>
