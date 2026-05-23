@@ -11,9 +11,14 @@ export default function CinematicHero({ onAuth }) {
       <div className="relative z-10 text-center px-6 max-w-3xl w-full py-24">
 
         {/* Wordmark */}
-        <h1 className="text-[clamp(48px,10vw,96px)] font-extrabold tracking-tight leading-none text-gradient mb-6">
+        <h1 className="text-[clamp(48px,10vw,96px)] font-extrabold tracking-tight leading-none text-gradient mb-3">
           MedAscend
         </h1>
+
+        {/* Tagline */}
+        <p className="text-[11px] font-semibold tracking-[3px] uppercase text-teal-light mb-6">
+          The Medical Education Revolution · Built by a Medical Student. For Medical Students.
+        </p>
 
         {/* Primary description */}
         <p className="text-base md:text-xl font-semibold text-cream/85 mb-3 max-w-xl mx-auto leading-snug">

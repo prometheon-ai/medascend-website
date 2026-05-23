@@ -27,6 +27,11 @@ export default function Navbar({ onLogin, onRegister }) {
     setMobileOpen(false)
   }, [location.pathname])
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
   const isActive = (to) => {
     if (to.includes('#')) return false
     return location.pathname === to
