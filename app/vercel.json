@@ -2,15 +2,8 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "https://api.medascend.in/api/$1",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://api.medascend.in/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
