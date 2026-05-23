@@ -55,7 +55,7 @@ export default function Navbar({ onLogin, onRegister }) {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl border-b
         ${scrolled ? 'shadow-lg' : ''}
         bg-dark/85 border-teal/10`}>
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-17">
+        <div className="max-w-350 mx-auto px-4 flex items-center justify-between h-17">
 
           {/* Logo */}
           <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 no-underline shrink-0">
@@ -71,13 +71,13 @@ export default function Navbar({ onLogin, onRegister }) {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-0.5">
             {links.map(l => (
               <Link
                 key={l.to}
                 to={l.to}
                 onClick={(e) => handleAnchorClick(e, l.to)}
-                className={`text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200
+                className={`text-xs font-medium px-3 py-2 rounded-lg transition-all duration-200 whitespace-nowrap
                   ${isActive(l.to)
                     ? 'text-cream bg-teal/15'
                     : 'text-sky hover:text-cream hover:bg-teal/10'
@@ -88,7 +88,7 @@ export default function Navbar({ onLogin, onRegister }) {
             ))}
             <Link
               to="/arena"
-              className={`relative ml-1 flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-lg transition-all duration-200
+              className={`relative ml-1 flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-lg transition-all duration-200 whitespace-nowrap
                 ${isActive('/arena')
                   ? 'text-cream bg-green-400/20'
                   : 'text-green-400 hover:text-cream hover:bg-green-400/15'
