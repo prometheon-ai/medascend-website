@@ -26,6 +26,15 @@ export default {
         primary: ['Plus Jakarta Sans', 'sans-serif'],
         secondary: ['DM Sans', 'sans-serif'],
       },
+      keyframes: {
+        popIn: {
+          '0%': { opacity: '0', transform: 'scale(0.85) translateY(12px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
+      },
+      animation: {
+        popIn: 'popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both',
+      },
     },
   },
   plugins: [],

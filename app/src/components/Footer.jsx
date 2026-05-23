@@ -29,6 +29,7 @@ export default function Footer() {
             <h4 className="text-xs font-bold text-cream mb-4 uppercase tracking-widest">Platform</h4>
             <div className="flex flex-col gap-3">
               <Link to="/features" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Features</Link>
+              <Link to="/arena" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Arena</Link>
               <Link to="/features#practise" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Practice</Link>
               <Link to="/features#ai-zone" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">AI Zone</Link>
               <Link to="/features#community" className="text-sm text-sky/75 hover:text-cream transition-colors duration-200 font-family-secondary">Community</Link>

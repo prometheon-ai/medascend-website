@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import FadeInView from '../components/animations/FadeInView'
+import { useAuth } from '../context/AuthContext'
 
 const stages = ['1st year MBBS', '2nd year', '3rd year', 'Final year', 'Intern', 'NEET-PG aspirant', 'PG resident', 'Other']
 
@@ -16,17 +17,30 @@ const examples = [
 const inputCls = 'w-full px-4 py-3 rounded-xl bg-dark-surface border border-teal/15 text-cream text-sm placeholder:text-sky/30 focus:outline-none focus:border-teal/40 font-family-secondary transition-colors duration-200'
 
 export default function HelpPage() {
+  const { user, token } = useAuth()
   const [form, setForm] = useState({ name: '', stage: '', problem: '', impact: '', email: '' })
   const [status, setStatus] = useState('idle')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  useEffect(() => {
+    if (user) {
+      setForm(f => ({
+        ...f,
+        name: user.full_name || f.name,
+        email: user.email || f.email,
+      }))
+    }
+  }, [user])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
     try {
+      const headers = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = `Bearer ${token}`
       await fetch('/api/tell-us', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(form),
       })
       setStatus('success')
@@ -57,9 +71,11 @@ export default function HelpPage() {
           </FadeInView>
 
           <FadeInView delay={0.15}>
-            <div className="mb-10 space-y-3">
+            <div className="mb-10 space-y-2">
               {examples.map((ex, i) => (
-                <p key={i} className="text-sm text-sky/70 font-family-secondary italic leading-relaxed">{ex}</p>
+                <div key={i} className="flex items-start gap-3 px-4 py-3 rounded-xl bg-dark-surface/50 border-l-2 border-teal/40">
+                  <p className="text-sm text-sky/75 font-family-secondary italic leading-relaxed">{ex}</p>
+                </div>
               ))}
             </div>
           </FadeInView>
@@ -73,7 +89,7 @@ export default function HelpPage() {
             </FadeInView>
           ) : (
             <FadeInView delay={0.2}>
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5 border border-teal/15 rounded-2xl p-6 bg-dark-surface/30">
                 <input type="text" placeholder="Name" value={form.name} onChange={e => set('name', e.target.value)} required className={inputCls} />
                 <select
                   value={form.stage}

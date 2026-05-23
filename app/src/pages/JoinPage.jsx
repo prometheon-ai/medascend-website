@@ -1,15 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import FadeInView from '../components/animations/FadeInView'
+import { useAuth } from '../context/AuthContext'
 
 const roles = ['Student', 'Professional', 'Doctor', 'Educator', 'Developer', 'Designer', 'Investor', 'Other']
 
 const inputCls = 'w-full px-4 py-3 rounded-xl bg-dark-surface border border-teal/15 text-cream text-sm placeholder:text-sky/30 focus:outline-none focus:border-teal/40 font-family-secondary transition-colors duration-200'
 
 export default function JoinPage() {
+  const { user, token } = useAuth()
   const [form, setForm] = useState({ name: '', age: '', role: '', email: '', phone: '', description: '', cv: null })
   const [status, setStatus] = useState('idle')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
+
+  useEffect(() => {
+    if (user) {
+      setForm(f => ({
+        ...f,
+        name: user.full_name || f.name,
+        email: user.email || f.email,
+      }))
+    }
+  }, [user])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -17,7 +29,9 @@ export default function JoinPage() {
     try {
       const data = new FormData()
       Object.entries(form).forEach(([k, v]) => { if (v) data.append(k, v) })
-      await fetch('/api/join-us', { method: 'POST', body: data })
+      const headers = {}
+      if (token) headers['Authorization'] = `Bearer ${token}`
+      await fetch('/api/join-us', { method: 'POST', headers, body: data })
       setStatus('success')
     } catch {
       setStatus('error')

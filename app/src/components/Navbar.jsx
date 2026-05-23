@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, LogOut } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
+import { useAuth } from '../context/AuthContext'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -13,6 +14,7 @@ const links = [
 ]
 
 export default function Navbar({ onLogin, onRegister }) {
+  const { user, logout } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
@@ -84,16 +86,43 @@ export default function Navbar({ onLogin, onRegister }) {
                 {l.label}
               </Link>
             ))}
+            <Link
+              to="/arena"
+              className={`relative ml-1 flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-lg transition-all duration-200
+                ${isActive('/arena')
+                  ? 'text-cream bg-green-400/20'
+                  : 'text-green-400 hover:text-cream hover:bg-green-400/15'
+                }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
+              Arena
+            </Link>
           </div>
 
           {/* CTA + hamburger */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={onLogin}
-              className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none"
-            >
-              Login / Register
-            </button>
+            {user ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="text-[13px] font-semibold text-cream px-3 py-2">
+                  {user.full_name?.split(' ')[0] || user.email}
+                </span>
+                <button
+                  onClick={logout}
+                  title="Logout"
+                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold px-4 py-2.5 bg-teal/15 text-teal-light rounded-xl hover:bg-teal/25 transition-all duration-200 cursor-pointer border-none"
+                >
+                  <LogOut size={15} />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onLogin}
+                className="hidden sm:inline-flex text-[13px] font-semibold px-5 py-2.5 bg-teal text-cream rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none"
+              >
+                Login / Register
+              </button>
+            )}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-1.5 text-current cursor-pointer bg-transparent border-none"
@@ -120,12 +149,35 @@ export default function Navbar({ onLogin, onRegister }) {
               {l.label}
             </Link>
           ))}
-          <button
-            onClick={() => { setMobileOpen(false); onLogin() }}
-            className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl cursor-pointer border-none"
+          <Link
+            to="/arena"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center justify-center gap-2 text-xl font-bold px-6 py-3 rounded-xl text-green-400 hover:bg-green-400/10 transition-all"
           >
-            Login / Register
-          </button>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            Arena
+          </Link>
+          {user ? (
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <span className="text-base font-semibold text-cream">
+                {user.full_name?.split(' ')[0] || user.email}
+              </span>
+              <button
+                onClick={() => { setMobileOpen(false); logout() }}
+                className="flex items-center gap-2 text-base font-semibold px-8 py-3 bg-teal/15 text-teal-light rounded-xl cursor-pointer border-none"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => { setMobileOpen(false); onLogin() }}
+              className="mt-4 text-base font-semibold px-8 py-3 bg-teal text-cream rounded-xl cursor-pointer border-none"
+            >
+              Login / Register
+            </button>
+          )}
         </div>
       </div>
     </>

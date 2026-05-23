@@ -1,6 +1,9 @@
+import { useAuth } from '../context/AuthContext'
+
 const audienceTags = ['MBBS', 'NEET-PG', 'FMGE', 'INI-CET', 'USMLE', 'MD', 'MS', 'Diploma', 'BDS', 'AYUSH', 'Nursing', 'Pharmacy', 'Physiotherapy']
 
 export default function CinematicHero({ onAuth }) {
+  const { user } = useAuth()
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -32,12 +35,14 @@ export default function CinematicHero({ onAuth }) {
 
         {/* Buttons */}
         <div className="flex flex-row items-center justify-center gap-3 mb-10 flex-wrap">
-          <button
-            onClick={onAuth}
-            className="px-8 py-3 bg-teal text-cream font-bold text-sm rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none"
-          >
-            Login / Register
-          </button>
+          {!user && (
+            <button
+              onClick={onAuth}
+              className="px-8 py-3 bg-teal text-cream font-bold text-sm rounded-xl hover:-translate-y-0.5 hover:shadow-lg hover:shadow-teal/30 transition-all duration-200 cursor-pointer border-none"
+            >
+              Login / Register
+            </button>
+          )}
           <a
             href="#the-problem"
             className="px-8 py-3 border border-cream/15 text-cream/80 font-semibold text-sm rounded-xl hover:border-cream/35 hover:text-cream transition-all duration-200 no-underline"

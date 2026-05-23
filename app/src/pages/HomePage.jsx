@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
+import { X, Zap } from 'lucide-react'
 import useScrollToHash from '../hooks/useScrollToHash'
 import CinematicHero from '../components/CinematicHero'
+import ArenaPoster from '../components/ArenaPoster'
 import TheProblem from '../components/TheProblem'
 import Differentiators from '../components/Differentiators'
 import ThePlatform from '../components/ThePlatform'
@@ -66,10 +69,85 @@ function GetInvolved() {
   )
 }
 
+function AppLaunchToast() {
+  const [visible, setVisible] = useState(true)
+  const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => setFading(true), 7000)
+    const hideTimer = setTimeout(() => setVisible(false), 8000)
+    return () => { clearTimeout(fadeTimer); clearTimeout(hideTimer) }
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <div className={`fixed bottom-6 right-6 z-50 max-w-sm w-full transition-all duration-1000 animate-popIn ${fading ? 'opacity-0 translate-y-2' : ''}`}>
+      <div className="rounded-2xl border border-teal/20 bg-dark-card/95 backdrop-blur-xl shadow-2xl shadow-black/40 p-4">
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0 mt-0.5" />
+            <span className="text-xs font-extrabold text-green-400 uppercase tracking-widest">Coming Soon</span>
+          </div>
+          <button
+            onClick={() => setVisible(false)}
+            className="bg-transparent border-none cursor-pointer text-sky/40 hover:text-sky transition-colors p-0 shrink-0"
+          >
+            <X size={14} />
+          </button>
+        </div>
+        <p className="text-sm text-cream font-medium leading-relaxed mb-3">
+          The app will be live on the <span className="text-teal font-bold">Play Store & App Store</span> in <span className="text-gold font-bold">7–10 days</span>. Start registering now!
+        </p>
+        <Link
+          to="/arena"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-cream transition-colors border border-teal/30 hover:border-teal/60 px-3 py-1.5 rounded-lg no-underline"
+        >
+          <Zap size={11} />
+          Register for Arena
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+function ArenaBanner() {
+  const [dismissed, setDismissed] = useState(false)
+  if (dismissed) return null
+  return (
+    <div className="fixed top-17 left-0 right-0 z-40 flex items-center justify-center gap-3 px-4 py-2 bg-linear-to-r from-teal/10 via-teal/5 to-gold-light/10 border-b border-teal/15 backdrop-blur-md">
+      <span className="flex items-center gap-1.5 text-[10px] font-extrabold text-green-400 uppercase tracking-[2px] shrink-0">
+        <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+        Live
+      </span>
+      <p className="text-sm font-medium text-cream/90 text-center">
+        Registrations are now open for{' '}
+        <span className="font-bold text-cream">MedAscend Arena — Contest 1</span>
+      </p>
+      <Link
+        to="/arena"
+        className="flex items-center gap-1 shrink-0 text-xs font-bold text-teal hover:text-cream transition-colors border border-teal/30 hover:border-teal/60 px-2.5 py-1 rounded-lg"
+      >
+        <Zap size={11} />
+        Register
+      </Link>
+      <button
+        onClick={() => setDismissed(true)}
+        className="shrink-0 p-0.5 bg-transparent border-none cursor-pointer text-sky/40 hover:text-sky transition-colors ml-1"
+      >
+        <X size={14} />
+      </button>
+    </div>
+  )
+}
+
 export default function HomePage({ onAuth }) {
   useScrollToHash()
+  const [showPoster, setShowPoster] = useState(() => !sessionStorage.getItem('posterSeen'))
+
   return (
     <>
+      {showPoster && <ArenaPoster onClose={() => { sessionStorage.setItem('posterSeen', '1'); setShowPoster(false) }} />}
       <Helmet>
         <title>MedAscend — AI-Native Medical Education Platform</title>
         <meta name="description" content="A flagship product of Prometheon Applied Intelligence — an AI-native medical education platform that brings the entire medical journey into one app, for Indian medical students." />
@@ -82,6 +160,8 @@ export default function HomePage({ onAuth }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
+      <ArenaBanner />
+      <AppLaunchToast />
       {/* 1. Hero */}
       <CinematicHero onAuth={onAuth} />
       {/* 2. The Problem */}
