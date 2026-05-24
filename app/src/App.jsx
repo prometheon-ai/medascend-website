@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -19,6 +19,7 @@ import { AuthProvider } from './context/AuthContext'
 export default function App() {
   const [authModal, setAuthModal] = useState({ open: false, tab: 'login' })
   const location = useLocation()
+  const navigate = useNavigate()
   const isSahAI = location.pathname.startsWith('/sahai')
   const isQuiz = location.pathname.includes('/quiz')
   const hideChrome = isSahAI || isQuiz
@@ -27,9 +28,24 @@ export default function App() {
     document.documentElement.classList.add('dark')
   }, [])
 
-  const openLogin = () => setAuthModal({ open: true, tab: 'login' })
-  const openRegister = () => setAuthModal({ open: true, tab: 'register' })
+  const openAuth = (tab) => {
+    const path = location.pathname
+    if (path !== '/') sessionStorage.setItem('authRedirect', path)
+    setAuthModal({ open: true, tab })
+  }
+  const openLogin = () => openAuth('login')
+  const openRegister = () => openAuth('register')
+
   const closeAuth = () => setAuthModal(p => ({ ...p, open: false }))
+
+  const handleAuthSuccess = () => {
+    closeAuth()
+    const redirect = sessionStorage.getItem('authRedirect')
+    if (redirect) {
+      sessionStorage.removeItem('authRedirect')
+      navigate(redirect)
+    }
+  }
 
   return (
     <AuthProvider>
@@ -51,7 +67,7 @@ export default function App() {
           </Routes>
         </main>
         {!hideChrome && <Footer />}
-        <AuthModal isOpen={authModal.open} onClose={closeAuth} defaultTab={authModal.tab} />
+        <AuthModal isOpen={authModal.open} onClose={closeAuth} onSuccess={handleAuthSuccess} defaultTab={authModal.tab} />
       </div>
     </AuthProvider>
   )

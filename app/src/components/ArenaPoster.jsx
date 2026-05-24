@@ -102,7 +102,7 @@ export default function ArenaPoster({ onClose }) {
                 <span className="font-mono font-bold pl-3 border-l border-black/15" style={{ color: '#9e4535' }}>₹99</span>
               </button>
               <div className="text-[11px] leading-snug" style={{ color: '#A49692' }}>
-                Top prize <b className="font-mono font-bold" style={{ color: '#e4a86a' }}>₹1,500</b><br />
+                Top prize <b className="font-mono font-bold" style={{ color: '#e4a86a' }}>₹1,150</b><br />
                 Credited within 24h
               </div>
             </div>

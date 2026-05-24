@@ -3,7 +3,7 @@ import { X, Eye, EyeOff, Loader2 } from 'lucide-react'
 import Logo from './Logo'
 import { useAuth } from '../context/AuthContext'
 
-export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
+export default function AuthModal({ isOpen, onClose, onSuccess, defaultTab = 'login' }) {
   const auth = useAuth()
   const [tab, setTab] = useState(defaultTab)
 
@@ -32,7 +32,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
     setErrorMsg('')
     try {
       await auth.login(loginForm.email, loginForm.password)
-      handleClose()
+      onSuccess ? onSuccess() : handleClose()
     } catch (err) {
       setStatus('error')
       setErrorMsg(err.message || 'Invalid credentials. Please try again.')
@@ -136,7 +136,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }) {
               </p>
             </div>
             <button
-              onClick={handleClose}
+              onClick={onSuccess ? onSuccess : handleClose}
               className="mt-2 px-6 py-2.5 bg-teal text-cream text-sm font-semibold rounded-xl cursor-pointer border-none hover:bg-teal/90 transition-all"
             >
               Got it

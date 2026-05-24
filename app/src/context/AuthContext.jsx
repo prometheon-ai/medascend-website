@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = createContext(null)
@@ -9,6 +10,8 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+  const didOAuthRedirect = useRef(false)
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -29,6 +32,15 @@ export function AuthProvider({ children }) {
           }
         } catch {
           // ignore fetch errors — still set session
+        }
+        // After Google OAuth redirect, send user back to where they came from
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && !didOAuthRedirect.current) {
+          const redirect = sessionStorage.getItem('authRedirect')
+          if (redirect) {
+            didOAuthRedirect.current = true
+            sessionStorage.removeItem('authRedirect')
+            navigate(redirect)
+          }
         }
       } else {
         localStorage.removeItem('access_token')
