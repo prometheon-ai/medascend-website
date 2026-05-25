@@ -1,8 +1,23 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, LogOut } from 'lucide-react'
+import { Menu, X, LogOut, UserCircle2 } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 import { useAuth } from '../context/AuthContext'
+
+function Avatar({ user, size = 'sm' }) {
+  const dim = size === 'sm' ? 'w-7 h-7 text-xs' : 'w-9 h-9 text-sm'
+  const initials = user?.full_name
+    ? user.full_name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
+    : user?.email?.[0]?.toUpperCase() || '?'
+  if (user?.avatar_url) {
+    return <img src={user.avatar_url} alt="" className={`${dim} rounded-full object-cover border border-teal/20 shrink-0`} referrerPolicy="no-referrer" />
+  }
+  return (
+    <span className={`${dim} rounded-full bg-teal/20 border border-teal/30 text-teal-light font-bold flex items-center justify-center shrink-0`}>
+      {initials}
+    </span>
+  )
+}
 
 const links = [
   { to: '/', label: 'Home' },
@@ -106,16 +121,18 @@ export default function Navbar({ onLogin, onRegister }) {
               <div className="hidden sm:flex items-center gap-2">
                 {isAdmin ? (
                   <div className="flex items-center gap-2">
-                    <Link to="/arena/profile" className="text-[13px] font-semibold text-cream px-3 py-2 no-underline hover:text-teal-light transition-colors">
-                      {user.full_name?.split(' ')[0] || user.email}
+                    <Link to="/arena/profile" className="flex items-center gap-2 px-3 py-1.5 no-underline hover:text-teal-light transition-colors group">
+                      <Avatar user={user} size="sm" />
+                      <span className="text-[13px] font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
                     </Link>
                     <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
                       Admin
                     </Link>
                   </div>
                 ) : (
-                  <Link to="/arena/profile" className="text-[13px] font-semibold text-cream px-3 py-2 no-underline hover:text-teal-light transition-colors">
-                    {user.full_name?.split(' ')[0] || user.email}
+                  <Link to="/arena/profile" className="flex items-center gap-2 px-3 py-1.5 no-underline hover:text-teal-light transition-colors group">
+                    <Avatar user={user} size="sm" />
+                    <span className="text-[13px] font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
                   </Link>
                 )}
                 <button
@@ -173,16 +190,18 @@ export default function Navbar({ onLogin, onRegister }) {
             <div className="mt-4 flex flex-col items-center gap-2">
               {isAdmin ? (
                 <div className="flex flex-col items-center gap-2">
-                  <Link to="/arena/profile" className="text-base font-semibold text-cream no-underline hover:text-teal-light transition-colors">
-                    {user.full_name?.split(' ')[0] || user.email}
+                  <Link to="/arena/profile" className="flex items-center gap-2 no-underline hover:text-teal-light transition-colors group">
+                    <Avatar user={user} size="lg" />
+                    <span className="text-base font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
                   </Link>
                   <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
                     Admin
                   </Link>
                 </div>
               ) : (
-                <Link to="/arena/profile" className="text-base font-semibold text-cream no-underline hover:text-teal-light transition-colors">
-                  {user.full_name?.split(' ')[0] || user.email}
+                <Link to="/arena/profile" className="flex items-center gap-2 no-underline hover:text-teal-light transition-colors group">
+                  <Avatar user={user} size="lg" />
+                  <span className="text-base font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
                 </Link>
               )}
               <button

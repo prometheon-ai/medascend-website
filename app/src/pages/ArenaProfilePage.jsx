@@ -239,9 +239,12 @@ export default function ArenaProfilePage() {
               <h1 className="text-3xl font-extrabold text-cream tracking-tight">Arena Profile</h1>
               <p className="mt-2 text-sm text-sky/70">Your certificates, tier changes, mastery, and trophy trail in one place.</p>
             </div>
-            <div className="rounded-2xl border border-teal/10 bg-dark-card px-4 py-3 text-right">
+            <div className="rounded-2xl border border-teal/10 bg-dark-card px-4 py-3 text-left">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-sky/45">Signed in as</p>
               <p className="mt-1 text-sm font-semibold text-cream">{user?.full_name || user?.email || 'Arena user'}</p>
+              {user?.full_name && user?.email && (
+                <p className="mt-0.5 text-xs text-sky/45">{user.email}</p>
+              )}
             </div>
           </div>
 
