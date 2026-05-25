@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import FadeInView from '../components/animations/FadeInView'
 import { useAuth } from '../context/AuthContext'
+import { readApiErrorMessage } from '../lib/api'
 
 const roles = ['Student', 'Professional', 'Doctor', 'Educator', 'Developer', 'Designer', 'Investor', 'Other']
 
@@ -11,6 +12,7 @@ export default function JoinPage() {
   const { user, token } = useAuth()
   const [form, setForm] = useState({ name: '', age: '', role: '', email: '', phone: '', description: '', cv: null })
   const [status, setStatus] = useState('idle')
+  const [errorMsg, setErrorMsg] = useState('Unable to send your application right now.')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
   useEffect(() => {
@@ -31,9 +33,11 @@ export default function JoinPage() {
       Object.entries(form).forEach(([k, v]) => { if (v) data.append(k, v) })
       const headers = {}
       if (token) headers['Authorization'] = `Bearer ${token}`
-      await fetch('/api/join-us', { method: 'POST', headers, body: data })
+      const res = await fetch('/api/join-us', { method: 'POST', headers, body: data })
+      if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to send your application right now.'))
       setStatus('success')
-    } catch {
+    } catch (err) {
+      setErrorMsg(err.message || 'Unable to send your application right now.')
       setStatus('error')
     }
   }
@@ -97,7 +101,7 @@ export default function JoinPage() {
                     className="text-sm text-sky font-family-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal/15 file:text-teal-light hover:file:bg-teal/25 cursor-pointer"
                   />
                 </div>
-                {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">Something went wrong. Try again.</p>}
+                {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">{errorMsg}</p>}
                 <button
                   type="submit"
                   disabled={status === 'loading'}

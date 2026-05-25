@@ -1,15 +1,48 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Loader2, Zap, Trophy, Clock, Users, AlertCircle } from 'lucide-react'
+import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet, Shield } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-
-const API = '/api/v1'
+import { API_BASE, readApiErrorMessage } from '../lib/api'
 
 const DIFFICULTY_COLORS = {
   easy: 'text-teal bg-teal/10 border-teal/20',
   medium: 'text-gold bg-gold/10 border-gold/20',
   hard: 'text-terracotta bg-terracotta/10 border-terracotta/20',
+}
+
+function normalizeArenaPayload(payload) {
+  const activeStatuses = new Set(['live', 'lobby', 'published', 'results_published'])
+
+  if (Array.isArray(payload)) {
+    const ended = payload.filter(c => !activeStatuses.has(c.status))
+    return {
+      live_events: payload.filter(c => c.status === 'live'),
+      upcoming_events: payload.filter(c => c.status === 'lobby' || c.status === 'published'),
+      recent_results: payload.filter(c => c.status === 'results_published'),
+      ended_events: ended,
+    }
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    return { live_events: [], upcoming_events: [], recent_results: [], ended_events: [] }
+  }
+
+  if (payload.live_events || payload.upcoming_events || payload.recent_results) {
+    return {
+      ...payload,
+      ended_events: payload.ended_events || [],
+    }
+  }
+
+  const quizzes = Array.isArray(payload.quizzes) ? payload.quizzes : []
+  const ended = quizzes.filter(c => !activeStatuses.has(c.status))
+  return {
+    live_events: quizzes.filter(c => c.status === 'live'),
+    upcoming_events: quizzes.filter(c => c.status === 'lobby' || c.status === 'published'),
+    recent_results: quizzes.filter(c => c.status === 'results_published'),
+    ended_events: ended,
+  }
 }
 
 function formatDate(dateString) {
@@ -23,7 +56,7 @@ function formatDate(dateString) {
   })
 }
 
-function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
+function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onWalletChanged }) {
   const [contest, setContest] = useState(initialContest)
   const [registering, setRegistering] = useState(false)
   const [regError, setRegError] = useState('')
@@ -33,7 +66,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
     setRegistering(true)
     setRegError('')
     try {
-      const res = await fetch(`${API}/arena/quizzes/${contest.id}/register`, {
+      const res = await fetch(`${API_BASE}/arena/quizzes/${contest.id}/register`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ payment_method: 'wallet' }),
@@ -48,11 +81,11 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
         return
       }
       if (!res.ok) {
-        const d = await res.json()
-        throw new Error(d.detail || d.error?.message || 'Registration failed')
+        throw new Error(await readApiErrorMessage(res, 'Registration failed'))
       }
       setContest(c => ({ ...c, is_registered: true }))
       onRegistered(contest.id)
+      onWalletChanged?.()
     } catch (err) {
       setRegError(err.message)
     } finally {
@@ -188,7 +221,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered }) {
   )
 }
 
-function ContestSection({ title, contests, token, onAuth, onRegistered }) {
+function ContestSection({ title, contests, token, onAuth, onRegistered, onWalletChanged }) {
   if (!contests || contests.length === 0) return null
   return (
     <div className="mb-10">
@@ -201,6 +234,7 @@ function ContestSection({ title, contests, token, onAuth, onRegistered }) {
             token={token}
             onAuth={onAuth}
             onRegistered={onRegistered}
+            onWalletChanged={onWalletChanged}
           />
         ))}
       </div>
@@ -209,28 +243,54 @@ function ContestSection({ title, contests, token, onAuth, onRegistered }) {
 }
 
 export default function ArenaPage({ onAuth }) {
-  const { token, loading: authLoading } = useAuth()
+  const navigate = useNavigate()
+  const { user, token, loading: authLoading } = useAuth()
+  const isAdmin = user?.role === 'admin'
   const [data, setData] = useState(null)
+  const [archivedContests, setArchivedContests] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [needsAuth, setNeedsAuth] = useState(false)
   const [registered, setRegistered] = useState({})
+  const activeToken = token || localStorage.getItem('access_token')
 
   useEffect(() => {
     if (authLoading) return
-    const activeToken = token || localStorage.getItem('access_token')
+    setNeedsAuth(false)
+    setError('')
+    if (!activeToken) {
+      setLoading(false)
+      setData(null)
+      return
+    }
+
     const headers = {}
     if (activeToken) headers.Authorization = `Bearer ${activeToken}`
-    fetch(`${API}/arena/`, { headers })
-      .then(res => {
-        if (res.status === 401 || res.status === 403) { setNeedsAuth(true); return null }
-        if (!res.ok) throw new Error('Failed to load contests')
+    fetch(`${API_BASE}/arena/`, { headers })
+      .then(async res => {
+        if (res.status === 401 || res.status === 403) {
+          setNeedsAuth(true)
+          return null
+        }
+        if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Failed to load contests'))
         return res.json()
       })
-      .then(d => { if (d) setData(d) })
+      .then(d => { if (d) setData(normalizeArenaPayload(d)) })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-  }, [token, authLoading])
+
+    fetch(`${API_BASE}/arena/quizzes?status=ended&status=results_published&limit=50&offset=0`, { headers })
+      .then(res => {
+        if (!res.ok) return null
+        return res.json()
+      })
+      .then(d => {
+        if (!d) return
+        const items = Array.isArray(d) ? d : d.quizzes || d.items || d.results || []
+        setArchivedContests(items)
+      })
+      .catch(() => {})
+  }, [activeToken, authLoading])
 
   const handleRegistered = (id) => setRegistered(p => ({ ...p, [id]: true }))
 
@@ -240,6 +300,12 @@ export default function ArenaPage({ onAuth }) {
   const allLive = withRegistered(data?.live_events)
   const upcomingEvents = withRegistered(data?.upcoming_events)
   const recentResults = withRegistered(data?.recent_results)
+  const endedEvents = withRegistered(data?.ended_events)
+  const archivedResults = withRegistered(archivedContests)
+  const finishedContests = [...recentResults, ...endedEvents, ...archivedResults].reduce((items, contest) => {
+    if (items.some(item => item.id === contest.id)) return items
+    return [...items, contest]
+  }, [])
 
   // Backend merges lobby+live into live_events — split them back
   const liveEvents = allLive.filter(c => c.status === 'live')
@@ -248,7 +314,7 @@ export default function ArenaPage({ onAuth }) {
   const publishedEvents = upcomingEvents.filter(c => c.status === 'published')
   const hasLive = liveEvents.length > 0
 
-  const isEmpty = allLive.length === 0 && upcomingEvents.length === 0 && recentResults.length === 0
+  const isEmpty = allLive.length === 0 && upcomingEvents.length === 0 && finishedContests.length === 0
 
   return (
     <>
@@ -260,14 +326,24 @@ export default function ArenaPage({ onAuth }) {
         <div className="max-w-6xl mx-auto px-6 py-12">
 
           <div className="mb-10">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-extrabold text-cream tracking-tight">MedAscend Arena</h1>
-              {hasLive && (
-                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-400/15 text-green-400 text-xs font-bold border border-green-400/20">
-                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block" />
-                  LIVE
-                </span>
-              )}
+            <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-extrabold text-cream tracking-tight">MedAscend Arena</h1>
+                {hasLive && (
+                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-400/15 text-green-400 text-xs font-bold border border-green-400/20">
+                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block" />
+                    LIVE
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/arena/wallet')}
+                className="inline-flex items-center gap-2 rounded-xl border border-teal/20 bg-dark-card px-4 py-2 text-sm font-semibold text-cream transition-colors hover:border-teal/40 hover:bg-teal/10"
+              >
+                <Wallet size={16} className="text-teal" />
+                Wallet
+              </button>
             </div>
             <p className="text-sky/70 text-sm font-family-secondary">
               Compete in timed MCQ contests. Test your medical knowledge against peers in real-time.
@@ -304,7 +380,7 @@ export default function ArenaPage({ onAuth }) {
             </div>
           )}
 
-          {!loading && !error && !needsAuth && !token && !localStorage.getItem('access_token') && (
+          {!loading && !error && !needsAuth && !activeToken && (
             <div className="flex flex-col items-center justify-center py-24 gap-6 text-center">
               <Trophy size={40} className="text-teal/40" />
               <div>
@@ -320,7 +396,7 @@ export default function ArenaPage({ onAuth }) {
             </div>
           )}
 
-          {!loading && !error && data && (token || localStorage.getItem('access_token')) && (
+          {!loading && !error && data && activeToken && (
             <>
               {isEmpty ? (
                 <div className="text-center py-24 text-sky/40">
@@ -332,28 +408,28 @@ export default function ArenaPage({ onAuth }) {
                   <ContestSection
                     title="Live Now"
                     contests={liveEvents}
-                    token={token || localStorage.getItem('access_token')}
+                    token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
                   />
                   <ContestSection
                     title="Register Now"
                     contests={lobbyEvents}
-                    token={token || localStorage.getItem('access_token')}
+                    token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
                   />
                   <ContestSection
                     title="Coming Soon"
                     contests={publishedEvents}
-                    token={token || localStorage.getItem('access_token')}
+                    token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
                   />
                   <ContestSection
                     title="Recent Results"
-                    contests={recentResults}
-                    token={token || localStorage.getItem('access_token')}
+                    contests={finishedContests}
+                    token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
                   />

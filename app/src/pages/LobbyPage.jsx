@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Loader2, Clock, Users, ChevronRight, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import { friendlyArenaAccessMessage } from '../lib/api'
 
 const API = '/api/v1'
 
@@ -48,23 +49,29 @@ export default function LobbyPage() {
 
   useEffect(() => {
     if (authLoading) return
-    const activeToken = token || localStorage.getItem('access_token')
+    const activeToken = token
     if (!activeToken) { navigate('/arena'); return }
 
     const headers = { Authorization: `Bearer ${activeToken}` }
     fetch(`${API}/arena/quizzes/${contestId}/dashboard`, { headers })
       .then(res => {
+        if (res.status === 400 || res.status === 403 || res.status === 409) {
+          setError(friendlyArenaAccessMessage(res.status))
+          setLoading(false)
+          return null
+        }
         if (!res.ok) throw new Error('Failed to load lobby')
         return res.json()
       })
       .then(d => {
+        if (!d) return
         const c = d.contest ?? d
         setContest({
           ...c,
           difficulty: c.difficulty ?? null,
         })
       })
-      .catch(err => setError(err.message))
+      .catch(() => setError('Unable to load lobby right now.'))
       .finally(() => setLoading(false))
   }, [contestId, token, authLoading])
 
@@ -141,7 +148,7 @@ export default function LobbyPage() {
                 </div>
               )}
 
-              {canStart && (
+              {canStart && !error && (
                 <div className="mb-4">
                   <p className="text-sm font-semibold text-teal mb-5">The contest is live — good luck!</p>
                   <button
@@ -151,6 +158,10 @@ export default function LobbyPage() {
                     Start Quiz <ChevronRight size={18} />
                   </button>
                 </div>
+              )}
+
+              {error && !contest && (
+                <p className="text-sm text-sky/60 mt-2">You can still view the lobby state, but quiz access is currently locked.</p>
               )}
             </div>
           )}

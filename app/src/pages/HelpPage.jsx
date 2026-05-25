@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import FadeInView from '../components/animations/FadeInView'
 import { useAuth } from '../context/AuthContext'
+import { readApiErrorMessage } from '../lib/api'
 
 const stages = ['1st year MBBS', '2nd year', '3rd year', 'Final year', 'Intern', 'NEET-PG aspirant', 'PG resident', 'Other']
 
@@ -20,6 +21,7 @@ export default function HelpPage() {
   const { user, token } = useAuth()
   const [form, setForm] = useState({ name: '', stage: '', problem: '', impact: '', email: '' })
   const [status, setStatus] = useState('idle')
+  const [errorMsg, setErrorMsg] = useState('Unable to send your problem right now.')
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
   useEffect(() => {
@@ -38,13 +40,15 @@ export default function HelpPage() {
     try {
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
-      await fetch('/api/tell-us', {
+      const res = await fetch('/api/tell-us', {
         method: 'POST',
         headers,
         body: JSON.stringify(form),
       })
+      if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to send your problem right now.'))
       setStatus('success')
-    } catch {
+    } catch (err) {
+      setErrorMsg(err.message || 'Unable to send your problem right now.')
       setStatus('error')
     }
   }
@@ -104,7 +108,7 @@ export default function HelpPage() {
                 <textarea placeholder="The problem you face" value={form.problem} onChange={e => set('problem', e.target.value)} required rows={5} className={inputCls + ' resize-none'} />
                 <textarea placeholder="How it affects your studying or prep (optional)" value={form.impact} onChange={e => set('impact', e.target.value)} rows={3} className={inputCls + ' resize-none'} />
                 <input type="email" placeholder="Email — so we can follow up (optional)" value={form.email} onChange={e => set('email', e.target.value)} className={inputCls} />
-                {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">Something went wrong. Try again.</p>}
+                {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">{errorMsg}</p>}
                 <button
                   type="submit"
                   disabled={status === 'loading'}

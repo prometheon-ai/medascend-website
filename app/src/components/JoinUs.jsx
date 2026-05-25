@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import FadeInView from './animations/FadeInView'
+import { readApiErrorMessage } from '../lib/api'
 
 const roles = ['Student', 'Professional', 'Doctor', 'Educator', 'Developer', 'Designer', 'Investor', 'Other']
 
 export default function JoinUs() {
   const [form, setForm] = useState({ name: '', age: '', role: '', email: '', phone: '', description: '', cv: null })
   const [status, setStatus] = useState('idle')
+  const [errorMsg, setErrorMsg] = useState('Unable to send your application right now.')
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -15,9 +17,11 @@ export default function JoinUs() {
     try {
       const data = new FormData()
       Object.entries(form).forEach(([k, v]) => { if (v) data.append(k, v) })
-      await fetch('/api/join-us', { method: 'POST', body: data })
+      const res = await fetch('/api/join-us', { method: 'POST', body: data })
+      if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to send your application right now.'))
       setStatus('success')
-    } catch {
+    } catch (err) {
+      setErrorMsg(err.message || 'Unable to send your application right now.')
       setStatus('error')
     }
   }
@@ -77,9 +81,7 @@ export default function JoinUs() {
                   className="text-sm text-sky/50 font-family-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal/15 file:text-teal-light hover:file:bg-teal/25 cursor-pointer"
                 />
               </div>
-              {status === 'error' && (
-                <p className="text-sm text-terracotta font-family-secondary">Something went wrong. Try again.</p>
-              )}
+              {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">{errorMsg}</p>}
               <button
                 type="submit"
                 disabled={status === 'loading'}

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Loader2, AlertTriangle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useArenaStore } from '../stores/arenaStore'
+import { readApiErrorMessage, friendlyArenaAccessMessage } from '../lib/api'
 
 const API = '/api/v1'
 
@@ -20,7 +21,7 @@ export default function QuizPage() {
   const { contestId } = useParams()
   const navigate = useNavigate()
   const { token } = useAuth()
-  const activeToken = token || localStorage.getItem('access_token')
+  const activeToken = token
 
   const {
     questions, currentIdx, selectedOption, timeLeft, submitting,
@@ -47,26 +48,29 @@ export default function QuizPage() {
 
     const init = async () => {
       try {
-        await fetch(`${API}/arena/quizzes/${contestId}/start`, {
+        const startRes = await fetch(`${API}/arena/quizzes/${contestId}/start`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${activeToken}` },
         })
+        if (!startRes.ok) {
+          throw new Error(friendlyArenaAccessMessage(startRes.status))
+        }
         const res = await fetch(`${API}/arena/quizzes/${contestId}/questions`, {
           headers: { Authorization: `Bearer ${activeToken}` },
         })
-        if (!res.ok) throw new Error('Failed to load questions')
+        if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to load questions right now.'))
         const data = await res.json()
         const qs = Array.isArray(data) ? data : data.questions || []
         if (qs.length === 0) throw new Error('No questions available')
         initQuiz(contestId, qs)
       } catch (err) {
-        setInitError(err.message)
+        setInitError(err.message || 'Unable to start this quiz right now.')
       } finally {
         setInitializing(false)
       }
     }
     init()
-  }, [])
+  }, [contestId, activeToken, navigate, initQuiz])
 
   // Timer per question
   useEffect(() => {

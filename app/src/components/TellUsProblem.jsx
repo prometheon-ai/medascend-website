@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FadeInView from './animations/FadeInView'
+import { readApiErrorMessage } from '../lib/api'
 
 const stages = [
   '1st year MBBS',
@@ -24,6 +25,7 @@ const examples = [
 export default function TellUsProblem() {
   const [form, setForm] = useState({ name: '', stage: '', problem: '', impact: '', email: '' })
   const [status, setStatus] = useState('idle')
+  const [errorMsg, setErrorMsg] = useState('Unable to send your problem right now.')
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -31,13 +33,15 @@ export default function TellUsProblem() {
     e.preventDefault()
     setStatus('loading')
     try {
-      await fetch('/api/tell-us', {
+      const res = await fetch('/api/tell-us', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
+      if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to send your problem right now.'))
       setStatus('success')
-    } catch {
+    } catch (err) {
+      setErrorMsg(err.message || 'Unable to send your problem right now.')
       setStatus('error')
     }
   }
@@ -113,9 +117,7 @@ export default function TellUsProblem() {
                 onChange={e => set('email', e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-dark-surface border border-teal/15 text-cream text-sm placeholder:text-sky/30 focus:outline-none focus:border-teal/40 font-family-secondary"
               />
-              {status === 'error' && (
-                <p className="text-sm text-terracotta font-family-secondary">Something went wrong. Try again.</p>
-              )}
+              {status === 'error' && <p className="text-sm text-terracotta font-family-secondary">{errorMsg}</p>}
               <button
                 type="submit"
                 disabled={status === 'loading'}

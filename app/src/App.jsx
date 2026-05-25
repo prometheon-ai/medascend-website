@@ -10,6 +10,8 @@ import HelpPage from './pages/HelpPage'
 import JoinPage from './pages/JoinPage'
 import SahAIPage from './pages/SahAIPage'
 import ArenaPage from './pages/ArenaPage'
+import ArenaAdminPage from './pages/ArenaAdminPage'
+import ArenaWalletPage from './pages/ArenaWalletPage'
 import LobbyPage from './pages/LobbyPage'
 import QuizPage from './pages/QuizPage'
 import ResultsPage from './pages/ResultsPage'
@@ -60,6 +62,9 @@ export default function App() {
             <Route path="/join" element={<JoinPage />} />
             <Route path="/sahai" element={<SahAIPage />} />
             <Route path="/arena" element={<ArenaPage onAuth={openLogin} />} />
+            <Route path="/arena/admin" element={<ArenaAdminPage />} />
+            <Route path="/arena/admin/:contestId" element={<ArenaAdminPage />} />
+            <Route path="/arena/wallet" element={<ArenaWalletPage onAuth={openLogin} />} />
             <Route path="/arena/:contestId/lobby" element={<LobbyPage />} />
             <Route path="/arena/:contestId/quiz" element={<QuizPage />} />
             <Route path="/arena/:contestId/results" element={<ResultsPage />} />

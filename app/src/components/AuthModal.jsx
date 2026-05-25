@@ -85,10 +85,11 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultTab = 'lo
   )
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={handleClose}>
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onMouseDown={handleClose} onClick={handleClose} />
       <div
         className="relative w-full max-w-md rounded-2xl p-8 shadow-2xl border bg-dark-card border-teal/15"
+        onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -110,12 +111,14 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultTab = 'lo
 
         <div className="flex gap-1 p-1 rounded-xl bg-dark-surface mb-6">
           <button
+            type="button"
             onClick={() => { setTab('login'); setStatus('idle'); setErrorMsg('') }}
             className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'login' ? 'bg-teal text-cream' : 'bg-transparent text-sky/80 hover:text-cream'}`}
           >
             Already have an account
           </button>
           <button
+            type="button"
             onClick={() => { setTab('register'); setStatus('idle'); setErrorMsg('') }}
             className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer border-none ${tab === 'register' ? 'bg-teal text-cream' : 'bg-transparent text-sky/80 hover:text-cream'}`}
           >

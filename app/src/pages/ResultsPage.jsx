@@ -8,7 +8,8 @@ const API = '/api/v1'
 
 export default function ResultsPage() {
   const { contestId } = useParams()
-  const { token } = useAuth()
+  const { user, token } = useAuth()
+  const isAdmin = user?.role === 'admin'
   const activeToken = token || localStorage.getItem('access_token')
 
   const [myResult, setMyResult] = useState(null)
@@ -59,6 +60,11 @@ export default function ResultsPage() {
           </div>
 
           <h1 className="text-2xl font-extrabold text-cream mb-8">Contest Results</h1>
+          {isAdmin && (
+            <div className="mb-6 inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
+              Admin access
+            </div>
+          )}
 
           {loading && (
             <div className="flex items-center justify-center gap-3 py-24 text-sky/50">

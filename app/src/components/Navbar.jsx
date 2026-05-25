@@ -15,6 +15,7 @@ const links = [
 
 export default function Navbar({ onLogin, onRegister }) {
   const { user, logout } = useAuth()
+  const isAdmin = user?.role === 'admin'
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
@@ -103,9 +104,20 @@ export default function Navbar({ onLogin, onRegister }) {
           <div className="flex items-center gap-2">
             {user ? (
               <div className="hidden sm:flex items-center gap-2">
-                <span className="text-[13px] font-semibold text-cream px-3 py-2">
-                  {user.full_name?.split(' ')[0] || user.email}
-                </span>
+                {isAdmin ? (
+                  <Link to="/arena/admin" className="flex items-center gap-2 no-underline">
+                    <span className="text-[13px] font-semibold text-cream px-3 py-2 hover:text-teal-light transition-colors">
+                      {user.full_name?.split(' ')[0] || user.email}
+                    </span>
+                    <span className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
+                      Admin
+                    </span>
+                  </Link>
+                ) : (
+                  <span className="text-[13px] font-semibold text-cream px-3 py-2">
+                    {user.full_name?.split(' ')[0] || user.email}
+                  </span>
+                )}
                 <button
                   onClick={logout}
                   title="Logout"
@@ -159,9 +171,20 @@ export default function Navbar({ onLogin, onRegister }) {
           </Link>
           {user ? (
             <div className="mt-4 flex flex-col items-center gap-2">
-              <span className="text-base font-semibold text-cream">
-                {user.full_name?.split(' ')[0] || user.email}
-              </span>
+              {isAdmin ? (
+                <Link to="/arena/admin" className="flex flex-col items-center gap-2 no-underline">
+                  <span className="text-base font-semibold text-cream hover:text-teal-light transition-colors">
+                    {user.full_name?.split(' ')[0] || user.email}
+                  </span>
+                  <span className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
+                    Admin
+                  </span>
+                </Link>
+              ) : (
+                <span className="text-base font-semibold text-cream">
+                  {user.full_name?.split(' ')[0] || user.email}
+                </span>
+              )}
               <button
                 onClick={() => { setMobileOpen(false); logout() }}
                 className="flex items-center gap-2 text-base font-semibold px-8 py-3 bg-teal/15 text-teal-light rounded-xl cursor-pointer border-none"
