@@ -105,18 +105,18 @@ export default function Navbar({ onLogin, onRegister }) {
             {user ? (
               <div className="hidden sm:flex items-center gap-2">
                 {isAdmin ? (
-                  <Link to="/arena/admin" className="flex items-center gap-2 no-underline">
-                    <span className="text-[13px] font-semibold text-cream px-3 py-2 hover:text-teal-light transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Link to="/arena/profile" className="text-[13px] font-semibold text-cream px-3 py-2 no-underline hover:text-teal-light transition-colors">
                       {user.full_name?.split(' ')[0] || user.email}
-                    </span>
-                    <span className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
+                    </Link>
+                    <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
                       Admin
-                    </span>
-                  </Link>
+                    </Link>
+                  </div>
                 ) : (
-                  <span className="text-[13px] font-semibold text-cream px-3 py-2">
+                  <Link to="/arena/profile" className="text-[13px] font-semibold text-cream px-3 py-2 no-underline hover:text-teal-light transition-colors">
                     {user.full_name?.split(' ')[0] || user.email}
-                  </span>
+                  </Link>
                 )}
                 <button
                   onClick={logout}
@@ -172,18 +172,18 @@ export default function Navbar({ onLogin, onRegister }) {
           {user ? (
             <div className="mt-4 flex flex-col items-center gap-2">
               {isAdmin ? (
-                <Link to="/arena/admin" className="flex flex-col items-center gap-2 no-underline">
-                  <span className="text-base font-semibold text-cream hover:text-teal-light transition-colors">
+                <div className="flex flex-col items-center gap-2">
+                  <Link to="/arena/profile" className="text-base font-semibold text-cream no-underline hover:text-teal-light transition-colors">
                     {user.full_name?.split(' ')[0] || user.email}
-                  </span>
-                  <span className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold">
+                  </Link>
+                  <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
                     Admin
-                  </span>
-                </Link>
+                  </Link>
+                </div>
               ) : (
-                <span className="text-base font-semibold text-cream">
+                <Link to="/arena/profile" className="text-base font-semibold text-cream no-underline hover:text-teal-light transition-colors">
                   {user.full_name?.split(' ')[0] || user.email}
-                </span>
+                </Link>
               )}
               <button
                 onClick={() => { setMobileOpen(false); logout() }}

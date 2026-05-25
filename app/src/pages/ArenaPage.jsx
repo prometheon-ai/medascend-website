@@ -247,7 +247,6 @@ export default function ArenaPage({ onAuth }) {
   const { user, token, loading: authLoading } = useAuth()
   const isAdmin = user?.role === 'admin'
   const [data, setData] = useState(null)
-  const [archivedContests, setArchivedContests] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [needsAuth, setNeedsAuth] = useState(false)
@@ -278,18 +277,6 @@ export default function ArenaPage({ onAuth }) {
       .then(d => { if (d) setData(normalizeArenaPayload(d)) })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
-
-    fetch(`${API_BASE}/arena/quizzes?status=ended&status=results_published&limit=50&offset=0`, { headers })
-      .then(res => {
-        if (!res.ok) return null
-        return res.json()
-      })
-      .then(d => {
-        if (!d) return
-        const items = Array.isArray(d) ? d : d.quizzes || d.items || d.results || []
-        setArchivedContests(items)
-      })
-      .catch(() => {})
   }, [activeToken, authLoading])
 
   const handleRegistered = (id) => setRegistered(p => ({ ...p, [id]: true }))
@@ -301,8 +288,7 @@ export default function ArenaPage({ onAuth }) {
   const upcomingEvents = withRegistered(data?.upcoming_events)
   const recentResults = withRegistered(data?.recent_results)
   const endedEvents = withRegistered(data?.ended_events)
-  const archivedResults = withRegistered(archivedContests)
-  const finishedContests = [...recentResults, ...endedEvents, ...archivedResults].reduce((items, contest) => {
+  const finishedContests = [...recentResults, ...endedEvents].reduce((items, contest) => {
     if (items.some(item => item.id === contest.id)) return items
     return [...items, contest]
   }, [])

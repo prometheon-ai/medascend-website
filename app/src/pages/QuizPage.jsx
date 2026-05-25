@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Loader2, AlertTriangle } from 'lucide-react'
+import { Loader2, AlertTriangle, Flag, Bookmark } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useArenaStore } from '../stores/arenaStore'
-import { readApiErrorMessage, friendlyArenaAccessMessage } from '../lib/api'
+import {
+  friendlyArenaAccessMessage,
+  getArenaLiveState,
+  patchArenaLiveState,
+  readApiErrorMessage,
+} from '../lib/api'
 
 const API = '/api/v1'
 
@@ -21,13 +26,15 @@ export default function QuizPage() {
   const { contestId } = useParams()
   const navigate = useNavigate()
   const { token } = useAuth()
-  const activeToken = token
+  const activeToken = token || localStorage.getItem('access_token')
 
   const {
     questions, currentIdx, selectedOption, timeLeft, submitting,
     runningScore, liveRank, streak, lastResult, switchCount,
+    flaggedQuestionIds, bookmarkedQuestionIds,
     initQuiz, selectOption, tickTimer, setSubmitting, afterSubmit,
-    nextQuestion, incrementSwitchCount,
+    nextQuestion, incrementSwitchCount, hydrateLiveState,
+    toggleFlaggedQuestion, toggleBookmarkedQuestion,
   } = useArenaStore()
 
   const [initializing, setInitializing] = useState(true)
@@ -35,6 +42,7 @@ export default function QuizPage() {
   const [toast, setToast] = useState(null)
   const [terminated, setTerminated] = useState(false)
   const [resultVisible, setResultVisible] = useState(false)
+  const [liveStateReady, setLiveStateReady] = useState(false)
 
   const timerRef = useRef(null)
   const submittingRef = useRef(false)
@@ -63,14 +71,40 @@ export default function QuizPage() {
         const qs = Array.isArray(data) ? data : data.questions || []
         if (qs.length === 0) throw new Error('No questions available')
         initQuiz(contestId, qs)
+
+        try {
+          const liveState = await getArenaLiveState(activeToken, contestId)
+          if (liveState) {
+            hydrateLiveState(liveState)
+          }
+        } catch {
+          // best effort recovery only
+        }
       } catch (err) {
         setInitError(err.message || 'Unable to start this quiz right now.')
       } finally {
+        setLiveStateReady(true)
         setInitializing(false)
       }
     }
     init()
-  }, [contestId, activeToken, navigate, initQuiz])
+  }, [contestId, activeToken, navigate, initQuiz, hydrateLiveState])
+
+  useEffect(() => {
+    if (initializing || terminated || !liveStateReady || !activeToken || !currentQuestion) return
+
+    const timer = window.setTimeout(() => {
+      patchArenaLiveState(activeToken, contestId, {
+        current_question_index: currentIdx,
+        current_question_id: currentQuestion.id,
+        switch_count: switchCount,
+          flagged_question_ids: flaggedQuestionIds,
+          bookmarked_question_ids: bookmarkedQuestionIds,
+      }).catch(() => {})
+    }, 300)
+
+    return () => window.clearTimeout(timer)
+  }, [activeToken, contestId, currentIdx, currentQuestion?.id, liveStateReady, initializing, switchCount, terminated, flaggedQuestionIds, bookmarkedQuestionIds])
 
   // Timer per question
   useEffect(() => {
@@ -236,6 +270,8 @@ export default function QuizPage() {
     key: opt.key ?? String.fromCharCode(65 + i),
     text: opt.text ?? opt,
   }))
+  const isFlagged = flaggedQuestionIds.includes(currentQuestion.id)
+  const isBookmarked = bookmarkedQuestionIds.includes(currentQuestion.id)
 
   return (
     <div className="min-h-screen bg-dark flex flex-col">
@@ -277,6 +313,22 @@ export default function QuizPage() {
                 {currentQuestion.topic}
               </span>
             )}
+            <button
+              type="button"
+              onClick={() => toggleFlaggedQuestion(currentQuestion.id)}
+              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${isFlagged ? 'bg-terracotta/15 text-terracotta border-terracotta/25' : 'bg-dark-surface text-sky/55 border-teal/15 hover:border-terracotta/30 hover:text-terracotta'}`}
+            >
+              <Flag size={12} />
+              {isFlagged ? 'Flagged' : 'Flag'}
+            </button>
+            <button
+              type="button"
+              onClick={() => toggleBookmarkedQuestion(currentQuestion.id)}
+              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${isBookmarked ? 'bg-gold/15 text-gold border-gold/25' : 'bg-dark-surface text-sky/55 border-teal/15 hover:border-gold/30 hover:text-gold'}`}
+            >
+              <Bookmark size={12} />
+              {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+            </button>
           </div>
           <div className={`text-2xl font-extrabold tabular-nums text-${timerColor}`}>
             {timeLeft}s

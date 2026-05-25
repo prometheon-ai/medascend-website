@@ -3,9 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { Loader2, Clock, Users, ChevronRight, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { friendlyArenaAccessMessage } from '../lib/api'
-
-const API = '/api/v1'
+import { getArenaDashboard, getArenaQuizDetail } from '../lib/api'
 
 function useCountdown(targetDate) {
   const [secondsLeft, setSecondsLeft] = useState(null)
@@ -37,6 +35,7 @@ export default function LobbyPage() {
   const navigate = useNavigate()
   const { state: routeState } = useLocation()
   const { token, loading: authLoading } = useAuth()
+  const activeToken = token || localStorage.getItem('access_token')
 
   const registeredCount = routeState?.registeredCount ?? '—'
 
@@ -49,23 +48,27 @@ export default function LobbyPage() {
 
   useEffect(() => {
     if (authLoading) return
-    const activeToken = token
     if (!activeToken) { navigate('/arena'); return }
 
-    const headers = { Authorization: `Bearer ${activeToken}` }
-    fetch(`${API}/arena/quizzes/${contestId}/dashboard`, { headers })
-      .then(res => {
-        if (res.status === 400 || res.status === 403 || res.status === 409) {
-          setError(friendlyArenaAccessMessage(res.status))
-          setLoading(false)
-          return null
+    Promise.all([
+      getArenaQuizDetail(activeToken, contestId).catch(err => {
+        if (err.message) {
+          setError(err.message)
         }
-        if (!res.ok) throw new Error('Failed to load lobby')
-        return res.json()
-      })
-      .then(d => {
-        if (!d) return
-        const c = d.contest ?? d
+        return null
+      }),
+      getArenaDashboard(activeToken, contestId).catch(err => {
+        if (err.message) {
+          setError(err.message)
+        }
+        return null
+      }),
+    ])
+      .then(([detail, dashboard]) => {
+        const dashboardContest = dashboard?.contest ?? dashboard
+        const detailContest = detail ?? {}
+        const c = { ...detailContest, ...dashboardContest }
+        if (!c || Object.keys(c).length === 0) return
         setContest({
           ...c,
           difficulty: c.difficulty ?? null,
@@ -73,7 +76,7 @@ export default function LobbyPage() {
       })
       .catch(() => setError('Unable to load lobby right now.'))
       .finally(() => setLoading(false))
-  }, [contestId, token, authLoading])
+  }, [contestId, activeToken, authLoading])
 
   const handleStartQuiz = () => {
     navigate(`/arena/${contestId}/quiz`)
@@ -135,6 +138,18 @@ export default function LobbyPage() {
                     <span>Duration</span>
                   </div>
                   <p className="text-lg font-bold text-cream">{contest.duration_minutes} min</p>
+                </div>
+                <div className="rounded-xl bg-dark-surface p-4">
+                  <div className="text-sky/50 text-xs mb-1">Entry fee</div>
+                  <p className="text-lg font-bold text-cream">
+                    {contest.entry_fee ? `₹${(contest.entry_fee / 100).toLocaleString('en-IN')}` : 'Free'}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-dark-surface p-4">
+                  <div className="text-sky/50 text-xs mb-1">Prize pool</div>
+                  <p className="text-lg font-bold text-cream">
+                    {contest.prize_pool ? `₹${(contest.prize_pool / 100).toLocaleString('en-IN')}` : '—'}
+                  </p>
                 </div>
               </div>
 

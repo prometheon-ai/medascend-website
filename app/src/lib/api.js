@@ -1,11 +1,22 @@
 export async function readApiErrorMessage(res, fallback = 'Something went wrong. Try again.') {
   const contentType = res.headers.get('content-type') || ''
 
+  const stringifyMessage = (value) => {
+    if (value === null || value === undefined) return fallback
+    if (typeof value === 'string') return value
+    if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+    if (Array.isArray(value)) return value.map(stringifyMessage).filter(Boolean).join(', ') || fallback
+    if (typeof value === 'object') {
+      return value.detail || value.error || value.message || value.msg || value.title || JSON.stringify(value)
+    }
+    return fallback
+  }
+
   try {
     if (contentType.includes('application/json')) {
       const data = await res.json()
       if (typeof data === 'string') return data
-      return data?.detail || data?.error || data?.message || fallback
+      return stringifyMessage(data?.detail || data?.error || data?.message || data)
     }
 
     const text = await res.text()
@@ -126,6 +137,10 @@ export async function getArenaQuizzes(token, query = {}) {
   return apiRequest('/arena/quizzes', { token, query, fallbackError: 'Failed to load contests.' })
 }
 
+export async function getArenaQuizDetail(token, quizId) {
+  return apiRequest(`/arena/quizzes/${quizId}`, { token, fallbackError: 'Failed to load quiz detail.' })
+}
+
 export async function getAdminArenaEvents(token, query = {}) {
   return apiRequest('/admin/arena/events', { token, query, fallbackError: 'Failed to load admin contests.' })
 }
@@ -215,6 +230,19 @@ export async function getArenaDashboard(token, quizId) {
   return apiRequest(`/arena/quizzes/${quizId}/dashboard`, { token, fallbackError: 'Failed to load lobby.' })
 }
 
+export async function getArenaLiveState(token, quizId) {
+  return apiRequest(`/arena/quizzes/${quizId}/live-state`, { token, fallbackError: 'Failed to load live state.' })
+}
+
+export async function patchArenaLiveState(token, quizId, body) {
+  return apiRequest(`/arena/quizzes/${quizId}/live-state`, {
+    token,
+    method: 'PATCH',
+    body,
+    fallbackError: 'Failed to save live state.',
+  })
+}
+
 export async function registerArenaQuiz(token, quizId, body = { payment_method: 'wallet' }) {
   return apiRequest(`/arena/quizzes/${quizId}/register`, {
     token,
@@ -230,6 +258,26 @@ export async function getArenaWalletSummary(token) {
 
 export async function getArenaWalletTransactions(token, query = {}) {
   return apiRequest('/arena/wallet/transactions', { token, query, fallbackError: 'Failed to load wallet transactions.' })
+}
+
+export async function getArenaMyCertificates(token) {
+  return apiRequest('/arena/certificates', { token, fallbackError: 'Failed to load certificates.' })
+}
+
+export async function getArenaMyStats(token) {
+  return apiRequest('/arena/my-stats', { token, fallbackError: 'Failed to load arena stats.' })
+}
+
+export async function getArenaTierHistory(token, query = {}) {
+  return apiRequest('/arena/my-stats/tier-history', { token, query, fallbackError: 'Failed to load tier history.' })
+}
+
+export async function getArenaSubjectMastery(token) {
+  return apiRequest('/arena/my-subject-mastery', { token, fallbackError: 'Failed to load subject mastery.' })
+}
+
+export async function getArenaTrophyHistory(token, query = {}) {
+  return apiRequest('/arena/my-trophy-history', { token, query, fallbackError: 'Failed to load trophy history.' })
 }
 
 export async function createWalletTopUpOrder(token, amountRupees) {
