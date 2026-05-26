@@ -4,6 +4,7 @@ import ScrollToTop from './components/ScrollToTop'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AuthModal from './components/AuthModal'
+import OnboardingModal from './components/OnboardingModal'
 import HomePage from './pages/HomePage'
 import FeaturesPage from './pages/FeaturesPage'
 import HelpPage from './pages/HelpPage'
@@ -75,6 +76,7 @@ export default function App() {
         </main>
         {!hideChrome && <Footer />}
         <AuthModal isOpen={authModal.open} onClose={closeAuth} onSuccess={handleAuthSuccess} defaultTab={authModal.tab} />
+        <OnboardingModal />
       </div>
     </AuthProvider>
   )

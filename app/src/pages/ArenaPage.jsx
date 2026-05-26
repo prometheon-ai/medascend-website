@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet, Shield } from 'lucide-react'
+import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { API_BASE, readApiErrorMessage } from '../lib/api'
+import { API_BASE, readApiErrorMessage, getArenaQuizDetail } from '../lib/api'
+import QuizRegistrationModal from '../components/QuizRegistrationModal'
 
 const DIFFICULTY_COLORS = {
   easy: 'text-teal bg-teal/10 border-teal/20',
@@ -53,44 +54,83 @@ function formatDate(dateString) {
     hour: '2-digit',
     minute: '2-digit',
     hour12: true,
+    timeZone: 'Asia/Kolkata',
   })
 }
 
+// Returns { label, secsLeft } — secsLeft is the raw seconds remaining (or null)
+function useCountdown(targetDate) {
+  const [secsLeft, setSecsLeft] = useState(null)
+  useEffect(() => {
+    if (!targetDate) { setSecsLeft(null); return }
+    const tick = () => {
+      const diff = new Date(targetDate) - Date.now()
+      setSecsLeft(Math.max(0, Math.floor(diff / 1000)))
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [targetDate])
+  return secsLeft
+}
+
+function fmtCountdown(secs, prefix = '') {
+  if (secs === null) return ''
+  if (secs <= 0) return ''
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  const s = secs % 60
+  const time = h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m ${s}s` : `${s}s`
+  return prefix ? `${prefix} ${time}` : time
+}
+
+function useRegistrationCountdown(closesAt) {
+  const secs = useCountdown(closesAt)
+  if (secs === null) return ''
+  if (secs <= 0) return 'closed'
+  return fmtCountdown(secs, 'Closes in')
+}
+
+const LOBBY_WINDOW_SECS = 2 * 60 // show Enter Lobby button when starts_at - now <= 2 min
+
 function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onWalletChanged }) {
   const [contest, setContest] = useState(initialContest)
-  const [registering, setRegistering] = useState(false)
-  const [regError, setRegError] = useState('')
+  useEffect(() => { setContest(initialContest) }, [initialContest.id])
+  const [showModal, setShowModal] = useState(false)
+  const [participated, setParticipated] = useState(null) // null = unknown
 
-  const handleRegister = async () => {
+  // For live+registered contests, fetch detail once to check participated
+  useEffect(() => {
+    if (contest.status !== 'live' || !contest.is_registered || !token) return
+    getArenaQuizDetail(token, contest.id)
+      .then(d => setParticipated(d?.my_registration?.participated ?? false))
+      .catch(() => {})
+  }, [contest.id, contest.status, contest.is_registered, token])
+
+  const regCountdown = useRegistrationCountdown(
+    contest.registration_closes_at ?? null
+  )
+
+  // Seconds until quiz starts — drives lobby window logic
+  const secsToStart = useCountdown(
+    contest.is_registered && (contest.status === 'published' || contest.status === 'lobby')
+      ? contest.starts_at
+      : null
+  )
+  // lobby window open when <= 2 min to start
+  const lobbyWindowOpen = secsToStart !== null && secsToStart <= LOBBY_WINDOW_SECS
+  const lobbyCountdownLabel = !lobbyWindowOpen && secsToStart !== null && secsToStart > 0
+    ? fmtCountdown(secsToStart - LOBBY_WINDOW_SECS, 'Lobby opens in')
+    : ''
+
+  const openModal = () => {
     if (!token) { onAuth(); return }
-    setRegistering(true)
-    setRegError('')
-    try {
-      const res = await fetch(`${API_BASE}/arena/quizzes/${contest.id}/register`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ payment_method: 'wallet' }),
-      })
-      if (res.status === 409) {
-        setContest(c => ({ ...c, is_registered: true }))
-        onRegistered(contest.id)
-        return
-      }
-      if (res.status === 401) {
-        onAuth()
-        return
-      }
-      if (!res.ok) {
-        throw new Error(await readApiErrorMessage(res, 'Registration failed'))
-      }
-      setContest(c => ({ ...c, is_registered: true }))
-      onRegistered(contest.id)
-      onWalletChanged?.()
-    } catch (err) {
-      setRegError(err.message)
-    } finally {
-      setRegistering(false)
-    }
+    setShowModal(true)
+  }
+
+  const handleRegistered = (id) => {
+    setContest(c => ({ ...c, is_registered: true }))
+    onRegistered(id)
   }
 
   const difficultyClass = DIFFICULTY_COLORS[contest.difficulty] || 'text-sky bg-sky/10 border-sky/20'
@@ -98,74 +138,88 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   const prizeLabel = contest.prize_pool_estimate > 0
     ? `₹${(contest.prize_pool_estimate / 100).toLocaleString('en-IN')} prize pool`
     : null
+  const RegisterBtn = ({ label = 'Register' }) => (
+    <button onClick={openModal} className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none">
+      {label}
+    </button>
+  )
 
   const ActionButton = () => {
-    if (contest.status === 'published') {
-      return <span className="text-xs text-sky/50 font-medium">Registration opens soon</span>
+    // Compute registration cutoff:
+    // 1. Use registration_closes_at if present
+    // 2. For paid contests: T-15min cutoff from starts_at
+    // 3. For free contests: open until starts_at
+    // 4. Fall back to is_registration_open flag
+    const now = Date.now()
+    let canRegister
+    if (contest.registration_closes_at) {
+      canRegister = new Date(contest.registration_closes_at) > now
+    } else if (contest.starts_at) {
+      const cutoff = new Date(contest.starts_at).getTime() - 15 * 60 * 1000
+      canRegister = now < cutoff
+    } else {
+      canRegister = contest.is_registration_open !== false
     }
+    const isRegistered = contest.is_registered
+    const { status } = contest
 
-    if (contest.status === 'live') {
-      return (
-        <Link
-          to={`/arena/${contest.id}/lobby`}
-          state={{ registeredCount: contest.registered_count }}
-          className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all no-underline"
-        >
-          <Zap size={14} />
-          Join Now
-        </Link>
-      )
-    }
-
-    if (contest.status === 'lobby') {
-      if (!token) {
-        return (
-          <button
-            onClick={onAuth}
-            className="px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"
-          >
-            Register
-          </button>
-        )
-      }
-      if (contest.is_registered) {
-        return (
-          <div className="flex flex-col items-end gap-2">
-            <span className="text-sm font-semibold text-green-400">Registered ✓</span>
-            <Link
-              to={`/arena/${contest.id}/lobby`}
-              state={{ registeredCount: contest.registered_count }}
-              className="text-xs font-bold text-cream/60 hover:text-cream border border-cream/15 hover:border-cream/30 px-3 py-1.5 rounded-lg transition-all no-underline"
-            >
-              Go to Lobby →
-            </Link>
+    if (status === 'published' || status === 'lobby' || status === 'registration_open') {
+      if (isRegistered) {
+        if (!lobbyWindowOpen) return (
+          <div className="flex flex-col items-end gap-1">
+            <span className="text-xs font-bold text-green-400">Registered ✓</span>
+            {lobbyCountdownLabel && (
+              <span className="text-[11px] text-sky/70 font-medium">{lobbyCountdownLabel}</span>
+            )}
           </div>
         )
+        return (
+          <Link
+            to={`/arena/${contest.id}/lobby`}
+            state={{ registeredCount: contest.registered_count }}
+            className="flex items-center gap-1.5 px-4 py-2 bg-teal/15 border border-teal/30 text-teal-light text-sm font-semibold rounded-xl hover:bg-teal/25 transition-all no-underline"
+          >
+            Enter Lobby →
+          </Link>
+        )
       }
-      return (
-        <button
-          onClick={handleRegister}
-          disabled={registering}
-          className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none disabled:opacity-60"
-        >
-          {registering && <Loader2 size={14} className="animate-spin" />}
-          Register
-        </button>
-      )
+      if (!canRegister) return <span className="text-xs text-sky/60 font-semibold">Registration closed</span>
+      if (!token) return <button onClick={onAuth} className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none">Register</button>
+      return <RegisterBtn />
     }
 
-    if (contest.status === 'results_published') {
-      return (
-        <Link
-          to={`/arena/${contest.id}/results`}
-          className="px-4 py-2 border border-teal/30 text-teal-light text-sm font-semibold rounded-xl hover:bg-teal/10 transition-all no-underline"
-        >
+    if (status === 'live') {
+      if (isRegistered) {
+        if (participated === true) return <span className="text-sm font-bold text-white/80">Attempted</span>
+        return (
+          <Link to={`/arena/${contest.id}/lobby`} state={{ registeredCount: contest.registered_count }} className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all no-underline">
+            <Zap size={14} /> Join Now
+          </Link>
+        )
+      }
+      if (!token) return <button onClick={onAuth} className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"><Zap size={14} /> Join Now</button>
+      return <span className="text-xs font-bold text-terracotta/80">Missed</span>
+    }
+
+    if (status === 'results_published') return (
+      <div className="flex flex-col items-end gap-1">
+        {isRegistered && <span className="text-[11px] font-bold italic text-green-400">Finished</span>}
+        <Link to={`/arena/${contest.id}/results`} className="px-4 py-2 border border-teal/30 text-teal-light text-sm font-semibold rounded-xl hover:bg-teal/10 transition-all no-underline">
           View Results
         </Link>
-      )
-    }
+      </div>
+    )
 
-    return <span className="text-xs text-sky/40 font-medium">Ended</span>
+    if (status === 'ended') return (
+      <div className="flex flex-col items-end gap-1">
+        {isRegistered && <span className="text-[11px] font-bold italic text-green-400">Finished</span>}
+        <Link to={`/arena/${contest.id}/results`} className="px-4 py-2 border border-sky/30 text-sky/80 text-sm font-semibold rounded-xl hover:bg-sky/10 hover:text-sky transition-all no-underline">
+          View Results
+        </Link>
+      </div>
+    )
+
+    return <span className="text-xs text-sky/60 font-semibold">Ended</span>
   }
 
   return (
@@ -190,20 +244,20 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 text-xs text-sky/60">
+      <div className="grid grid-cols-2 gap-3 text-xs text-sky/80">
         <div className="flex items-center gap-1.5">
-          <Clock size={13} />
+          <Clock size={13} className="text-sky/60" />
           <span>{formatDate(contest.starts_at)}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="font-medium text-sky/80">{contest.duration_minutes} min</span>
+          <span className="font-semibold text-cream/80">{contest.duration_minutes} min</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Users size={13} />
+          <Users size={13} className="text-sky/60" />
           <span>{contest.registered_count ?? 0} registered</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className={`font-semibold ${!contest.entry_fee ? 'text-teal' : 'text-gold'}`}>
+          <span className={`font-bold ${!contest.entry_fee ? 'text-teal' : 'text-gold'}`}>
             {entryLabel}
           </span>
         </div>
@@ -216,7 +270,20 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
         </div>
       )}
 
-      {regError && <p className="text-xs text-terracotta">{regError}</p>}
+      {regCountdown && regCountdown !== 'closed' && (
+        <div className="text-xs text-sky/65 font-medium">{regCountdown}</div>
+      )}
+
+      {showModal && (
+        <QuizRegistrationModal
+          contest={contest}
+          token={token}
+          onAuth={onAuth}
+          onClose={() => setShowModal(false)}
+          onRegistered={handleRegistered}
+          onWalletChanged={onWalletChanged}
+        />
+      )}
     </div>
   )
 }
@@ -297,9 +364,9 @@ export default function ArenaPage({ onAuth }) {
   const liveEvents = allLive.filter(c => c.status === 'live')
   const liveLobbyEvents = allLive.filter(c => c.status === 'lobby')
   const lobbyEvents = [...liveLobbyEvents, ...upcomingEvents.filter(c => c.status === 'lobby')]
-  const publishedEvents = upcomingEvents.filter(c => c.status === 'published')
+  const publishedOpen = upcomingEvents.filter(c => c.status === 'published' && c.is_registration_open !== false)
+  const publishedSoon = upcomingEvents.filter(c => c.status === 'published' && c.is_registration_open === false)
   const hasLive = liveEvents.length > 0
-
   const isEmpty = allLive.length === 0 && upcomingEvents.length === 0 && finishedContests.length === 0
 
   return (
@@ -400,14 +467,14 @@ export default function ArenaPage({ onAuth }) {
                   />
                   <ContestSection
                     title="Register Now"
-                    contests={lobbyEvents}
+                    contests={[...lobbyEvents, ...publishedOpen]}
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
                   />
                   <ContestSection
                     title="Coming Soon"
-                    contests={publishedEvents}
+                    contests={publishedSoon}
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}

@@ -6,10 +6,15 @@ const AuthContext = createContext(null)
 
 const API = '/api/v1'
 
+function isProfileIncomplete(userData) {
+  return !userData?.college || !userData?.phone
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [needsOnboarding, setNeedsOnboarding] = useState(false)
   const navigate = useNavigate()
   const didOAuthRedirect = useRef(false)
 
@@ -29,6 +34,7 @@ export function AuthProvider({ children }) {
             const userData = await res.json()
             setUser(userData)
             localStorage.setItem('user', JSON.stringify(userData))
+            setNeedsOnboarding(isProfileIncomplete(userData))
           }
         } catch {
           // ignore fetch errors — still set session
@@ -42,12 +48,13 @@ export function AuthProvider({ children }) {
             navigate(redirect)
           }
         }
-      } else {
+      } else if (event === 'SIGNED_OUT') {
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
         localStorage.removeItem('user')
         setToken(null)
         setUser(null)
+        setNeedsOnboarding(false)
       }
       setLoading(false)
     })
@@ -71,6 +78,7 @@ export function AuthProvider({ children }) {
             setToken(storedToken)
             setUser(userData)
             localStorage.setItem('user', JSON.stringify(userData))
+            setNeedsOnboarding(isProfileIncomplete(userData))
           })
           .catch(() => {
             localStorage.removeItem('access_token')
@@ -79,9 +87,21 @@ export function AuthProvider({ children }) {
           })
           .finally(() => setLoading(false))
       }
-    })
+    }).catch(() => setLoading(false))
 
-    return () => subscription.unsubscribe()
+    const handleUnauthorized = () => {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      localStorage.removeItem('user')
+      setToken(null)
+      setUser(null)
+    }
+    window.addEventListener('auth:unauthorized', handleUnauthorized)
+
+    return () => {
+      subscription.unsubscribe()
+      window.removeEventListener('auth:unauthorized', handleUnauthorized)
+    }
   }, [])
 
   const login = useCallback(async (email, password) => {
@@ -99,6 +119,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user', JSON.stringify(data.user))
     setToken(data.access_token)
     setUser(data.user)
+    setNeedsOnboarding(isProfileIncomplete(data.user))
   }, [])
 
   const register = useCallback(async ({ name, email, password, college, phone, batch }) => {
@@ -142,6 +163,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user', JSON.stringify(userData))
     setToken(accessToken)
     setUser(userData)
+    setNeedsOnboarding(isProfileIncomplete(userData))
   }, [])
 
   const logout = useCallback(async () => {
@@ -162,7 +184,33 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('user')
     setToken(null)
     setUser(null)
+    setNeedsOnboarding(false)
   }, [])
+
+  const completeOnboarding = useCallback(async ({ name, college, phone, batch }) => {
+    const activeToken = token || localStorage.getItem('access_token')
+    const yearOfStudy = batch ? Number(batch) - 2018 : undefined
+    const patchBody = {}
+    if (name) patchBody.full_name = name
+    if (college) patchBody.college = college
+    if (phone) patchBody.phone = phone
+    if (yearOfStudy !== undefined) patchBody.year_of_study = yearOfStudy
+
+    const res = await fetch(`${API}/users/me`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${activeToken}` },
+      body: JSON.stringify(patchBody),
+    })
+    if (!res.ok) throw new Error('Failed to save profile. Please try again.')
+
+    const meRes = await fetch(`${API}/users/me`, { headers: { Authorization: `Bearer ${activeToken}` } })
+    if (meRes.ok) {
+      const userData = await meRes.json()
+      setUser(userData)
+      localStorage.setItem('user', JSON.stringify(userData))
+    }
+    setNeedsOnboarding(false)
+  }, [token])
 
   const loginWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -172,7 +220,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loginWithGoogle, loading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, loginWithGoogle, loading, needsOnboarding, completeOnboarding }}>
       {children}
     </AuthContext.Provider>
   )

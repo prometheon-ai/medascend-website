@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Loader2, AlertTriangle, Flag, Bookmark } from 'lucide-react'
+import { Loader2, AlertTriangle, Flag, Bookmark, Check } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useArenaStore } from '../stores/arenaStore'
 import {
@@ -43,9 +43,12 @@ export default function QuizPage() {
   const [terminated, setTerminated] = useState(false)
   const [resultVisible, setResultVisible] = useState(false)
   const [liveStateReady, setLiveStateReady] = useState(false)
+  const [quizDone, setQuizDone] = useState(null) // { score, timeTaken }
+  const quizStartRef = useRef(Date.now())
 
   const timerRef = useRef(null)
   const submittingRef = useRef(false)
+  const submitAnswerRef = useRef(null)
 
   const currentQuestion = questions[currentIdx] || null
   const isLastQuestion = currentIdx === questions.length - 1
@@ -116,7 +119,7 @@ export default function QuizPage() {
         clearInterval(timerRef.current)
         if (!submittingRef.current) {
           submittingRef.current = true
-          submitAnswer(null)
+          submitAnswerRef.current?.(null)
         }
       } else {
         tickTimer()
@@ -135,7 +138,16 @@ export default function QuizPage() {
         fetch(`${API}/arena/quizzes/${contestId}/report-switch`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${activeToken}` },
-        }).catch(() => {})
+        })
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (data?.auto_submitted) {
+              setTerminated(true)
+              clearInterval(timerRef.current)
+              setToast({ message: data.warning_message || 'Quiz ended by server due to tab switching', type: 'error' })
+            }
+          })
+          .catch(() => {})
 
         if (newCount >= 3) {
           setTerminated(true)
@@ -152,11 +164,11 @@ export default function QuizPage() {
   }, [contestId, activeToken, terminated, initializing])
 
   const submitAnswer = useCallback(async (option) => {
-    if (submitting) return
+    if (submitting || !currentQuestion) return
     clearInterval(timerRef.current)
     setSubmitting(true)
 
-    const budget = currentQuestion?.time_budget_sec ?? 60
+    const budget = currentQuestion.time_budget_sec ?? 60
     const timeTaken = Math.max(0, budget - useArenaStore.getState().timeLeft)
 
     try {
@@ -195,15 +207,20 @@ export default function QuizPage() {
     }
   }, [contestId, activeToken, currentQuestion, submitting, isLastQuestion])
 
+  // Always keep ref pointing at latest submitAnswer so the timer interval doesn't close over a stale copy
+  useEffect(() => { submitAnswerRef.current = submitAnswer }, [submitAnswer])
+
   const finishQuiz = useCallback(async () => {
+    const timeTaken = Math.round((Date.now() - quizStartRef.current) / 1000)
     try {
       await fetch(`${API}/arena/quizzes/${contestId}/finish`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${activeToken}` },
       })
     } catch { /* best-effort */ }
-    navigate(`/arena/${contestId}/results`)
-  }, [contestId, activeToken, navigate])
+    const finalScore = useArenaStore.getState().runningScore
+    setQuizDone({ score: finalScore, timeTaken })
+  }, [contestId, activeToken])
 
   const handleSubmit = () => {
     if (submittingRef.current || submitting || terminated) return
@@ -249,6 +266,47 @@ export default function QuizPage() {
         >
           Back to Arena
         </button>
+      </div>
+    )
+  }
+
+  if (quizDone) {
+    const mins = Math.floor(quizDone.timeTaken / 60)
+    const secs = quizDone.timeTaken % 60
+    const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`
+    return (
+      <div className="min-h-screen bg-dark flex flex-col items-center justify-center gap-8 px-6 text-center">
+        <div className="w-20 h-20 rounded-full bg-teal/15 flex items-center justify-center">
+          <Check size={36} className="text-teal" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-extrabold text-cream mb-1">Quiz Complete!</h2>
+          <p className="text-sky/50 text-sm">Great effort. Results will be declared soon.</p>
+        </div>
+        <div className="flex gap-4">
+          <div className="rounded-2xl border border-teal/20 bg-dark-card px-8 py-5 text-center">
+            <p className="text-xs text-sky/45 uppercase tracking-widest mb-1">Your Score</p>
+            <p className="text-4xl font-extrabold text-teal">{quizDone.score}</p>
+          </div>
+          <div className="rounded-2xl border border-sky/15 bg-dark-card px-8 py-5 text-center">
+            <p className="text-xs text-sky/45 uppercase tracking-widest mb-1">Time Taken</p>
+            <p className="text-4xl font-extrabold text-cream">{timeStr}</p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate(`/arena/${contestId}/results`)}
+            className="px-6 py-3 bg-teal text-cream font-semibold rounded-xl cursor-pointer border-none hover:bg-teal/90 transition-colors"
+          >
+            View Results
+          </button>
+          <button
+            onClick={() => navigate('/arena')}
+            className="px-6 py-3 border border-teal/20 text-sky/70 font-semibold rounded-xl cursor-pointer bg-transparent hover:bg-teal/5 transition-colors"
+          >
+            Back to Arena
+          </button>
+        </div>
       </div>
     )
   }

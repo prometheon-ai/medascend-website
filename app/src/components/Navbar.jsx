@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, LogOut, UserCircle2 } from 'lucide-react'
+import { Menu, X, LogOut, Mail, Phone, GraduationCap, Building2, ChevronDown } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 import { useAuth } from '../context/AuthContext'
 
@@ -19,6 +19,90 @@ function Avatar({ user, size = 'sm' }) {
   )
 }
 
+function UserCard({ user, onClose, onLogout }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose() }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [onClose])
+
+  const enrollYear = user.batch_year ?? (user.year_of_study ? new Date().getFullYear() - user.year_of_study + 1 : null)
+  const gradYear = enrollYear ? enrollYear + 5 : null
+  const batch = enrollYear && gradYear ? `${enrollYear} – ${gradYear}` : null
+
+  const initials = user.full_name
+    ? user.full_name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
+    : user.email?.[0]?.toUpperCase() || '?'
+
+  return (
+    <div ref={ref} className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-teal/15 bg-dark-card shadow-[0_16px_48px_rgba(0,0,0,0.6)] z-50 overflow-hidden">
+      {/* Header */}
+      <div className="px-5 pt-5 pb-4 flex items-center gap-3 border-b border-teal/10">
+        {user.avatar_url ? (
+          <img src={user.avatar_url} alt="" referrerPolicy="no-referrer" className="w-12 h-12 rounded-full object-cover border-2 border-teal/25 shrink-0" />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-teal/20 border-2 border-teal/30 text-teal font-bold text-lg flex items-center justify-center shrink-0">
+            {initials}
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-cream truncate">{user.full_name || '—'}</p>
+          {user.role === 'admin' && (
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold">Admin</span>
+          )}
+        </div>
+      </div>
+
+      {/* Details */}
+      <div className="px-5 py-3 space-y-2.5">
+        {user.college && (
+          <div className="flex items-start gap-2.5">
+            <Building2 size={13} className="text-sky/40 mt-0.5 shrink-0" />
+            <p className="text-xs text-sky/70 leading-relaxed">{user.college}</p>
+          </div>
+        )}
+        {batch && (
+          <div className="flex items-center gap-2.5">
+            <GraduationCap size={13} className="text-sky/40 shrink-0" />
+            <p className="text-xs text-sky/70">Batch {batch}</p>
+          </div>
+        )}
+        {user.email && (
+          <div className="flex items-center gap-2.5">
+            <Mail size={13} className="text-sky/40 shrink-0" />
+            <p className="text-xs text-sky/70 truncate">{user.email}</p>
+          </div>
+        )}
+        {user.phone && (
+          <div className="flex items-center gap-2.5">
+            <Phone size={13} className="text-sky/40 shrink-0" />
+            <p className="text-xs text-sky/70">{user.phone}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 pb-4 pt-1 flex gap-2 border-t border-teal/10 mt-1">
+        <Link
+          to="/arena/profile"
+          onClick={onClose}
+          className="flex-1 text-center text-xs font-semibold py-2 rounded-xl border border-teal/20 text-teal hover:bg-teal/8 transition-colors no-underline"
+        >
+          View Profile
+        </Link>
+        <button
+          onClick={onLogout}
+          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-xl border border-terracotta/20 text-terracotta/80 hover:bg-terracotta/8 transition-colors cursor-pointer bg-transparent"
+        >
+          <LogOut size={12} /> Logout
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const links = [
   { to: '/', label: 'Home' },
   { to: '/#the-problem', label: 'The Problem' },
@@ -33,6 +117,7 @@ export default function Navbar({ onLogin, onRegister }) {
   const isAdmin = user?.role === 'admin'
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [cardOpen, setCardOpen] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
@@ -43,6 +128,7 @@ export default function Navbar({ onLogin, onRegister }) {
 
   useEffect(() => {
     setMobileOpen(false)
+    setCardOpen(false)
   }, [location.pathname])
 
   useEffect(() => {
@@ -119,30 +205,28 @@ export default function Navbar({ onLogin, onRegister }) {
           <div className="flex items-center gap-2">
             {user ? (
               <div className="hidden sm:flex items-center gap-2">
-                {isAdmin ? (
-                  <div className="flex items-center gap-2">
-                    <Link to="/arena/profile" className="flex items-center gap-2 px-3 py-1.5 no-underline hover:text-teal-light transition-colors group">
-                      <Avatar user={user} size="sm" />
-                      <span className="text-[13px] font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
-                    </Link>
-                    <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
-                      Admin
-                    </Link>
-                  </div>
-                ) : (
-                  <Link to="/arena/profile" className="flex items-center gap-2 px-3 py-1.5 no-underline hover:text-teal-light transition-colors group">
-                    <Avatar user={user} size="sm" />
-                    <span className="text-[13px] font-semibold text-cream group-hover:text-teal-light">{user.full_name?.split(' ')[0] || user.email}</span>
+                {isAdmin && (
+                  <Link to="/arena/admin" className="inline-flex items-center rounded-full border border-gold/20 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-gold no-underline hover:border-gold/40 hover:bg-gold/15">
+                    Admin
                   </Link>
                 )}
-                <button
-                  onClick={logout}
-                  title="Logout"
-                  className="inline-flex items-center gap-1.5 text-[13px] font-semibold px-4 py-2.5 bg-teal/15 text-teal-light rounded-xl hover:bg-teal/25 transition-all duration-200 cursor-pointer border-none"
-                >
-                  <LogOut size={15} />
-                  Logout
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setCardOpen(o => !o)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-teal/8 transition-colors cursor-pointer bg-transparent border-none"
+                  >
+                    <Avatar user={user} size="sm" />
+                    <span className="text-[13px] font-semibold text-cream">{user.full_name?.split(' ')[0] || user.email}</span>
+                    <ChevronDown size={13} className={`text-sky/40 transition-transform ${cardOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {cardOpen && (
+                    <UserCard
+                      user={user}
+                      onClose={() => setCardOpen(false)}
+                      onLogout={() => { setCardOpen(false); logout() }}
+                    />
+                  )}
+                </div>
               </div>
             ) : (
               <button

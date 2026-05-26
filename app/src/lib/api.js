@@ -80,6 +80,11 @@ export async function apiRequest(path, options = {}) {
     signal,
   })
 
+  if (res.status === 401) {
+    window.dispatchEvent(new Event('auth:unauthorized'))
+    throw new Error(await readApiErrorMessage(res, fallbackError))
+  }
+
   if (!res.ok) {
     throw new Error(await readApiErrorMessage(res, fallbackError))
   }
@@ -216,6 +221,14 @@ export async function reorderAdminArenaQuestions(token, contestId, body) {
     method: 'PUT',
     body,
     fallbackError: 'Failed to reorder questions.',
+  })
+}
+
+export async function publishAdminArenaResults(token, contestId) {
+  return apiRequest(`/admin/arena/events/${contestId}/publish-results`, {
+    token,
+    method: 'POST',
+    fallbackError: 'Failed to publish results.',
   })
 }
 
