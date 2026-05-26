@@ -3,7 +3,6 @@
 AI-native medical education platform for Indian NEET PG aspirants. Combines adaptive study tools, subject-specific AI tutors, and competitive MCQ contests in one dark-themed web app.
 
 ---
-
 ## Stack
 
 | Layer | Tech |
