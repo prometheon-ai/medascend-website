@@ -11,5 +11,5 @@ AI-native medical education platform for Indian NEET PG aspirants. Combines adap
 | Auth | Custom JWT + Google OAuth via Supabase |
 | Backend (local) | FastAPI Deployed on AWS |
 | Payments | Razorpay (frontend checkout, webhook on backend) |
-| Deploy | Vercel (frontend) |
+| Deploy | Vercel |
 
