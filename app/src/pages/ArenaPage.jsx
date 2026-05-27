@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet } from 'lucide-react'
+import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet, Info } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE, readApiErrorMessage, getArenaQuizDetail } from '../lib/api'
-import QuizRegistrationModal from '../components/QuizRegistrationModal'
+import QuizRegistrationModal, { ContestInfoModal } from '../components/QuizRegistrationModal'
 
 const DIFFICULTY_COLORS = {
   easy: 'text-teal bg-teal/10 border-teal/20',
@@ -97,6 +97,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   const [contest, setContest] = useState(initialContest)
   useEffect(() => { setContest(initialContest) }, [initialContest.id])
   const [showModal, setShowModal] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   const [participated, setParticipated] = useState(null) // null = unknown
 
   // For live+registered contests, fetch detail once to check participated
@@ -119,7 +120,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   )
   // lobby window open when <= 2 min to start
   const lobbyWindowOpen = secsToStart !== null && secsToStart <= LOBBY_WINDOW_SECS
-  const lobbyCountdownLabel = !lobbyWindowOpen && secsToStart !== null && secsToStart > 0 && secsToStart <= 86400
+  const lobbyCountdownLabel = !lobbyWindowOpen && secsToStart !== null && secsToStart > 0
     ? fmtCountdown(secsToStart - LOBBY_WINDOW_SECS, 'Lobby opens in')
     : ''
 
@@ -222,6 +223,8 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
     return <span className="text-xs text-sky/60 font-semibold">Ended</span>
   }
 
+  const qCount = contest.question_count || 20
+
   return (
     <div className="rounded-2xl border border-teal/10 bg-dark-card p-6 flex flex-col gap-4 hover:border-teal/20 transition-all duration-200">
       <div className="flex items-start justify-between gap-3">
@@ -237,7 +240,18 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
               {contest.difficulty?.charAt(0).toUpperCase() + contest.difficulty?.slice(1)}
             </span>
           </div>
-          <h3 className="text-base font-bold text-cream leading-snug">{contest.title}</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-bold text-cream leading-snug">{contest.title}</h3>
+            {!['ended', 'results_published', 'cancelled'].includes(contest.status) && (
+              <button
+                onClick={() => setShowInfo(true)}
+                className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-sky/20 text-sky/50 hover:text-sky/80 hover:border-sky/40 text-[10px] font-medium transition-colors cursor-pointer"
+                style={{ background: 'rgba(125,211,252,0.04)' }}
+              >
+                <Info size={10} /> info
+              </button>
+            )}
+          </div>
         </div>
         <div className="shrink-0">
           <ActionButton />
@@ -272,6 +286,10 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
 
       {regCountdown && regCountdown !== 'closed' && (
         <div className="text-xs text-sky/65 font-medium">{regCountdown}</div>
+      )}
+
+      {showInfo && (
+        <ContestInfoModal contest={contest} onClose={() => setShowInfo(false)} />
       )}
 
       {showModal && (

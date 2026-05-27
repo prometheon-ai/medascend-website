@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 api_ref.md
+CONTEST_GUIDE.md
 dist
 .env
 dist-ssr

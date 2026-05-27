@@ -171,6 +171,7 @@ function istInputToISO(localStr) {
 function CreateContestPage({ token, onCreated, onBack }) {
   const [step, setStep] = useState(1) // 1=details, 2=questions, 3=preview
   const [form, setForm] = useState(emptyContestForm)
+  const [prizeRows, setPrizeRows] = useState([{ rankFrom: '1', rankTo: '1', amount: '' }])
   const [questions, setQuestions] = useState([emptyQuestion()])
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -178,8 +179,20 @@ function CreateContestPage({ token, onCreated, onBack }) {
 
   const setField = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }))
 
+  const addPrizeRow = () => setPrizeRows(rows => [...rows, { rankFrom: '', rankTo: '', amount: '' }])
+  const removePrizeRow = (i) => setPrizeRows(rows => rows.filter((_, idx) => idx !== i))
+  const updatePrizeRow = (i, field, value) => setPrizeRows(rows => rows.map((r, idx) => idx === i ? { ...r, [field]: value } : r))
+
+  const isPaid = Number(form.entry_fee) > 0
+  const prizeRowsValid = !isPaid || prizeRows.every(r => r.rankFrom && r.rankTo && r.amount && Number(r.rankFrom) <= Number(r.rankTo))
+  const prizeTotal = prizeRows.reduce((sum, r) => {
+    const count = Math.max(0, Number(r.rankTo) - Number(r.rankFrom) + 1)
+    return sum + (Number(r.amount) || 0) * count
+  }, 0)
+  const prizeTotalMatchesPool = !isPaid || !Number(form.prize_pool) || Math.abs(prizeTotal - Number(form.prize_pool)) < 0.5
+
   // ── Step 1: Contest details ──
-  const step1Valid = form.title && form.starts_at && form.duration_minutes
+  const step1Valid = form.title && form.starts_at && form.duration_minutes && prizeRowsValid && prizeTotalMatchesPool
 
   // ── Step 2: Questions ──
   const addQuestion = () => setQuestions(qs => [...qs, { ...emptyQuestion(), question_order: qs.length + 1 }])
@@ -206,7 +219,16 @@ function CreateContestPage({ token, onCreated, onBack }) {
       // §5.1: field names must match API exactly
       const entryFee = form.entry_fee === '' ? 0 : Math.round(Number(form.entry_fee) * 100)
       const prizePool = form.prize_pool === '' ? 0 : Math.round(Number(form.prize_pool) * 100)
-      const isPaid = entryFee > 0
+      // expand prize rows into per-rank percent entries
+      const prizeDistribution = isPaid && prizePool > 0
+        ? prizeRows.flatMap(r => {
+            const from = Number(r.rankFrom), to = Number(r.rankTo)
+            const amtPaise = Math.round(Number(r.amount) * 100)
+            const pct = (amtPaise / prizePool) * 100
+            return Array.from({ length: to - from + 1 }, (_, i) => ({ rank: from + i, percent: parseFloat(pct.toFixed(4)) }))
+          })
+        : undefined
+
       const payload = {
         title: form.title,
         contest_type: form.type,
@@ -218,12 +240,7 @@ function CreateContestPage({ token, onCreated, onBack }) {
         entry_fee: entryFee,
         prize_pool_type: prizePool > 0 ? 'fixed' : 'entry_fees_pool',
         prize_pool_fixed: prizePool > 0 ? prizePool : undefined,
-        // prize_distribution required when entry_fee > 0 (§5.1)
-        prize_distribution: isPaid ? [
-          { rank: 1, percent: 50.0 },
-          { rank: 2, percent: 30.0 },
-          { rank: 3, percent: 20.0 },
-        ] : undefined,
+        prize_distribution: prizeDistribution,
         penalty_per_wrong: 3,
         time_bonus_enabled: true,
         shuffle_questions: true,
@@ -328,6 +345,60 @@ function CreateContestPage({ token, onCreated, onBack }) {
             </Field>
           </div>
 
+          {isPaid && (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky/60">Prize distribution</p>
+                {prizeTotal > 0 && Number(form.prize_pool) > 0 && (
+                  <p className={`text-xs font-semibold ${Math.abs(prizeTotal - Number(form.prize_pool)) < 0.5 ? 'text-teal' : 'text-terracotta'}`}>
+                    Total: ₹{prizeTotal.toFixed(0)} / ₹{form.prize_pool}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                {prizeRows.map((row, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 flex-1">
+                      <span className="text-xs text-sky/40 shrink-0">Rank</span>
+                      <TextInput
+                        type="number" min="1" step="1"
+                        value={row.rankFrom}
+                        onChange={e => updatePrizeRow(i, 'rankFrom', e.target.value)}
+                        placeholder="from"
+                        className="w-16 text-center"
+                      />
+                      <span className="text-xs text-sky/40 shrink-0">–</span>
+                      <TextInput
+                        type="number" min="1" step="1"
+                        value={row.rankTo}
+                        onChange={e => updatePrizeRow(i, 'rankTo', e.target.value)}
+                        placeholder="to"
+                        className="w-16 text-center"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1 flex-1">
+                      <span className="text-xs text-sky/40 shrink-0">₹</span>
+                      <TextInput
+                        type="number" min="0" step="1"
+                        value={row.amount}
+                        onChange={e => updatePrizeRow(i, 'amount', e.target.value)}
+                        placeholder="each"
+                      />
+                    </div>
+                    {prizeRows.length > 1 && (
+                      <button type="button" onClick={() => removePrizeRow(i)} className="text-terracotta/60 hover:text-terracotta bg-transparent border-none cursor-pointer shrink-0">
+                        <X size={14} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <button type="button" onClick={addPrizeRow} className="mt-2 text-xs text-teal/70 hover:text-teal bg-transparent border-none cursor-pointer flex items-center gap-1">
+                + Add rank range
+              </button>
+            </div>
+          )}
+
           <div className="flex justify-end pt-2">
             <Btn variant="primary" onClick={() => setStep(2)} disabled={!step1Valid}>
               Next: Questions <ChevronRight size={16} />
@@ -356,7 +427,7 @@ function CreateContestPage({ token, onCreated, onBack }) {
             <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-sky/60">
               <span>+time bonus (up to 44s remaining)</span>
               <span className="text-terracotta/80">−3 wrong answer</span>
-              <span className="text-teal/70">Streak bonus: 3→+3, 5→+6, 7→+10, 10→+15, 15→+25, 20→+40</span>
+              <span className="text-teal/70">Streak bonus: 3→+3, 5→+5, 7→+7, 10→+9, 15→+11, 20→+13</span>
             </div>
           </Card>
 
@@ -487,6 +558,27 @@ function CreateContestPage({ token, onCreated, onBack }) {
             </div>
           </Card>
 
+          {isPaid && prizeRows.some(r => r.amount) && (
+            <Card className="p-6">
+              <SectionHeading title="Prize distribution" subtitle="What each rank wins." />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                {prizeRows.map((r, i) => {
+                  const label = r.rankFrom === r.rankTo ? `#${r.rankFrom}` : `#${r.rankFrom}–${r.rankTo}`
+                  return (
+                    <div key={i} className="rounded-xl bg-dark-surface px-3 py-2 flex items-center justify-between">
+                      <span className="text-sky/50">{label}</span>
+                      <span className="font-semibold text-gold">₹{Number(r.amount).toLocaleString('en-IN')}</span>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className={`mt-3 text-xs font-semibold ${Math.abs(prizeTotal - Number(form.prize_pool)) < 0.5 ? 'text-teal' : 'text-terracotta'}`}>
+                Total payout: ₹{prizeTotal.toFixed(0)} / Pool: ₹{form.prize_pool}
+                {Math.abs(prizeTotal - Number(form.prize_pool)) >= 0.5 && ' ⚠ mismatch'}
+              </p>
+            </Card>
+          )}
+
           <Card className="p-6">
             <SectionHeading title={`${questions.length} question${questions.length !== 1 ? 's' : ''}`} subtitle="Final review of all questions and options." />
             <div className="space-y-4">
@@ -544,6 +636,7 @@ export default function ArenaAdminPage() {
   const [showInfo, setShowInfo] = useState(false)
   const [typeFilter, setTypeFilter] = useState('')
   const [editForm, setEditForm] = useState(emptyContestForm)
+  const [editPrizeRows, setEditPrizeRows] = useState([{ rankFrom: '1', rankTo: '1', amount: '' }])
   const [statusDraft, setStatusDraft] = useState('')
   const activeToken = token || localStorage.getItem('access_token')
   const isAdmin = user?.role === 'admin'
@@ -573,6 +666,7 @@ export default function ArenaAdminPage() {
         getAdminArenaRegistrations(activeToken, id).catch(() => null),
       ])
       setSelectedEvent(detail)
+      const pool = detail?.prize_pool ?? detail?.prize_pool_estimate ?? 0
       setEditForm({
         title: detail?.title || '',
         slug: detail?.slug || '',
@@ -582,9 +676,27 @@ export default function ArenaAdminPage() {
         starts_at: isoToISTInput(detail?.starts_at),
         duration_minutes: detail?.duration_minutes ?? '',
         entry_fee: detail?.entry_fee ?? '',
-        prize_pool: detail?.prize_pool ?? detail?.prize_pool_estimate ?? '',
+        prize_pool: pool,
         subject_id: detail?.subject_id || '',
       })
+      // collapse prize_distribution into rank-range rows
+      const dist = detail?.prize_distribution ?? []
+      if (dist.length > 0 && pool > 0) {
+        const sorted = [...dist].sort((a, b) => a.rank - b.rank)
+        const rows = []
+        sorted.forEach(entry => {
+          const amt = Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * pool / 100)
+          const last = rows[rows.length - 1]
+          if (last && last.amount === String(amt) && Number(last.rankTo) === entry.rank - 1) {
+            last.rankTo = String(entry.rank)
+          } else {
+            rows.push({ rankFrom: String(entry.rank), rankTo: String(entry.rank), amount: String(amt) })
+          }
+        })
+        setEditPrizeRows(rows)
+      } else {
+        setEditPrizeRows([{ rankFrom: '1', rankTo: '1', amount: '' }])
+      }
       setStatusDraft((VALID_STATUS_TRANSITIONS[detail?.status] ?? [])[0] ?? '')
       setRegistrations(Array.isArray(regs) ? regs : regs?.registrations || regs?.items || [])
       if (isEndedStatus(detail?.status)) {
@@ -629,13 +741,26 @@ export default function ArenaAdminPage() {
     if (!selectedId) return
     setSaving(true); setError(''); setMessage('')
     try {
+      const editEntryFee = editForm.entry_fee === '' ? 0 : Number(editForm.entry_fee)
+      const editPrizePool = editForm.prize_pool === '' ? 0 : Number(editForm.prize_pool)
+      const editIsPaid = editEntryFee > 0
+      const editPrizeDist = editIsPaid && editPrizePool > 0
+        ? editPrizeRows.flatMap(r => {
+            const from = Number(r.rankFrom), to = Number(r.rankTo)
+            const amtPaise = Math.round(Number(r.amount) * 100)
+            const pct = (amtPaise / editPrizePool) * 100
+            return Array.from({ length: to - from + 1 }, (_, i) => ({ rank: from + i, percent: parseFloat(pct.toFixed(4)) }))
+          })
+        : undefined
       const payload = {
         title: editForm.title || undefined,
         slug: editForm.slug || undefined,
         contest_type: editForm.type || undefined,
         difficulty: editForm.difficulty || undefined,
         duration_minutes: editForm.duration_minutes === '' ? undefined : Number(editForm.duration_minutes),
-        entry_fee: editForm.entry_fee === '' ? undefined : Number(editForm.entry_fee),
+        entry_fee: editEntryFee || undefined,
+        prize_pool_fixed: editPrizePool > 0 ? editPrizePool : undefined,
+        prize_distribution: editPrizeDist,
         starts_at: istInputToISO(editForm.starts_at),
         // ends_at is not a valid API field — backend derives from starts_at + duration_minutes
       }
@@ -990,6 +1115,45 @@ export default function ArenaAdminPage() {
                               <TextInput type="number" min="0" step="1" value={editForm.prize_pool !== '' ? (Number(editForm.prize_pool) / 100) : ''} onChange={e => setEditForm(f => ({ ...f, prize_pool: e.target.value === '' ? '' : Math.round(Number(e.target.value) * 100) }))} placeholder="0 = none" />
                             </Field>
                           </div>
+
+                          {Number(editForm.entry_fee) > 0 && (() => {
+                            const pool = Number(editForm.prize_pool) / 100
+                            const total = editPrizeRows.reduce((s, r) => s + (Number(r.amount) || 0) * Math.max(0, Number(r.rankTo) - Number(r.rankFrom) + 1), 0)
+                            const matches = pool === 0 || Math.abs(total - pool) < 0.5
+                            return (
+                              <div className="mb-5">
+                                <div className="flex items-center justify-between mb-2">
+                                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky/60">Prize distribution</p>
+                                  {pool > 0 && <p className={`text-xs font-semibold ${matches ? 'text-teal' : 'text-terracotta'}`}>Total: ₹{total.toFixed(0)} / ₹{pool}</p>}
+                                </div>
+                                <div className="space-y-2">
+                                  {editPrizeRows.map((row, i) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                      <div className="flex items-center gap-1 flex-1">
+                                        <span className="text-xs text-sky/40 shrink-0">Rank</span>
+                                        <TextInput type="number" min="1" value={row.rankFrom} onChange={e => setEditPrizeRows(rows => rows.map((r, idx) => idx === i ? { ...r, rankFrom: e.target.value } : r))} placeholder="from" className="w-16 text-center" />
+                                        <span className="text-xs text-sky/40 shrink-0">–</span>
+                                        <TextInput type="number" min="1" value={row.rankTo} onChange={e => setEditPrizeRows(rows => rows.map((r, idx) => idx === i ? { ...r, rankTo: e.target.value } : r))} placeholder="to" className="w-16 text-center" />
+                                      </div>
+                                      <div className="flex items-center gap-1 flex-1">
+                                        <span className="text-xs text-sky/40 shrink-0">₹</span>
+                                        <TextInput type="number" min="0" value={row.amount} onChange={e => setEditPrizeRows(rows => rows.map((r, idx) => idx === i ? { ...r, amount: e.target.value } : r))} placeholder="each" />
+                                      </div>
+                                      {editPrizeRows.length > 1 && (
+                                        <button type="button" onClick={() => setEditPrizeRows(rows => rows.filter((_, idx) => idx !== i))} className="text-terracotta/60 hover:text-terracotta bg-transparent border-none cursor-pointer shrink-0">
+                                          <X size={14} />
+                                        </button>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                                <button type="button" onClick={() => setEditPrizeRows(rows => [...rows, { rankFrom: '', rankTo: '', amount: '' }])} className="mt-2 text-xs text-teal/70 hover:text-teal bg-transparent border-none cursor-pointer flex items-center gap-1">
+                                  + Add rank range
+                                </button>
+                              </div>
+                            )
+                          })()}
+
                           <Btn type="submit" variant="primary" disabled={saving}>
                             <Save size={16} /> Save changes
                           </Btn>

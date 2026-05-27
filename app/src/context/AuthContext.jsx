@@ -219,8 +219,21 @@ export function AuthProvider({ children }) {
     })
   }
 
+  const updateProfile = useCallback(async (fields) => {
+    const activeToken = token || localStorage.getItem('access_token')
+    const res = await fetch(`${API}/users/me`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${activeToken}` },
+      body: JSON.stringify(fields),
+    })
+    if (!res.ok) throw new Error('Failed to update profile.')
+    const userData = await res.json()
+    setUser(userData)
+    localStorage.setItem('user', JSON.stringify(userData))
+  }, [token])
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loginWithGoogle, loading, needsOnboarding, completeOnboarding }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, loginWithGoogle, loading, needsOnboarding, completeOnboarding, updateProfile }}>
       {children}
     </AuthContext.Provider>
   )

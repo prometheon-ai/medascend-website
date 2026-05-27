@@ -82,13 +82,12 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
   const countdown = useCountdown(contest.starts_at)
   const prize = contest.prize_pool_estimate ?? contest.prize_pool ?? 0
 
-  const PRIZE_SPLIT = [
-    [1, 150000], [2, 100000], [3, 65000], [4, 45000], [5, 35000],
-    [6, 28000], [7, 24000], [8, 21000], [9, 19000], [10, 17000],
-    [11, 15000], [12, 14000], [13, 13000], [14, 12000], [15, 11000],
-    [16, 10500], [17, 10400], [18, 10300], [19, 10200], [20, 10100],
-    [21, 10000], [22, 9900], [23, 9900], [24, 9900], [25, 9900],
-  ]
+  // Build display rows from contest.prize_distribution (API returns share_pct per rank)
+  const prizeDist = contest.prize_distribution ?? []
+  const PRIZE_SPLIT = prizeDist.map(entry => [
+    entry.rank,
+    Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * prize),
+  ])
 
   return (
     <div className="flex flex-col h-full">
@@ -128,15 +127,18 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
               <Trophy size={14} className="text-yellow-400" />
               <p className="text-xs font-bold text-yellow-400">Prize Pool — {formatRupees(prize)}</p>
             </div>
-            <div className="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-1">
-              {PRIZE_SPLIT.slice(0, 10).map(([rank, paise]) => (
-                <div key={rank} className="flex items-center justify-between text-[11px] px-2 py-1.5 rounded-xl bg-white/5">
-                  <span className={`font-bold ${rank <= 3 ? 'text-yellow-400' : 'text-white/40'}`}>#{rank}</span>
-                  <span className="text-white/80 font-semibold">{formatRupees(paise)}</span>
-                </div>
-              ))}
-              <div className="col-span-2 text-center text-[10px] text-white/25 pt-1">Top 25 win · Ranks 22–25 recover entry fee</div>
-            </div>
+            {PRIZE_SPLIT.length > 0 ? (
+              <div className="grid grid-cols-2 gap-1.5 max-h-36 overflow-y-auto pr-1">
+                {PRIZE_SPLIT.map(([rank, paise]) => (
+                  <div key={rank} className="flex items-center justify-between text-[11px] px-2 py-1.5 rounded-xl bg-white/5">
+                    <span className={`font-bold ${rank <= 3 ? 'text-yellow-400' : 'text-white/40'}`}>#{rank}</span>
+                    <span className="text-white/80 font-semibold">{formatRupees(paise)}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[11px] text-white/30 text-center py-2">Distribution not available yet</p>
+            )}
           </div>
         )}
       </div>
@@ -146,7 +148,7 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
           onClick={onNext}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal text-dark font-bold text-sm hover:bg-teal/90 active:scale-[0.98] transition-all cursor-pointer border-none"
         >
-          {isFree ? 'Continue' : 'Next'} <ChevronRight size={15} />
+          Next <ChevronRight size={15} />
         </button>
       </div>
     </div>
@@ -155,7 +157,7 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
 
 // ── Step 1: Disclaimer ────────────────────────────────────────────────────────
 
-function StepDisclaimer({ onNext, onBack, isFree }) {
+function StepDisclaimer({ onNext, onBack, isFree, readOnly = false }) {
   const { ref, scrolled, onScroll } = useScrollGate()
   const [agreed, setAgreed] = useState(false)
 
@@ -203,15 +205,17 @@ function StepDisclaimer({ onNext, onBack, isFree }) {
       </div>
 
       <div className="pt-3 mt-3 border-t border-white/6 space-y-2">
-        <label className={`flex items-start gap-3 cursor-pointer rounded-2xl border p-3 transition-all ${agreed ? 'border-teal/35 bg-teal/8' : 'border-white/8 bg-white/2'} ${!scrolled ? 'opacity-25 pointer-events-none' : ''}`}>
-          <div className={`w-4.5 h-4.5 rounded-md flex items-center justify-center shrink-0 mt-0.5 border-2 transition-all ${agreed ? 'bg-teal border-teal' : 'border-white/15'}`}>
-            {agreed && <Check size={10} strokeWidth={3} className="text-dark" />}
-          </div>
-          <input type="checkbox" className="sr-only" checked={agreed} onChange={e => setAgreed(e.target.checked)} disabled={!scrolled} />
-          <span className="text-xs text-white/55 leading-relaxed">
-            I have read and agree to the Disclaimer and Terms above.
-          </span>
-        </label>
+        {!readOnly && (
+          <label className={`flex items-start gap-3 cursor-pointer rounded-2xl border p-3 transition-all ${agreed ? 'border-teal/35 bg-teal/8' : 'border-white/8 bg-white/2'} ${!scrolled ? 'opacity-25 pointer-events-none' : ''}`}>
+            <div className={`w-4.5 h-4.5 rounded-md flex items-center justify-center shrink-0 mt-0.5 border-2 transition-all ${agreed ? 'bg-teal border-teal' : 'border-white/15'}`}>
+              {agreed && <Check size={10} strokeWidth={3} className="text-dark" />}
+            </div>
+            <input type="checkbox" className="sr-only" checked={agreed} onChange={e => setAgreed(e.target.checked)} disabled={!scrolled} />
+            <span className="text-xs text-white/55 leading-relaxed">
+              I have read and agree to the Disclaimer and Terms above.
+            </span>
+          </label>
+        )}
 
         <div className="flex gap-2">
           <button onClick={onBack} className="flex items-center gap-1 px-4 py-3 rounded-2xl border border-white/8 text-white/45 text-sm hover:bg-white/5 transition-all cursor-pointer bg-transparent">
@@ -219,10 +223,10 @@ function StepDisclaimer({ onNext, onBack, isFree }) {
           </button>
           <button
             onClick={onNext}
-            disabled={!agreed}
+            disabled={!readOnly && !agreed}
             className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal text-dark font-bold text-sm hover:bg-teal/90 active:scale-[0.98] transition-all disabled:opacity-25 disabled:cursor-not-allowed cursor-pointer border-none"
           >
-            I Agree <ChevronRight size={15} />
+            {readOnly ? 'Next' : 'I Agree'} <ChevronRight size={15} />
           </button>
         </div>
       </div>
@@ -232,7 +236,7 @@ function StepDisclaimer({ onNext, onBack, isFree }) {
 
 // ── Step 2: Instructions + Fair Play ─────────────────────────────────────────
 
-function StepInstructions({ contest, onNext, onBack }) {
+function StepInstructions({ contest, onNext, onBack, nextLabel }) {
   const { ref, scrolled, onScroll } = useScrollGate()
   const qCount = contest.question_count || 'N'
 
@@ -246,14 +250,15 @@ function StepInstructions({ contest, onNext, onBack }) {
       <div ref={ref} onScroll={onScroll} className="flex-1 overflow-y-auto space-y-3 pr-1">
         <div className="space-y-1.5">
           {[
-            `This quiz has ${qCount} questions. You get 45 seconds per question.`,
+            `This quiz has ${qCount} questions. You get 45 seconds per question. Once you answer or the timer runs out, you move on — you cannot go back.`,
+            'Registration closes 15 minutes before the quiz. The lobby opens 10 minutes before start time.',
+            'You must be in the lobby at least 2 minutes before start. After that, entry is locked — no exceptions.',
+            `Every contest draws from a pool of 40 vetted questions. Each user gets 20 randomly selected questions — no two players see the same set.`,
             '+10 to +15 for a correct answer (harder = more points). −3 for wrong. 0 for unanswered.',
-            'Speed bonus: every second left on the clock adds +1 point. Answer instantly to maximise.',
-            'Streak bonus: consecutive correct answers unlock milestones — 3→+3, 5→+6, 7→+10, 10→+15, 15→+25, 20→+40.',
-            'Once you answer or the timer runs out, you move on. You cannot go back.',
-            'The quiz starts at the exact scheduled time for everyone. Join the lobby 5 minutes early.',
+            'Speed bonus: every second left on the clock when you answer correctly adds +1 point.',
+            'Streak bonus: consecutive correct answers unlock milestones — 3→+3, 5→+5, 7→+7, 10→+9, 15→+11, 20→+13.',
             "Rank is decided by: total score → correct count → speed. Don't waste time.",
-            "Only the Top 25 winners are shown publicly. You'll see your own rank privately.",
+            'Prizes will be sent to the UPI ID you paid from, or to your registered mobile number.',
             'Use a stable internet connection. Disconnection may auto-submit your quiz.',
           ].map((text, i) => (
             <div key={i} className="flex gap-2.5 py-1.5 px-2 rounded-xl hover:bg-white/3 transition-colors">
@@ -275,9 +280,9 @@ function StepInstructions({ contest, onNext, onBack }) {
             ))}
           </div>
           <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-white/45">
-            <span>⏱ +1/sec left (max +44)</span>
+            <span>⏱ +1/sec saved (max +44)</span>
             <span className="text-red-400/70">✗ Wrong = −3</span>
-            <span className="text-orange-400/70">🔥 Streak up to +99</span>
+            <span className="text-orange-400/70">🔥 Streak up to +48</span>
           </div>
         </div>
 
@@ -286,7 +291,7 @@ function StepInstructions({ contest, onNext, onBack }) {
           <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-red-400/70 mb-2">Fair Play & Anti-Cheat</p>
           <div className="space-y-1.5">
             {[
-              'Stay on screen. 1st tab switch = warning, 2nd = warning, 3rd = quiz auto-submits.',
+              'Stay on screen. Switching apps or tabs gives a warning. On the 3rd switch, your quiz is auto-submitted.',
               'Screenshots and screen recording are disabled. Attempting this forfeits your entry.',
               'You cannot re-attempt a quiz once your session has started or been submitted.',
               'Sharing questions during a live quiz results in immediate disqualification.',
@@ -311,7 +316,7 @@ function StepInstructions({ contest, onNext, onBack }) {
           disabled={!scrolled}
           className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-teal text-dark font-bold text-sm hover:bg-teal/90 active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer border-none"
         >
-          Understood <ChevronRight size={15} />
+          {nextLabel ?? 'Understood'} <ChevronRight size={15} />
         </button>
       </div>
     </div>
@@ -398,6 +403,71 @@ function StepConfirm({ contest, onConfirm, onBack, registering, paymentStatus, p
             ? <><Zap size={15} /> Enter Lobby</>
             : <><CreditCard size={15} /> Pay ₹{contest.entry_fee ? (contest.entry_fee / 100).toLocaleString('en-IN') : '0'}</>}
         </button>
+      </div>
+    </div>
+  )
+}
+
+// ── Info Modal (read-only, no registration) ───────────────────────────────────
+
+export function ContestInfoModal({ contest, onClose }) {
+  const [step, setStep] = useState(0)
+  const isFree = !contest.entry_fee || contest.entry_fee === 0
+  const INFO_STEPS = ['Details', 'Disclaimer', 'Instructions']
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="relative z-10 w-full max-w-md h-[90vh] bg-[#0f1923] border border-white/8 rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden">
+
+        <div className="h-0.5 w-full shrink-0 bg-gradient-to-r from-sky/0 via-sky/60 to-sky/0" />
+
+        <div className="flex items-center justify-between px-5 pt-4 pb-0 shrink-0">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 rounded-full bg-sky/15 text-sky/80">
+            Contest Info
+          </span>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-full border border-white/15 bg-white/8 hover:bg-white/18 text-white/70 hover:text-white border-none cursor-pointer transition-all"
+          >
+            <X size={15} />
+          </button>
+        </div>
+
+        {/* Step dots — 3 steps only */}
+        <div className="px-5 pt-3 shrink-0">
+          <div className="flex items-center justify-center gap-1.5 mb-4">
+            {INFO_STEPS.map((label, i) => (
+              <div key={label} className="flex items-center gap-1.5">
+                <div className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-bold transition-all
+                  ${i < step ? 'bg-teal text-dark' : i === step ? 'bg-teal/20 border border-teal/60 text-teal' : 'bg-white/5 border border-white/10 text-white/25'}`}>
+                  {i < step ? <Check size={10} strokeWidth={3} /> : i + 1}
+                </div>
+                {i < INFO_STEPS.length - 1 && (
+                  <div className={`w-6 h-px transition-colors ${i < step ? 'bg-teal/50' : 'bg-white/8'}`} />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mx-5 h-px bg-white/5 shrink-0" />
+
+        <div className="flex-1 min-h-0 px-5 py-4 flex flex-col">
+          {step === 0 && (
+            <StepDetails contest={contest} isFree={isFree} onNext={() => setStep(1)} onClose={onClose} />
+          )}
+          {step === 1 && (
+            <StepDisclaimer isFree={isFree} readOnly onNext={() => setStep(2)} onBack={() => setStep(0)} />
+          )}
+          {step === 2 && (
+            <StepInstructions
+              contest={contest}
+              onNext={onClose}
+              onBack={() => setStep(1)}
+              nextLabel="Close"
+            />
+          )}
+        </div>
       </div>
     </div>
   )

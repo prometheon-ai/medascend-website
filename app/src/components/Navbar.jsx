@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, LogOut, Mail, Phone, GraduationCap, Building2, ChevronDown } from 'lucide-react'
+import { Menu, X, LogOut, Mail, Phone, GraduationCap, Building2, ChevronDown, Pencil, Check, Loader2 } from 'lucide-react'
 import faviconImg from '../assets/favicon.png'
 import { useAuth } from '../context/AuthContext'
 
@@ -20,13 +20,48 @@ function Avatar({ user, size = 'sm' }) {
 }
 
 function UserCard({ user, onClose, onLogout }) {
+  const { updateProfile } = useAuth()
   const ref = useRef(null)
+  const [editing, setEditing] = useState(false)
+  const [form, setForm] = useState({ full_name: '', college: '', phone: '', batch_year: '' })
+  const [saving, setSaving] = useState(false)
+  const [err, setErr] = useState('')
 
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose() }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
+
+  const openEdit = () => {
+    const enrollYear = user.batch_year ?? (user.year_of_study ? new Date().getFullYear() - user.year_of_study + 1 : '')
+    setForm({
+      full_name: user.full_name || '',
+      college: user.college || '',
+      phone: user.phone || '',
+      batch_year: enrollYear || '',
+    })
+    setErr('')
+    setEditing(true)
+  }
+
+  const handleSave = async () => {
+    setSaving(true)
+    setErr('')
+    try {
+      const payload = {}
+      if (form.full_name.trim()) payload.full_name = form.full_name.trim()
+      if (form.college.trim()) payload.college = form.college.trim()
+      if (form.phone.trim()) payload.phone = form.phone.trim()
+      if (form.batch_year !== '') payload.year_of_study = new Date().getFullYear() - Number(form.batch_year) + 1
+      await updateProfile(payload)
+      setEditing(false)
+    } catch (e) {
+      setErr(e.message)
+    } finally {
+      setSaving(false)
+    }
+  }
 
   const enrollYear = user.batch_year ?? (user.year_of_study ? new Date().getFullYear() - user.year_of_study + 1 : null)
   const gradYear = enrollYear ? enrollYear + 5 : null
@@ -35,6 +70,8 @@ function UserCard({ user, onClose, onLogout }) {
   const initials = user.full_name
     ? user.full_name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
     : user.email?.[0]?.toUpperCase() || '?'
+
+  const inputCls = 'w-full rounded-lg border border-teal/20 bg-dark-surface px-2.5 py-1.5 text-xs text-cream outline-none focus:border-teal/50 placeholder:text-sky/30'
 
   return (
     <div ref={ref} className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-teal/15 bg-dark-card shadow-[0_16px_48px_rgba(0,0,0,0.6)] z-50 overflow-hidden">
@@ -47,41 +84,77 @@ function UserCard({ user, onClose, onLogout }) {
             {initials}
           </div>
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-bold text-cream truncate">{user.full_name || '—'}</p>
           {user.role === 'admin' && (
             <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold">Admin</span>
           )}
         </div>
+        <button
+          onClick={editing ? () => setEditing(false) : openEdit}
+          className="shrink-0 p-1.5 rounded-lg text-sky/40 hover:text-teal hover:bg-teal/10 transition-colors bg-transparent border-none cursor-pointer"
+          title={editing ? 'Cancel' : 'Edit profile'}
+        >
+          {editing ? <X size={13} /> : <Pencil size={13} />}
+        </button>
       </div>
 
-      {/* Details */}
-      <div className="px-5 py-3 space-y-2.5">
-        {user.college && (
-          <div className="flex items-start gap-2.5">
-            <Building2 size={13} className="text-sky/40 mt-0.5 shrink-0" />
-            <p className="text-xs text-sky/70 leading-relaxed">{user.college}</p>
+      {editing ? (
+        <div className="px-5 py-3 space-y-2">
+          <div className="space-y-1.5">
+            <label className="text-[10px] uppercase tracking-[0.12em] text-sky/40">Name</label>
+            <input className={inputCls} value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Full name" />
           </div>
-        )}
-        {batch && (
-          <div className="flex items-center gap-2.5">
-            <GraduationCap size={13} className="text-sky/40 shrink-0" />
-            <p className="text-xs text-sky/70">Batch {batch}</p>
+          <div className="space-y-1.5">
+            <label className="text-[10px] uppercase tracking-[0.12em] text-sky/40">College</label>
+            <input className={inputCls} value={form.college} onChange={e => setForm(f => ({ ...f, college: e.target.value }))} placeholder="College name" />
           </div>
-        )}
-        {user.email && (
-          <div className="flex items-center gap-2.5">
-            <Mail size={13} className="text-sky/40 shrink-0" />
-            <p className="text-xs text-sky/70 truncate">{user.email}</p>
+          <div className="space-y-1.5">
+            <label className="text-[10px] uppercase tracking-[0.12em] text-sky/40">Phone</label>
+            <input className={inputCls} value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="10-digit number" />
           </div>
-        )}
-        {user.phone && (
-          <div className="flex items-center gap-2.5">
-            <Phone size={13} className="text-sky/40 shrink-0" />
-            <p className="text-xs text-sky/70">{user.phone}</p>
+          <div className="space-y-1.5">
+            <label className="text-[10px] uppercase tracking-[0.12em] text-sky/40">Batch (enroll year)</label>
+            <input className={inputCls} type="number" min="2000" max={new Date().getFullYear()} value={form.batch_year} onChange={e => setForm(f => ({ ...f, batch_year: e.target.value }))} placeholder="e.g. 2023" />
           </div>
-        )}
-      </div>
+          {err && <p className="text-[11px] text-terracotta">{err}</p>}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full flex items-center justify-center gap-1.5 py-2 mt-1 rounded-xl bg-teal text-dark text-xs font-bold hover:bg-teal/90 transition-colors disabled:opacity-50 cursor-pointer border-none"
+          >
+            {saving ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
+            {saving ? 'Saving…' : 'Save changes'}
+          </button>
+        </div>
+      ) : (
+        <div className="px-5 py-3 space-y-2.5">
+          {user.college && (
+            <div className="flex items-start gap-2.5">
+              <Building2 size={13} className="text-sky/40 mt-0.5 shrink-0" />
+              <p className="text-xs text-sky/70 leading-relaxed">{user.college}</p>
+            </div>
+          )}
+          {batch && (
+            <div className="flex items-center gap-2.5">
+              <GraduationCap size={13} className="text-sky/40 shrink-0" />
+              <p className="text-xs text-sky/70">Batch {batch}</p>
+            </div>
+          )}
+          {user.email && (
+            <div className="flex items-center gap-2.5">
+              <Mail size={13} className="text-sky/40 shrink-0" />
+              <p className="text-xs text-sky/70 truncate">{user.email}</p>
+            </div>
+          )}
+          {user.phone && (
+            <div className="flex items-center gap-2.5">
+              <Phone size={13} className="text-sky/40 shrink-0" />
+              <p className="text-xs text-sky/70">{user.phone}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Footer */}
       <div className="px-4 pb-4 pt-1 flex gap-2 border-t border-teal/10 mt-1">
