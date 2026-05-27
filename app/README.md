@@ -4,7 +4,6 @@ AI-native medical education platform for Indian NEET PG aspirants. Combines adap
 
 ---
 ## Stack
-
 | Layer | Tech |
 |---|---|
 | Frontend | React 19, Vite, Tailwind CSS v4, Framer Motion |
