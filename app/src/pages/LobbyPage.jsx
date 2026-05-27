@@ -43,14 +43,16 @@ const AVATAR_COLORS = [
 
 function ParticipantAvatar({ index, visible }) {
   const color = AVATAR_COLORS[index % AVATAR_COLORS.length]
-  const label = String.fromCharCode(65 + (index % 26))
+  const shapes = ['M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z']
   return (
     <div
-      className={`w-10 h-10 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all duration-500 ${color} ${
+      className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${color} ${
         visible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
       }`}
     >
-      {label}
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current opacity-80">
+        <path d={shapes[0]} />
+      </svg>
     </div>
   )
 }

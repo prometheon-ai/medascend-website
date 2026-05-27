@@ -80,13 +80,12 @@ function StepDots({ step }) {
 
 function StepDetails({ contest, onNext, onClose, isFree }) {
   const countdown = useCountdown(contest.starts_at)
-  const prize = contest.prize_pool_estimate ?? contest.prize_pool ?? 0
+  const prize = contest.prize_pool ?? contest.prize_pool_estimate ?? 0
 
-  // Build display rows from contest.prize_distribution (API returns share_pct per rank)
   const prizeDist = contest.prize_distribution ?? []
   const PRIZE_SPLIT = prizeDist.map(entry => [
     entry.rank,
-    Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * prize),
+    entry.amount_paise ?? Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * prize),
   ])
 
   return (
@@ -326,7 +325,7 @@ function StepInstructions({ contest, onNext, onBack, nextLabel }) {
 // ── Step 3: Confirm & Register ────────────────────────────────────────────────
 
 function StepConfirm({ contest, onConfirm, onBack, registering, paymentStatus, paymentAttempted, error, isFree }) {
-  const prize = contest.prize_pool_estimate ?? contest.prize_pool ?? 0
+  const prize = contest.prize_pool ?? contest.prize_pool_estimate ?? 0
 
   return (
     <div className="flex flex-col h-full">

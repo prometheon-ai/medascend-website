@@ -228,6 +228,16 @@ export default function QuizPage() {
     submitAnswer(selectedOption)
   }
 
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'Enter' && selectedOption && !submittingRef.current && !submitting && !terminated && !lastResult) {
+        handleSubmit()
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [selectedOption, submitting, terminated, lastResult])
+
   // Loading state
   if (initializing) {
     return (
@@ -271,42 +281,26 @@ export default function QuizPage() {
   }
 
   if (quizDone) {
-    const mins = Math.floor(quizDone.timeTaken / 60)
-    const secs = quizDone.timeTaken % 60
-    const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`
     return (
       <div className="min-h-screen bg-dark flex flex-col items-center justify-center gap-8 px-6 text-center">
         <div className="w-20 h-20 rounded-full bg-teal/15 flex items-center justify-center">
           <Check size={36} className="text-teal" />
         </div>
-        <div>
-          <h2 className="text-2xl font-extrabold text-cream mb-1">Quiz Complete!</h2>
-          <p className="text-sky/50 text-sm">Great effort. Results will be declared soon.</p>
+        <div className="space-y-2">
+          <h2 className="text-3xl font-extrabold text-cream">Quiz Finished</h2>
+          <p className="text-sky/60 text-sm">Results within 24 hours</p>
+          <p className="text-sky/50 text-xs">Winnings will be credited within 24–48 hours after results</p>
         </div>
-        <div className="flex gap-4">
-          <div className="rounded-2xl border border-teal/20 bg-dark-card px-8 py-5 text-center">
-            <p className="text-xs text-sky/45 uppercase tracking-widest mb-1">Your Score</p>
-            <p className="text-4xl font-extrabold text-teal">{quizDone.score}</p>
-          </div>
-          <div className="rounded-2xl border border-sky/15 bg-dark-card px-8 py-5 text-center">
-            <p className="text-xs text-sky/45 uppercase tracking-widest mb-1">Time Taken</p>
-            <p className="text-4xl font-extrabold text-cream">{timeStr}</p>
-          </div>
+        <div className="rounded-2xl border border-teal/15 bg-dark-card px-8 py-5 text-center">
+          <p className="text-xs text-sky/45 uppercase tracking-widest mb-1">Till then, stay tuned for results on</p>
+          <p className="text-base font-bold text-teal">Arena Page</p>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={() => navigate(`/arena/${contestId}/results`)}
-            className="px-6 py-3 bg-teal text-cream font-semibold rounded-xl cursor-pointer border-none hover:bg-teal/90 transition-colors"
-          >
-            View Results
-          </button>
-          <button
-            onClick={() => navigate('/arena')}
-            className="px-6 py-3 border border-teal/20 text-sky/70 font-semibold rounded-xl cursor-pointer bg-transparent hover:bg-teal/5 transition-colors"
-          >
-            Back to Arena
-          </button>
-        </div>
+        <button
+          onClick={() => navigate('/arena')}
+          className="px-8 py-3 bg-teal text-cream font-semibold rounded-xl cursor-pointer border-none hover:bg-teal/90 transition-colors"
+        >
+          Go to Arena
+        </button>
       </div>
     )
   }
@@ -439,7 +433,7 @@ export default function QuizPage() {
         {resultVisible && lastResult && (
           <div className={`p-4 rounded-xl mb-6 text-sm font-semibold flex items-center gap-3 ${
             lastResult.is_correct ? 'bg-teal/10 border border-teal/20 text-teal'
-            : lastResult.is_correct === false ? 'bg-teal/10 border border-teal/20 text-teal/70'
+            : lastResult.is_correct === false ? 'bg-terracotta/10 border border-terracotta/20 text-terracotta'
             : 'bg-sky/10 border border-sky/20 text-sky'
           }`}>
             <span>
@@ -447,15 +441,6 @@ export default function QuizPage() {
               {lastResult.is_correct === false && '✗ Wrong'}
               {lastResult.is_correct === null && "⏱ Time's up"}
             </span>
-            {lastResult.points_earned != null && (
-              <span className="text-xs opacity-80">+{lastResult.points_earned} pts</span>
-            )}
-            {lastResult.speed_bonus > 0 && (
-              <span className="text-xs opacity-80">⚡ +{lastResult.speed_bonus} speed</span>
-            )}
-            {lastResult.streak_bonus > 0 && (
-              <span className="text-xs opacity-80">🔥 +{lastResult.streak_bonus} streak</span>
-            )}
           </div>
         )}
 

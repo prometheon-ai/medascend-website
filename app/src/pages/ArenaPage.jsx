@@ -127,6 +127,12 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   const openModal = () => {
     if (!token) { onAuth(); return }
     setShowModal(true)
+    // Fetch full detail to get prize_distribution if not already loaded
+    if (!contest.prize_distribution) {
+      getArenaQuizDetail(token, contest.id)
+        .then(d => { if (d?.prize_distribution) setContest(c => ({ ...c, prize_distribution: d.prize_distribution })) })
+        .catch(() => {})
+    }
   }
 
   const handleRegistered = (id) => {
@@ -136,8 +142,9 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
 
   const difficultyClass = DIFFICULTY_COLORS[contest.difficulty] || 'text-sky bg-sky/10 border-sky/20'
   const entryLabel = !contest.entry_fee ? 'Free' : `₹${(contest.entry_fee / 100).toLocaleString('en-IN')}`
-  const prizeLabel = contest.prize_pool_estimate > 0
-    ? `₹${(contest.prize_pool_estimate / 100).toLocaleString('en-IN')} prize pool`
+  const prizeAmount = contest.prize_pool ?? contest.prize_pool_estimate ?? 0
+  const prizeLabel = prizeAmount > 0
+    ? `₹${(prizeAmount / 100).toLocaleString('en-IN')} prize pool`
     : null
   const RegisterBtn = ({ label = 'Register' }) => (
     <button onClick={openModal} className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none">

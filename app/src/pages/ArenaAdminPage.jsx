@@ -685,7 +685,7 @@ export default function ArenaAdminPage() {
         const sorted = [...dist].sort((a, b) => a.rank - b.rank)
         const rows = []
         sorted.forEach(entry => {
-          const amt = Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * pool / 100)
+          const amt = entry.amount_paise != null ? Math.round(entry.amount_paise / 100) : Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * pool / 100)
           const last = rows[rows.length - 1]
           if (last && last.amount === String(amt) && Number(last.rankTo) === entry.rank - 1) {
             last.rankTo = String(entry.rank)
