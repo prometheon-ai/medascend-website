@@ -189,9 +189,7 @@ function StepDisclaimer({ onNext, onBack, isFree }) {
             <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-yellow-400/70 mb-1">Payment Terms</p>
             {[
               'Entry is confirmed only after successful Razorpay payment. Your seat is reserved for 10 minutes once payment is initiated.',
-              'Prizes are credited to your in-app wallet within 24 hours of the quiz ending.',
-              'A PAN card is required to withdraw winnings. TDS is deducted as per Indian tax law.',
-              'Withdrawals cannot be processed without a valid PAN on record.',
+              'Prizes are credited to your in-app wallet within 48 hours of the quiz ending.',
             ].map((t, i) => (
               <div key={i} className="flex gap-2.5">
                 <span className="text-yellow-500/40 shrink-0 mt-0.5">·</span>
@@ -437,8 +435,8 @@ export default function QuizRegistrationModal({ contest, onClose, onRegistered, 
         if (!res.ok) return
         const data = await res.json()
         const payStatus = data?.my_registration?.payment_status
-        // resolve on paid (webhook confirmed) OR payment_pending (seat reserved, webhook in flight)
-        if (payStatus === 'paid' || payStatus === 'payment_pending') {
+        // only resolve once webhook confirms payment — payment_pending means still waiting
+        if (payStatus === 'paid') {
           stopPolling()
           onRegistered(contest.id)
           onClose()
@@ -499,7 +497,18 @@ export default function QuizRegistrationModal({ contest, onClose, onRegistered, 
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       })
-      if (orderRes.status === 409) { onRegistered(contest.id); onClose(); return }
+      if (orderRes.status === 409) {
+        // Check actual payment status — 409 may mean already paid or seat still pending
+        const detail = await fetch(`/api/v1/arena/quizzes/${contest.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }).then(r => r.json()).catch(() => null)
+        const payStatus = detail?.my_registration?.payment_status
+        if (payStatus === 'paid') { onRegistered(contest.id); onClose(); return }
+        // payment_pending: seat reserved but payment not completed yet
+        setRegistering(false)
+        setRegError('Your seat is still reserved. Please wait a moment and try again, or wait for the reservation to expire (10 min).')
+        return
+      }
       if (!orderRes.ok) throw new Error(await readApiErrorMessage(orderRes, 'Could not create payment order. Please try again.'))
       const order = await orderRes.json()
 

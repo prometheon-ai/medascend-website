@@ -694,6 +694,35 @@ export default function ArenaAdminPage() {
     finally { setSaving(false) }
   }
 
+  const [addQForm, setAddQForm] = useState(null) // null = hidden, object = open
+  const [addQSaving, setAddQSaving] = useState(false)
+
+  const openAddQuestion = () => {
+    const nextOrder = (selectedEvent?.questions?.length ?? 0) + 1
+    setAddQForm({ question_text: '', options: { A: '', B: '', C: '', D: '' }, correct_option: '', difficulty: 'medium', question_order: nextOrder })
+  }
+
+  const handleAddQuestion = async () => {
+    if (!addQForm) return
+    setAddQSaving(true); setError(''); setMessage('')
+    try {
+      await addAdminArenaQuestion(activeToken, selectedId, {
+        question_order: addQForm.question_order,
+        question_text: addQForm.question_text,
+        question_type: 'mcq',
+        options: OPTION_KEYS.map(k => ({ key: k, text: addQForm.options[k] })),
+        correct_option: addQForm.correct_option,
+        difficulty: addQForm.difficulty,
+        points: DIFFICULTY_POINTS[addQForm.difficulty] ?? 12,
+        negative_marks: 3,
+      })
+      setMessage('Question added.')
+      setAddQForm(null)
+      await loadDetail(selectedId)
+    } catch (err) { setError(err.message) }
+    finally { setAddQSaving(false) }
+  }
+
   if (authLoading) return (
     <div className="pt-17 min-h-screen bg-dark flex items-center justify-center text-sky/50">
       <Loader2 className="animate-spin" size={24} />
@@ -1069,7 +1098,79 @@ export default function ArenaAdminPage() {
                           <h2 className="text-base font-bold text-cream">Questions</h2>
                           <p className="text-sm text-sky/55 mt-1">{Array.isArray(selectedEvent.questions) ? selectedEvent.questions.length : (selectedEvent.question_count || 0)} loaded</p>
                         </div>
+                        {['draft', 'published', 'lobby', 'live'].includes(selectedEvent.status) && !addQForm && (
+                          <Btn variant="primary" onClick={openAddQuestion}>
+                            <Plus size={15} /> Add question
+                          </Btn>
+                        )}
                       </div>
+
+                      {/* Inline add question form */}
+                      {addQForm && (
+                        <div className="mb-5 rounded-xl border border-teal/25 bg-teal/5 p-5 space-y-4">
+                          <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal">New question</p>
+
+                          <Field label="Question text">
+                            <textarea
+                              value={addQForm.question_text}
+                              onChange={e => setAddQForm(f => ({ ...f, question_text: e.target.value }))}
+                              rows={3}
+                              placeholder="Type the question here..."
+                              className="w-full rounded-xl border border-teal/20 bg-dark-surface px-4 py-2.5 text-sm text-cream outline-none focus:border-teal/50 placeholder:text-sky/35 resize-none"
+                            />
+                          </Field>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {OPTION_KEYS.map(key => (
+                              <div key={key} className="flex items-center gap-3 rounded-xl border border-teal/15 bg-dark-surface px-4 py-2.5">
+                                <span className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold border border-teal/30 text-sky/50">{key}</span>
+                                <input
+                                  value={addQForm.options[key]}
+                                  onChange={e => setAddQForm(f => ({ ...f, options: { ...f.options, [key]: e.target.value } }))}
+                                  placeholder={`Option ${key}`}
+                                  className="flex-1 bg-transparent text-sm text-cream outline-none placeholder:text-sky/25"
+                                />
+                              </div>
+                            ))}
+                          </div>
+
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky/70 mb-2">Correct option</p>
+                            <div className="flex items-center gap-2">
+                              {OPTION_KEYS.map(key => (
+                                <button key={key} type="button"
+                                  onClick={() => setAddQForm(f => ({ ...f, correct_option: key }))}
+                                  className={`w-10 h-10 rounded-xl text-sm font-bold border-2 transition-colors bg-transparent cursor-pointer
+                                    ${addQForm.correct_option === key ? 'border-teal bg-teal text-cream' : 'border-teal/25 text-sky/50 hover:border-teal/50'}`}
+                                >{key}</button>
+                              ))}
+                              {addQForm.correct_option && <span className="ml-2 text-xs text-teal/80">Option {addQForm.correct_option} is correct</span>}
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky/70 mb-2">Difficulty</p>
+                            <div className="flex items-center gap-2">
+                              {['easy', 'medium', 'hard'].map(d => (
+                                <button key={d} type="button"
+                                  onClick={() => setAddQForm(f => ({ ...f, difficulty: d }))}
+                                  className={`px-4 py-2 rounded-xl text-xs font-bold border-2 capitalize transition-colors bg-transparent cursor-pointer
+                                    ${addQForm.difficulty === d
+                                      ? d === 'easy' ? 'border-teal bg-teal/15 text-teal' : d === 'medium' ? 'border-gold bg-gold/15 text-gold' : 'border-terracotta bg-terracotta/15 text-terracotta'
+                                      : 'border-teal/20 text-sky/40 hover:border-teal/40'}`}
+                                >{d} · +{DIFFICULTY_POINTS[d]}</button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3 pt-1">
+                            <Btn variant="primary" onClick={handleAddQuestion} disabled={addQSaving || !addQForm.question_text.trim() || !OPTION_KEYS.every(k => addQForm.options[k].trim()) || !addQForm.correct_option}>
+                              {addQSaving ? <><Loader2 size={14} className="animate-spin" /> Saving...</> : <><Check size={14} /> Save question</>}
+                            </Btn>
+                            <Btn variant="ghost" onClick={() => setAddQForm(null)}>Cancel</Btn>
+                          </div>
+                        </div>
+                      )}
                       {Array.isArray(selectedEvent.questions) && selectedEvent.questions.length > 0 ? (
                         <div className="space-y-3">
                           {selectedEvent.questions.map((q, idx) => (

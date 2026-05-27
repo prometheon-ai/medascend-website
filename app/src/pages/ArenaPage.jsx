@@ -119,7 +119,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   )
   // lobby window open when <= 2 min to start
   const lobbyWindowOpen = secsToStart !== null && secsToStart <= LOBBY_WINDOW_SECS
-  const lobbyCountdownLabel = !lobbyWindowOpen && secsToStart !== null && secsToStart > 0
+  const lobbyCountdownLabel = !lobbyWindowOpen && secsToStart !== null && secsToStart > 0 && secsToStart <= 86400
     ? fmtCountdown(secsToStart - LOBBY_WINDOW_SECS, 'Lobby opens in')
     : ''
 
