@@ -99,7 +99,6 @@ function AppLaunchToast() {
         <p className="text-sm text-cream font-medium leading-relaxed mb-3">
           The app will be live on the <span className="text-teal font-bold">Play Store & App Store</span> on <span className="text-gold font-bold">18th June 2026</span>. Start registering now!
         </p>
-        
       </div>
     </div>
   )
