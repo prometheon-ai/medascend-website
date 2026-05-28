@@ -19,86 +19,138 @@ export function AuthProvider({ children }) {
   const didOAuthRedirect = useRef(false)
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session) {
-        localStorage.setItem('access_token', session.access_token)
-        if (session.refresh_token) {
-          localStorage.setItem('refresh_token', session.refresh_token)
-        }
-        setToken(session.access_token)
-        try {
-          const res = await fetch(`${API}/users/me`, {
-            headers: { Authorization: `Bearer ${session.access_token}` },
-          })
-          if (res.ok) {
-            const userData = await res.json()
-            setUser(userData)
-            localStorage.setItem('user', JSON.stringify(userData))
-            setNeedsOnboarding(isProfileIncomplete(userData))
-          }
-        } catch {
-          // ignore fetch errors — still set session
-        }
-        // After Google OAuth redirect, send user back to where they came from
-        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && !didOAuthRedirect.current) {
-          const redirect = sessionStorage.getItem('authRedirect')
-          if (redirect) {
-            didOAuthRedirect.current = true
-            sessionStorage.removeItem('authRedirect')
-            navigate(redirect)
-          }
-        }
-      } else if (event === 'SIGNED_OUT') {
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('refresh_token')
-        localStorage.removeItem('user')
-        setToken(null)
-        setUser(null)
-        setNeedsOnboarding(false)
-      }
-      setLoading(false)
-    })
+    let cancelled = false
 
-    // If no supabase session at all, also try local token (non-OAuth users)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        const storedToken = localStorage.getItem('access_token')
-        if (!storedToken) {
-          setLoading(false)
-          return
-        }
-        fetch(`${API}/users/me`, {
-          headers: { Authorization: `Bearer ${storedToken}` },
+    const tryRefresh = async () => {
+      const refreshToken = localStorage.getItem('refresh_token')
+      if (!refreshToken) return null
+      try {
+        const res = await fetch(`${API}/auth/refresh`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: refreshToken }),
         })
-          .then(res => {
-            if (res.ok) return res.json()
-            throw new Error('Unauthorized')
-          })
-          .then(userData => {
-            setToken(storedToken)
-            setUser(userData)
-            localStorage.setItem('user', JSON.stringify(userData))
-            setNeedsOnboarding(isProfileIncomplete(userData))
-          })
-          .catch(() => {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('refresh_token')
-            localStorage.removeItem('user')
-          })
-          .finally(() => setLoading(false))
+        if (!res.ok) return null
+        const data = await res.json()
+        if (data?.access_token) {
+          localStorage.setItem('access_token', data.access_token)
+          return data.access_token
+        }
+      } catch {
+        // swallow
       }
-    }).catch(() => setLoading(false))
+      return null
+    }
 
-    const handleUnauthorized = () => {
+    const fetchMeWithRefresh = async (initialToken) => {
+      let activeToken = initialToken
+      let res = await fetch(`${API}/users/me`, {
+        headers: { Authorization: `Bearer ${activeToken}` },
+      })
+      if (res.status === 401) {
+        const newToken = await tryRefresh()
+        if (!newToken) return null
+        activeToken = newToken
+        res = await fetch(`${API}/users/me`, {
+          headers: { Authorization: `Bearer ${activeToken}` },
+        })
+      }
+      if (!res.ok) return null
+      return { userData: await res.json(), token: activeToken }
+    }
+
+    const applySession = (userData, accessToken) => {
+      setToken(accessToken)
+      setUser(userData)
+      localStorage.setItem('user', JSON.stringify(userData))
+      setNeedsOnboarding(isProfileIncomplete(userData))
+    }
+
+    const clearSession = () => {
       localStorage.removeItem('access_token')
       localStorage.removeItem('refresh_token')
       localStorage.removeItem('user')
       setToken(null)
       setUser(null)
+      setNeedsOnboarding(false)
+    }
+
+    const bootstrap = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (cancelled) return
+
+        if (session) {
+          localStorage.setItem('access_token', session.access_token)
+          if (session.refresh_token) {
+            localStorage.setItem('refresh_token', session.refresh_token)
+          }
+          const result = await fetchMeWithRefresh(session.access_token)
+          if (cancelled) return
+          if (result) applySession(result.userData, result.token)
+          setLoading(false)
+          return
+        }
+
+        const storedToken = localStorage.getItem('access_token')
+        if (!storedToken) {
+          setLoading(false)
+          return
+        }
+        const result = await fetchMeWithRefresh(storedToken)
+        if (cancelled) return
+        if (result) {
+          applySession(result.userData, result.token)
+        } else {
+          clearSession()
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    bootstrap()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        clearSession()
+        return
+      }
+      if (!session) return
+      localStorage.setItem('access_token', session.access_token)
+      if (session.refresh_token) {
+        localStorage.setItem('refresh_token', session.refresh_token)
+      }
+      try {
+        const res = await fetch(`${API}/users/me`, {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        })
+        if (res.ok) applySession(await res.json(), session.access_token)
+      } catch {
+        // ignore
+      }
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && !didOAuthRedirect.current) {
+        const redirect = sessionStorage.getItem('authRedirect')
+        if (redirect) {
+          didOAuthRedirect.current = true
+          sessionStorage.removeItem('authRedirect')
+          navigate(redirect)
+        }
+      }
+    })
+
+    const handleUnauthorized = async () => {
+      const newToken = await tryRefresh()
+      if (newToken) {
+        setToken(newToken)
+        return
+      }
+      clearSession()
     }
     window.addEventListener('auth:unauthorized', handleUnauthorized)
 
     return () => {
+      cancelled = true
       subscription.unsubscribe()
       window.removeEventListener('auth:unauthorized', handleUnauthorized)
     }

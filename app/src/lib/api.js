@@ -47,6 +47,27 @@ function buildQueryString(params = {}) {
   return query ? `?${query}` : ''
 }
 
+async function refreshAccessToken() {
+  const refreshToken = localStorage.getItem('refresh_token')
+  if (!refreshToken) return null
+  try {
+    const res = await fetch(`${API_BASE}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    if (data?.access_token) {
+      localStorage.setItem('access_token', data.access_token)
+      return data.access_token
+    }
+  } catch {
+    // swallow
+  }
+  return null
+}
+
 export async function apiRequest(path, options = {}) {
   const {
     token,
@@ -58,8 +79,7 @@ export async function apiRequest(path, options = {}) {
     signal,
   } = options
 
-  const requestHeaders = { ...headers }
-  if (token) requestHeaders.Authorization = `Bearer ${token}`
+  const baseHeaders = { ...headers }
 
   let requestBody = body
   const isJsonBody = body !== undefined
@@ -69,16 +89,28 @@ export async function apiRequest(path, options = {}) {
     && !(body instanceof URLSearchParams)
 
   if (isJsonBody) {
-    requestHeaders['Content-Type'] = requestHeaders['Content-Type'] || 'application/json'
+    baseHeaders['Content-Type'] = baseHeaders['Content-Type'] || 'application/json'
     requestBody = JSON.stringify(body)
   }
 
-  const res = await fetch(`${API_BASE}${path}${buildQueryString(query)}`, {
-    method,
-    headers: requestHeaders,
-    body: requestBody,
-    signal,
-  })
+  const url = `${API_BASE}${path}${buildQueryString(query)}`
+
+  const send = (bearer) => {
+    const h = { ...baseHeaders }
+    if (bearer) h.Authorization = `Bearer ${bearer}`
+    return fetch(url, { method, headers: h, body: requestBody, signal })
+  }
+
+  let activeToken = token
+  let res = await send(activeToken)
+
+  if (res.status === 401 && activeToken) {
+    const newToken = await refreshAccessToken()
+    if (newToken) {
+      activeToken = newToken
+      res = await send(activeToken)
+    }
+  }
 
   if (res.status === 401) {
     window.dispatchEvent(new Event('auth:unauthorized'))
