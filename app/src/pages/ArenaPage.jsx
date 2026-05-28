@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet, Info } from 'lucide-react'
+import { Loader2, Zap, Trophy, Clock, AlertCircle, Wallet, Info } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE, readApiErrorMessage, getArenaQuizDetail } from '../lib/api'
 import QuizRegistrationModal, { ContestInfoModal } from '../components/QuizRegistrationModal'
@@ -276,8 +276,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
           <span className="font-semibold text-cream/80">{contest.duration_minutes} min</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Users size={13} className="text-sky/60" />
-          <span>{contest.registered_count ?? 0} registered</span>
+          <span className="font-semibold text-cream/80">20 MCQs</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className={`font-bold ${!contest.entry_fee ? 'text-teal' : 'text-gold'}`}>
