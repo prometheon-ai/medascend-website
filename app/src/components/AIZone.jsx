@@ -10,6 +10,7 @@ const aiTools = [
   { icon: FileText, label: 'Content Summarizer' },
   { icon: FileQuestion, label: 'MCQ Generator' },
   { icon: Layers, label: 'Flashcard Generator' },
+  
   { icon: Lightbulb, label: 'Mnemonic Creator' },
   { icon: UserRound, label: 'Patient Simulator' },
   { icon: Headphones, label: 'Audio Overview' },
