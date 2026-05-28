@@ -8,7 +8,12 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultTab = 'lo
   const [tab, setTab] = useState(defaultTab)
 
   useEffect(() => {
-    if (isOpen) setTab(defaultTab)
+    if (isOpen) {
+      setTab(defaultTab)
+      setStatus('idle')
+      setErrorMsg('')
+      setShowPassword(false)
+    }
   }, [isOpen, defaultTab])
   const [showPassword, setShowPassword] = useState(false)
   const [status, setStatus] = useState('idle')
