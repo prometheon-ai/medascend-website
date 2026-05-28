@@ -85,7 +85,7 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
   const prizeDist = contest.prize_distribution ?? []
   const PRIZE_SPLIT = prizeDist.map(entry => [
     entry.rank,
-    entry.amount_paise ?? Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * prize),
+    Math.round(prize * ((entry.share_pct ?? entry.percent ?? 0) / 100)),
   ])
 
   return (

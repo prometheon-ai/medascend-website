@@ -127,12 +127,9 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   const openModal = () => {
     if (!token) { onAuth(); return }
     setShowModal(true)
-    // Fetch full detail to get prize_distribution if not already loaded
-    if (!contest.prize_distribution) {
-      getArenaQuizDetail(token, contest.id)
-        .then(d => { if (d?.prize_distribution) setContest(c => ({ ...c, prize_distribution: d.prize_distribution })) })
-        .catch(() => {})
-    }
+    getArenaQuizDetail(token, contest.id)
+      .then(d => { if (d) setContest(c => ({ ...c, prize_distribution: d.prize_distribution, prize_pool: d.prize_pool })) })
+      .catch(() => {})
   }
 
   const handleRegistered = (id) => {
@@ -251,7 +248,12 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
             <h3 className="text-base font-bold text-cream leading-snug">{contest.title}</h3>
             {!['ended', 'results_published', 'cancelled'].includes(contest.status) && (
               <button
-                onClick={() => setShowInfo(true)}
+                onClick={() => {
+                  setShowInfo(true)
+                  getArenaQuizDetail(token, contest.id)
+                    .then(d => { if (d) setContest(c => ({ ...c, prize_distribution: d.prize_distribution, prize_pool: d.prize_pool })) })
+                    .catch(() => {})
+                }}
                 className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-sky/20 text-sky/50 hover:text-sky/80 hover:border-sky/40 text-[10px] font-medium transition-colors cursor-pointer"
                 style={{ background: 'rgba(125,211,252,0.04)' }}
               >
