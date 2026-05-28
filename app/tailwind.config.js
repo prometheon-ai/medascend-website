@@ -9,9 +9,9 @@ export default {
       colors: {
         cream: '#FAF3EB',
         'cream-dark': '#f0e6d9',
-        teal: '#52B8D8',
-        'teal-deep': '#3a90ae',
-        'teal-light': '#7acde0',
+        teal: '#3D8FA8',
+        'teal-deep': '#2d6e84',
+        'teal-light': '#5aafc8',
         terracotta: '#E07060',
         'terra-deep': '#c45848',
         stone: '#C0B5B0',
