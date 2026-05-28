@@ -6,7 +6,7 @@ AI-native medical education platform for Indian NEET PG aspirants. Combines adap
 ## Stack
 | Layer | Tech |
 |---|---|
-| Frontend | React 19, Vite, Tailwind CSS v4, Framer Motion |
+| Frontend | React 19, Vite, Tailwind CSS v4, Framer Motion|
 | State | Zustand (arena/quiz), React Context (auth) |
 | Auth | Custom JWT + OAuth via Supabase |
 | Backend (local) | FastAPI Deployed on AWS |
