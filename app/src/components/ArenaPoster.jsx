@@ -1,37 +1,54 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
 
 export default function ArenaPoster({ onClose }) {
   const navigate = useNavigate()
+  const [showPrompt, setShowPrompt] = useState(false)
 
   const handleEnter = () => {
+    setShowPrompt(true)
+  }
+
+  const confirmEnter = () => {
+    setShowPrompt(false)
     onClose()
     navigate('/arena')
   }
 
-  return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm">
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 z-[201] p-2 rounded-full bg-dark-card border border-teal/20 text-sky/60 hover:text-cream hover:border-teal/40 transition-all cursor-pointer border-solid"
-      >
-        <X size={16} />
-      </button>
+  useEffect(() => {
+    if (!showPrompt) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [showPrompt])
 
-      {/* Poster frame */}
-      <div
-        className="relative w-full max-w-5xl rounded-2xl overflow-hidden"
-        style={{
-          background: 'radial-gradient(110% 70% at 86% 14%, rgba(66,111,128,0.18), transparent 55%), radial-gradient(80% 70% at 8% 100%, rgba(211,140,70,0.06), transparent 60%), #0f1a1f',
-          color: '#FAF3EB',
-          boxShadow: '0 40px 120px -20px rgba(0,0,0,0.8)',
-          border: '1px solid rgba(66,111,128,0.2)',
-          fontFamily: "'Inter', system-ui, sans-serif",
-          maxHeight: '92vh',
-          overflowY: 'auto',
-        }}
-      >
+  return (
+    <>
+      <div className="fixed inset-0 z-200 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-201 p-2 rounded-full bg-dark-card border border-teal/20 text-sky/60 hover:text-cream hover:border-teal/40 transition-all cursor-pointer border-solid"
+        >
+          <X size={16} />
+        </button>
+
+        {/* Poster frame */}
+        <div
+          className="relative w-full max-w-5xl rounded-2xl overflow-hidden"
+          style={{
+            background: 'radial-gradient(110% 70% at 86% 14%, rgba(66,111,128,0.18), transparent 55%), radial-gradient(80% 70% at 8% 100%, rgba(211,140,70,0.06), transparent 60%), #0f1a1f',
+            color: '#FAF3EB',
+            boxShadow: '0 40px 120px -20px rgba(0,0,0,0.8)',
+            border: '1px solid rgba(66,111,128,0.2)',
+            fontFamily: "'Inter', system-ui, sans-serif",
+            maxHeight: '92vh',
+            overflowY: 'auto',
+          }}
+        >
         {/* Main content — two col on desktop, single col on mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-10 p-6 sm:p-8 lg:p-[52px_64px] items-center">
 
@@ -113,7 +130,7 @@ export default function ArenaPoster({ onClose }) {
 
             {/* Back phone (leaderboard) — hidden on mobile */}
             <div
-              className="hidden lg:block absolute right-0 top-[20px]"
+              className="hidden lg:block absolute right-0 top-5"
               style={{ width: '240px', transform: 'rotate(4deg)', borderRadius: '30px', background: '#152229', boxShadow: '0 0 0 1.5px #243842, 0 0 0 6px #07111a, 0 30px 60px -15px rgba(0,0,0,0.7)', overflow: 'hidden' }}
             >
               <div style={{ height: '28px', display: 'flex', alignItems: 'center', padding: '8px 18px 0', fontFamily: 'monospace', fontSize: '10px', color: '#A1B9C5', fontWeight: 600 }}>
@@ -154,7 +171,7 @@ export default function ArenaPoster({ onClose }) {
 
             {/* Front phone — Live Quiz (visible on all sizes, centered on mobile) */}
             <div
-              className="absolute lg:left-[10px]"
+              className="absolute lg:left-2.5"
               style={{ width: '240px', transform: 'rotate(-3deg)', borderRadius: '30px', background: '#152229', boxShadow: '0 0 0 1.5px #243842, 0 0 0 6px #07111a, 0 30px 60px -15px rgba(0,0,0,0.7)', overflow: 'hidden', zIndex: 2, top: '80px' }}
             >
               <div style={{ height: '28px', display: 'flex', alignItems: 'center', padding: '8px 18px 0', fontFamily: 'monospace', fontSize: '10px', color: '#A1B9C5', fontWeight: 600 }}>
@@ -212,7 +229,42 @@ export default function ArenaPoster({ onClose }) {
             <span style={{ color: '#BA5B47' }}>🔥 Streak</span>
           </div>
         </div>
+        </div>
+
       </div>
+
+      {showPrompt && (
+        <div className="fixed inset-0 z-220 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4" onClick={() => setShowPrompt(false)}>
+          <div className="w-full max-w-lg rounded-3xl border border-teal/15 bg-dark-card p-6 shadow-2xl shadow-black/50" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-3 inline-flex rounded-full border border-teal/20 bg-teal/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-teal/80">
+              Announcement
+            </div>
+            <h3 className="text-lg font-extrabold text-cream">FMT & PSM Quizzes, Rescheduled</h3>
+            <div className="mt-3 space-y-3 text-sm leading-relaxed text-sky/75 whitespace-pre-line">
+              Hey everyone 👋
+
+              As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+              So we are doing two things:
+              Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+              Rescheduling both quizzes. New dates will be conveyed.
+
+              This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+              Team MedAscend.
+            </div>
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowPrompt(false)}
+                className="rounded-xl border border-teal/15 bg-transparent px-4 py-2.5 text-sm font-semibold text-sky/70 transition-colors hover:border-teal/30 hover:text-cream cursor-pointer"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes pulse {
@@ -221,6 +273,6 @@ export default function ArenaPoster({ onClose }) {
           100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
         }
       `}</style>
-    </div>
+    </>
   )
 }
