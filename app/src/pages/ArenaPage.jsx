@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { Loader2, Zap, Trophy, Clock, Users, AlertCircle, Wallet, Info } from 'lucide-react'
+import { Loader2, Zap, Trophy, Clock, AlertCircle, Wallet, Info } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE, readApiErrorMessage, getArenaQuizDetail } from '../lib/api'
 import QuizRegistrationModal, { ContestInfoModal } from '../components/QuizRegistrationModal'
@@ -91,9 +91,36 @@ function useRegistrationCountdown(closesAt) {
   return fmtCountdown(secs, 'Closes in')
 }
 
+function ActionPromptModal({ prompt, onCancel, onConfirm }) {
+  if (!prompt) return null
+
+  return (
+    <div className="fixed inset-0 z-120 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4" onClick={onCancel}>
+      <div className="w-full max-w-lg rounded-3xl border border-teal/15 bg-dark-card p-6 shadow-2xl shadow-black/50" onClick={(e) => e.stopPropagation()}>
+        <div className="mb-3 inline-flex rounded-full border border-teal/20 bg-teal/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-teal/80">
+          Announcement
+        </div>
+        <h3 className="text-lg font-extrabold text-cream">{prompt.title}</h3>
+        <div className="mt-3 space-y-3 text-sm leading-relaxed text-sky/75 whitespace-pre-line">
+          {prompt.message}
+        </div>
+        <div className="mt-5 flex justify-end">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-xl border border-teal/15 bg-transparent px-4 py-2.5 text-sm font-semibold text-sky/70 transition-colors hover:border-teal/30 hover:text-cream cursor-pointer"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const LOBBY_WINDOW_SECS = 2 * 60 // show Enter Lobby button when starts_at - now <= 2 min
 
-function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onWalletChanged }) {
+function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onWalletChanged, requestAction, navigate }) {
   const [contest, setContest] = useState(initialContest)
   useEffect(() => { setContest(initialContest) }, [initialContest.id])
   const [showModal, setShowModal] = useState(false)
@@ -125,14 +152,20 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
     : ''
 
   const openModal = () => {
-    if (!token) { onAuth(); return }
-    setShowModal(true)
-    // Fetch full detail to get prize_distribution if not already loaded
-    if (!contest.prize_distribution) {
-      getArenaQuizDetail(token, contest.id)
-        .then(d => { if (d?.prize_distribution) setContest(c => ({ ...c, prize_distribution: d.prize_distribution })) })
-        .catch(() => {})
-    }
+    requestAction({
+      title: 'FMT & PSM quizzes rescheduled',
+      message: `Hey everyone 👋
+
+As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+So we are doing two things:
+Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+Rescheduling both quizzes. New dates will be conveyed.
+
+This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+Team MedAscend.`,
+    })
   }
 
   const handleRegistered = (id) => {
@@ -182,17 +215,43 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
           </div>
         )
         return (
-          <Link
-            to={`/arena/${contest.id}/lobby`}
-            state={{ registeredCount: contest.registered_count }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-teal/15 border border-teal/30 text-teal-light text-sm font-semibold rounded-xl hover:bg-teal/25 transition-all no-underline"
+          <button
+            type="button"
+            onClick={() => requestAction({
+              title: 'FMT & PSM quizzes rescheduled',
+              message: `Hey everyone 👋
+
+As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+So we are doing two things:
+Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+Rescheduling both quizzes. New dates will be conveyed.
+
+This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+Team MedAscend.`,
+            })}
+            className="flex items-center gap-1.5 px-4 py-2 bg-teal/15 border border-teal/30 text-teal-light text-sm font-semibold rounded-xl hover:bg-teal/25 transition-all no-underline cursor-pointer border-none"
           >
             Enter Lobby →
-          </Link>
+          </button>
         )
       }
       if (!canRegister) return <span className="text-xs text-sky/60 font-semibold">Registration closed</span>
-      if (!token) return <button onClick={onAuth} className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none">Register</button>
+      if (!token) return <button onClick={() => requestAction({
+        title: 'FMT & PSM quizzes rescheduled',
+        message: `Hey everyone 👋
+
+As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+So we are doing two things:
+Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+Rescheduling both quizzes. New dates will be conveyed.
+
+This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+Team MedAscend.`,
+      })} className="flex items-center gap-2 px-4 py-2 bg-teal text-cream text-sm font-semibold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none">Register</button>
       return <RegisterBtn />
     }
 
@@ -200,12 +259,42 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
       if (isRegistered) {
         if (participated === true) return <span className="text-sm font-bold text-white/80">Attempted</span>
         return (
-          <Link to={`/arena/${contest.id}/lobby`} state={{ registeredCount: contest.registered_count }} className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all no-underline">
+          <button
+            type="button"
+            onClick={() => requestAction({
+              title: 'FMT & PSM quizzes rescheduled',
+              message: `Hey everyone 👋
+
+As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+So we are doing two things:
+Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+Rescheduling both quizzes. New dates will be conveyed.
+
+This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+Team MedAscend.`,
+            })}
+            className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all no-underline cursor-pointer border-none"
+          >
             <Zap size={14} /> Join Now
-          </Link>
+          </button>
         )
       }
-      if (!token) return <button onClick={onAuth} className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"><Zap size={14} /> Join Now</button>
+      if (!token) return <button onClick={() => requestAction({
+        title: 'FMT & PSM quizzes rescheduled',
+        message: `Hey everyone 👋
+
+As per our fairness policy, a quiz only runs once it crosses the minimum entries needed to keep the prize pool and competition fair. We are holding off to make sure your first MedAscend quiz is the full, competitive experience it is meant to be, not a watered-down one.
+
+So we are doing two things:
+Full refund to every registered participant - every rupee, no deductions. Processing now, expect it within 1 working day.
+Rescheduling both quizzes. New dates will be conveyed.
+
+This is exactly the zero risk promise we made. Your entry is always protected. Thanks for being part of day one. The best version of this is worth getting right.
+
+Team MedAscend.`,
+      })} className="flex items-center gap-1.5 px-4 py-2 bg-teal text-cream text-sm font-bold rounded-xl hover:bg-teal/90 transition-all cursor-pointer border-none"><Zap size={14} /> Join Now</button>
       return <span className="text-xs font-bold text-terracotta/80">Missed</span>
     }
 
@@ -251,7 +340,12 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
             <h3 className="text-base font-bold text-cream leading-snug">{contest.title}</h3>
             {!['ended', 'results_published', 'cancelled'].includes(contest.status) && (
               <button
-                onClick={() => setShowInfo(true)}
+                onClick={() => {
+                  setShowInfo(true)
+                  getArenaQuizDetail(token, contest.id)
+                    .then(d => { if (d) setContest(c => ({ ...c, prize_distribution: d.prize_distribution, prize_pool: d.prize_pool })) })
+                    .catch(() => {})
+                }}
                 className="shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-sky/20 text-sky/50 hover:text-sky/80 hover:border-sky/40 text-[10px] font-medium transition-colors cursor-pointer"
                 style={{ background: 'rgba(125,211,252,0.04)' }}
               >
@@ -274,8 +368,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
           <span className="font-semibold text-cream/80">{contest.duration_minutes} min</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Users size={13} className="text-sky/60" />
-          <span>{contest.registered_count ?? 0} registered</span>
+          <span className="font-semibold text-cream/80">20 MCQs</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className={`font-bold ${!contest.entry_fee ? 'text-teal' : 'text-gold'}`}>
@@ -313,7 +406,7 @@ function ContestCard({ contest: initialContest, token, onAuth, onRegistered, onW
   )
 }
 
-function ContestSection({ title, contests, token, onAuth, onRegistered, onWalletChanged }) {
+function ContestSection({ title, contests, token, onAuth, onRegistered, onWalletChanged, requestAction, navigate }) {
   if (!contests || contests.length === 0) return null
   return (
     <div className="mb-10">
@@ -327,6 +420,8 @@ function ContestSection({ title, contests, token, onAuth, onRegistered, onWallet
             onAuth={onAuth}
             onRegistered={onRegistered}
             onWalletChanged={onWalletChanged}
+            requestAction={requestAction}
+            navigate={navigate}
           />
         ))}
       </div>
@@ -343,7 +438,25 @@ export default function ArenaPage({ onAuth }) {
   const [error, setError] = useState('')
   const [needsAuth, setNeedsAuth] = useState(false)
   const [registered, setRegistered] = useState({})
+  const [actionPrompt, setActionPrompt] = useState(null)
   const activeToken = token || localStorage.getItem('access_token')
+
+  const requestAction = (prompt) => setActionPrompt(prompt)
+  const closeActionPrompt = () => setActionPrompt(null)
+  const confirmAction = () => {
+    const action = actionPrompt?.onConfirm
+    closeActionPrompt()
+    action?.()
+  }
+
+  useEffect(() => {
+    if (!actionPrompt) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [actionPrompt])
 
   useEffect(() => {
     if (authLoading) return
@@ -489,6 +602,8 @@ export default function ArenaPage({ onAuth }) {
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
+                    requestAction={requestAction}
+                    navigate={navigate}
                   />
                   <ContestSection
                     title="Register Now"
@@ -496,6 +611,8 @@ export default function ArenaPage({ onAuth }) {
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
+                    requestAction={requestAction}
+                    navigate={navigate}
                   />
                   <ContestSection
                     title="Coming Soon"
@@ -503,6 +620,8 @@ export default function ArenaPage({ onAuth }) {
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
+                    requestAction={requestAction}
+                    navigate={navigate}
                   />
                   <ContestSection
                     title="Recent Results"
@@ -510,6 +629,8 @@ export default function ArenaPage({ onAuth }) {
                     token={activeToken}
                     onAuth={onAuth}
                     onRegistered={handleRegistered}
+                    requestAction={requestAction}
+                    navigate={navigate}
                   />
                 </>
               )}
@@ -517,6 +638,7 @@ export default function ArenaPage({ onAuth }) {
           )}
         </div>
       </div>
+      <ActionPromptModal prompt={actionPrompt} onCancel={closeActionPrompt} onConfirm={confirmAction} />
     </>
   )
 }

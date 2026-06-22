@@ -85,7 +85,7 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
   const prizeDist = contest.prize_distribution ?? []
   const PRIZE_SPLIT = prizeDist.map(entry => [
     entry.rank,
-    entry.amount_paise ?? Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * prize),
+    Math.round(prize * ((entry.share_pct ?? entry.percent ?? 0) / 100)),
   ])
 
   return (
@@ -103,8 +103,7 @@ function StepDetails({ contest, onNext, onClose, isFree }) {
             ['Date & Time', formatDate(contest.starts_at), 'text-white'],
             ['Duration', `${contest.duration_minutes} min`, 'text-white'],
             ['Entry Fee', isFree ? 'FREE' : formatRupees(contest.entry_fee), isFree ? 'text-teal font-bold' : 'text-gold font-bold'],
-            ['Registered', `${contest.registered_count ?? 0} joined`, 'text-white'],
-            ...(contest.question_count > 0 ? [['Questions', `${contest.question_count} Qs`, 'text-white']] : []),
+            ['Questions', '20 MCQs', 'text-white'],
           ].map(([label, val, cls]) => (
             <div key={label} className="rounded-2xl bg-white/4 border border-white/6 p-3">
               <p className="text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1">{label}</p>
@@ -249,7 +248,7 @@ function StepInstructions({ contest, onNext, onBack, nextLabel }) {
       <div ref={ref} onScroll={onScroll} className="flex-1 overflow-y-auto space-y-3 pr-1">
         <div className="space-y-1.5">
           {[
-            `This quiz has ${qCount} questions. You get 45 seconds per question. Once you answer or the timer runs out, you move on — you cannot go back.`,
+            `This quiz has 20 questions. You get 45 seconds per question. Once you answer or the timer runs out, you move on — you cannot go back.`,
             'Registration closes 15 minutes before the quiz. The lobby opens 10 minutes before start time.',
             'You must be in the lobby at least 2 minutes before start. After that, entry is locked — no exceptions.',
             `Every contest draws from a pool of 40 vetted questions. Each user gets 20 randomly selected questions — no two players see the same set.`,

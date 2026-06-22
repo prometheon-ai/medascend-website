@@ -336,8 +336,6 @@ export default function QuizPage() {
             Question <span className="text-cream">{currentIdx + 1}</span>/{questions.length}
           </span>
           <div className="flex items-center gap-4">
-            <span className="text-sky/60">Score <span className="text-teal font-bold">{runningScore}</span></span>
-            {liveRank && <span className="text-sky/60">Rank <span className="text-gold font-bold">#{liveRank}</span></span>}
             {streak > 1 && <span className="text-terracotta font-bold">{streak}x streak</span>}
           </div>
         </div>

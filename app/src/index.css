@@ -3,18 +3,18 @@
 @theme {
   --color-cream: #FAF3EB;
   --color-cream-dark: #f0e6d9;
-  --color-teal: #426F80;
-  --color-teal-deep: #2f5464;
-  --color-teal-light: #5a92a6;
-  --color-terracotta: #BA5B47;
-  --color-terra-deep: #9e4535;
-  --color-stone: #A49692;
-  --color-sky: #A1B9C5;
-  --color-gold: #D38C46;
-  --color-gold-light: #e4a86a;
-  --color-dark: #0f1a1f;
-  --color-dark-card: #152229;
-  --color-dark-surface: #1a2e38;
+  --color-teal: #3D8FA8;
+  --color-teal-deep: #2d6e84;
+  --color-teal-light: #5aafc8;
+  --color-terracotta: #E07060;
+  --color-terra-deep: #c45848;
+  --color-stone: #C0B5B0;
+  --color-sky: #D4E8F5;
+  --color-gold: #F0A84E;
+  --color-gold-light: #f5c07a;
+  --color-dark: #0d1b24;
+  --color-dark-card: #162635;
+  --color-dark-surface: #1e3344;
   --font-family-primary: 'Plus Jakarta Sans', sans-serif;
   --font-family-secondary: 'DM Sans', sans-serif;
 }
@@ -146,7 +146,7 @@
 
 /* Glass effect */
 .glass {
-  background: rgba(26, 46, 56, 0.5);
+  background: rgba(30, 51, 68, 0.5);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }

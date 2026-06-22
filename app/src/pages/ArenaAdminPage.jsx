@@ -219,8 +219,7 @@ function CreateContestPage({ token, onCreated, onBack }) {
       // §5.1: field names must match API exactly
       const entryFee = form.entry_fee === '' ? 0 : Math.round(Number(form.entry_fee) * 100)
       const prizePool = form.prize_pool === '' ? 0 : Math.round(Number(form.prize_pool) * 100)
-      // expand prize rows into per-rank percent entries
-      const prizeDistribution = isPaid && prizePool > 0
+      const prizeDistribution = isPaid && prizePool > 0 && prizeRows.some(r => Number(r.amount) > 0)
         ? prizeRows.flatMap(r => {
             const from = Number(r.rankFrom), to = Number(r.rankTo)
             const amtPaise = Math.round(Number(r.amount) * 100)
@@ -666,7 +665,15 @@ export default function ArenaAdminPage() {
         getAdminArenaRegistrations(activeToken, id).catch(() => null),
       ])
       setSelectedEvent(detail)
-      const pool = detail?.prize_pool ?? detail?.prize_pool_estimate ?? 0
+      const dist = detail?.prize_distribution ?? []
+      let pool = 0
+      if (detail?.prize_pool_type === 'fixed') {
+        pool = detail?.prize_pool_fixed ?? 0
+      } else if (detail?.prize_pool_type === 'entry_fees_pool') {
+        const gross = (detail?.registered_count ?? 0) * (detail?.entry_fee ?? 0)
+        pool = gross - (gross * (detail?.platform_cut_percent ?? 0) / 100)
+      }
+      if (!pool) pool = detail?.prize_pool || detail?.prize_pool_estimate || 0
       setEditForm({
         title: detail?.title || '',
         slug: detail?.slug || '',
@@ -680,12 +687,11 @@ export default function ArenaAdminPage() {
         subject_id: detail?.subject_id || '',
       })
       // collapse prize_distribution into rank-range rows
-      const dist = detail?.prize_distribution ?? []
-      if (dist.length > 0 && pool > 0) {
+      if (dist.length > 0) {
         const sorted = [...dist].sort((a, b) => a.rank - b.rank)
         const rows = []
         sorted.forEach(entry => {
-          const amt = entry.amount_paise != null ? Math.round(entry.amount_paise / 100) : Math.round(((entry.share_pct ?? entry.percent ?? 0) / 100) * pool / 100)
+          const amt = Math.round(pool * ((entry.share_pct ?? entry.percent ?? 0) / 100) / 100)
           const last = rows[rows.length - 1]
           if (last && last.amount === String(amt) && Number(last.rankTo) === entry.rank - 1) {
             last.rankTo = String(entry.rank)
@@ -744,7 +750,7 @@ export default function ArenaAdminPage() {
       const editEntryFee = editForm.entry_fee === '' ? 0 : Number(editForm.entry_fee)
       const editPrizePool = editForm.prize_pool === '' ? 0 : Number(editForm.prize_pool)
       const editIsPaid = editEntryFee > 0
-      const editPrizeDist = editIsPaid && editPrizePool > 0
+      const editPrizeDist = editIsPaid && editPrizePool > 0 && editPrizeRows.some(r => Number(r.amount) > 0)
         ? editPrizeRows.flatMap(r => {
             const from = Number(r.rankFrom), to = Number(r.rankTo)
             const amtPaise = Math.round(Number(r.amount) * 100)

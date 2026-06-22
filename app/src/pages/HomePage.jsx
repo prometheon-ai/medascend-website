@@ -97,15 +97,8 @@ function AppLaunchToast() {
           </button>
         </div>
         <p className="text-sm text-cream font-medium leading-relaxed mb-3">
-          The app will be live on the <span className="text-teal font-bold">Play Store & App Store</span> in <span className="text-gold font-bold">7–10 days</span>. Start registering now!
+          The app will be live on the <span className="text-teal font-bold">Play Store & App Store</span> on <span className="text-gold font-bold">18th June 2026</span>. Start registering now!
         </p>
-        <Link
-          to="/arena"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-cream transition-colors border border-teal/30 hover:border-teal/60 px-3 py-1.5 rounded-lg no-underline"
-        >
-          <Zap size={11} />
-          Register for Arena
-        </Link>
       </div>
     </div>
   )
@@ -122,7 +115,7 @@ function ArenaBanner() {
       </span>
       <p className="text-sm font-medium text-cream/90 text-center">
         Registrations are now open for{' '}
-        <span className="font-bold text-cream">MedAscend Arena — Contest 1</span>
+        <span className="font-bold text-cream">MedAscend Arena — FMT and PSM Quiz</span>
       </p>
       <Link
         to="/arena"

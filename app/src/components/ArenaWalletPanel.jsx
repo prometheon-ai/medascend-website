@@ -154,15 +154,10 @@ export default function ArenaWalletPanel({ token, onAuth, refreshSeed = 0, onWal
     await loadWallet({ silent: true })
   }
 
+  const [disabledNotice, setDisabledNotice] = useState(false)
+
   const openTopUp = () => {
-    if (!token) {
-      onAuth?.()
-      return
-    }
-    setSubmitError('')
-    setStatusMessage('')
-    setAmountRupees('')
-    setModalOpen(true)
+    setDisabledNotice(true)
   }
 
   const handleTopUp = async (event) => {
@@ -320,6 +315,23 @@ export default function ArenaWalletPanel({ token, onAuth, refreshSeed = 0, onWal
             )}
           </div>
         </>
+      )}
+
+      {disabledNotice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <button type="button" className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDisabledNotice(false)} />
+          <div className="relative z-10 w-full max-w-sm rounded-3xl border border-teal/20 bg-dark-card p-6 shadow-2xl shadow-black/50 text-center">
+            <p className="text-lg font-extrabold text-cream mb-2">Temporarily Disabled</p>
+            <p className="text-sm text-sky/60 mb-5">Wallet top-ups are currently unavailable. Please check back soon.</p>
+            <button
+              type="button"
+              onClick={() => setDisabledNotice(false)}
+              className="px-6 py-2.5 rounded-xl bg-teal text-cream text-sm font-bold hover:bg-teal/90 transition-colors cursor-pointer border-none"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       )}
 
       {modalOpen && (
