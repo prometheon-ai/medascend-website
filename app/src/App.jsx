@@ -17,6 +17,8 @@ import ArenaWalletPage from './pages/ArenaWalletPage'
 import LobbyPage from './pages/LobbyPage'
 import QuizPage from './pages/QuizPage'
 import ResultsPage from './pages/ResultsPage'
+import SupportPage from './pages/SupportPage'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import NotFoundPage from './pages/NotFoundPage'
 import { AuthProvider } from './context/AuthContext'
 
@@ -62,6 +64,8 @@ export default function App() {
             <Route path="/features" element={<FeaturesPage />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/join" element={<JoinPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/sahai" element={<SahAIPage />} />
             <Route path="/arena" element={<ArenaPage onAuth={openLogin} />} />
             <Route path="/arena/profile" element={<ArenaProfilePage />} />

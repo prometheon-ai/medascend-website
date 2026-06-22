@@ -19,7 +19,7 @@ export default function EarlyAccessModal({ isOpen, onClose }) {
     setErrorMsg('')
 
     try {
-      const res = await fetch('/api/early-access', {
+      const res = await fetch('/api/v1/early-access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

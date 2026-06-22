@@ -17,7 +17,7 @@ export default function JoinUs() {
     try {
       const data = new FormData()
       Object.entries(form).forEach(([k, v]) => { if (v) data.append(k, v) })
-      const res = await fetch('/api/join-us', { method: 'POST', body: data })
+      const res = await fetch('/api/v1/join-us', { method: 'POST', body: data })
       if (!res.ok) throw new Error(await readApiErrorMessage(res, 'Unable to send your application right now.'))
       setStatus('success')
     } catch (err) {

@@ -33,7 +33,7 @@ export default function TellUsProblem() {
     e.preventDefault()
     setStatus('loading')
     try {
-      const res = await fetch('/api/tell-us', {
+      const res = await fetch('/api/v1/tell-us', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
